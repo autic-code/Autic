@@ -1,0 +1,29 @@
+{
+  "name": "autic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CLI-native autonomous AI engineering runtime",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:cli": "pnpm --filter @autic/cli build",
+    "clean": "pnpm -r clean",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yaml}\"",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

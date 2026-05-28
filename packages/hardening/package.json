@@ -1,0 +1,29 @@
+{
+  "name": "@autic/hardening",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@autic/shared": "workspace:*",
+    "@autic/runtime": "workspace:*",
+    "@autic/providers": "workspace:*",
+    "@autic/security": "workspace:*",
+    "@autic/swarm": "workspace:*",
+    "@autic/context-engine": "workspace:*",
+    "@autic/config": "workspace:*",
+    "@autic/diagnostics": "workspace:*"
+  }
+}

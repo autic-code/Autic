@@ -1,0 +1,58 @@
+{
+  "name": "@autic/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "autic": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@autic/shared": "workspace:*",
+    "@autic/providers": "workspace:*",
+    "@autic/runtime": "workspace:*",
+    "@autic/memory": "workspace:*",
+    "@autic/sessions": "workspace:*",
+    "@autic/security": "workspace:*",
+    "@autic/tools": "workspace:*",
+    "@autic/router": "workspace:*",
+    "@autic/ui": "workspace:*",
+    "@autic/context": "workspace:*",
+    "@autic/skills": "workspace:*",
+    "@autic/orchestrator": "workspace:*",
+    "@autic/workflow": "workspace:*",
+    "@autic/learning": "workspace:*",
+    "@autic/swarm": "workspace:*",
+    "@autic/context-engine": "workspace:*",
+    "@autic/config": "workspace:*",
+    "@autic/diagnostics": "workspace:*",
+    "@autic/hardening": "workspace:*",
+    "@autic/sdk": "workspace:*",
+    "@autic/templates": "workspace:*",
+    "@autic/release": "workspace:*",
+    "@autic/validation": "workspace:*",
+    "@autic/governance": "workspace:*",
+    "@autic/telemetry": "workspace:*",
+    "@autic/profiling": "workspace:*",
+    "commander": "^12.0.0",
+    "ink": "^5.0.0",
+    "react": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.6.0"
+  }
+}

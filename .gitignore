@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.cache/
+*.tsbuildinfo
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+.tmp/
+sessions/
+autic-data/

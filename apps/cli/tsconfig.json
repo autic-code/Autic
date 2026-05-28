@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "jsx": "react-jsx",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "references": [
+    { "path": "../../packages/shared" },
+    { "path": "../../packages/providers" },
+    { "path": "../../packages/runtime" },
+    { "path": "../../packages/memory" },
+    { "path": "../../packages/sessions" },
+    { "path": "../../packages/security" },
+    { "path": "../../packages/tools" },
+    { "path": "../../packages/router" },
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/context" },
+    { "path": "../../packages/workflow" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/diagnostics" },
+    { "path": "../../packages/hardening" },
+    { "path": "../../packages/sdk" },
+    { "path": "../../packages/templates" },
+    { "path": "../../packages/release" }
+  ]
+}
