@@ -13,6 +13,7 @@
     { "path": "../../packages/providers" },
     { "path": "../../packages/runtime" },
     { "path": "../../packages/memory" },
+    { "path": "../../packages/sessions" },
     { "path": "../../packages/security" },
     { "path": "../../packages/tools" },
     { "path": "../../packages/router" },
