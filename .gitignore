@@ -8,5 +8,5 @@ dist/
 .DS_Store
 coverage/
 .tmp/
-sessions/
+/sessions/
 autic-data/
