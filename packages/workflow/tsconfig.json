@@ -10,7 +10,6 @@
     { "path": "../shared" },
     { "path": "../runtime" },
     { "path": "../tools" },
-    { "path": "../sessions" },
     { "path": "../memory" },
     { "path": "../context" }
   ]
