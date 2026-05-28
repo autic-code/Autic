@@ -13,15 +13,23 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  RepairOutput, 
-  VerificationOutput, 
-  TaskContract, 
+import type {
+  RepairOutput,
+  VerificationOutput,
+  TaskContract,
   OrchestrationStage,
 } from '@autic/shared';
-import { createContract, fulfillContract, rejectContract, getContractOutput } from '../contracts.js';
+import {
+  createContract,
+  fulfillContract,
+  rejectContract,
+  getContractOutput,
+} from '../contracts.js';
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class RepairAgent {
   private maxAttempts: number;
@@ -105,10 +113,7 @@ export class RepairAgent {
 
       return fulfillContract(contract, output as unknown as Record<string, unknown>);
     } catch (error) {
-      return rejectContract(
-        contract,
-        error instanceof Error ? error.message : String(error),
-      );
+      return rejectContract(contract, error instanceof Error ? error.message : String(error));
     }
   }
 

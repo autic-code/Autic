@@ -13,15 +13,18 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  FinalReviewOutput, 
-  TaskContract, 
+import type {
+  FinalReviewOutput,
+  TaskContract,
   OrchestrationStage,
   PipelineState,
 } from '@autic/shared';
 import { createContract, fulfillContract, rejectContract } from '../contracts.js';
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class FinalReviewAgent {
   /**
@@ -111,13 +114,17 @@ export class FinalReviewAgent {
       }
 
       // Score calculations
-      const securityScore = issues.filter((i) =>
-        i.toLowerCase().includes('secret') || i.toLowerCase().includes('env'),
-      ).length > 0 ? 60 : 90;
+      const securityScore =
+        issues.filter((i) => i.toLowerCase().includes('secret') || i.toLowerCase().includes('env'))
+          .length > 0
+          ? 60
+          : 90;
 
-      const verificationScore = issues.filter((i) =>
-        i.toLowerCase().includes('test') || i.toLowerCase().includes('build'),
-      ).length > 0 ? 70 : 90;
+      const verificationScore =
+        issues.filter((i) => i.toLowerCase().includes('test') || i.toLowerCase().includes('build'))
+          .length > 0
+          ? 70
+          : 90;
 
       const approved = issues.length === 0;
 
@@ -137,10 +144,7 @@ export class FinalReviewAgent {
 
       return fulfillContract(contract, output as unknown as Record<string, unknown>);
     } catch (error) {
-      return rejectContract(
-        contract,
-        error instanceof Error ? error.message : String(error),
-      );
+      return rejectContract(contract, error instanceof Error ? error.message : String(error));
     }
   }
 }

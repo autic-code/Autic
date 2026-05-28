@@ -81,10 +81,7 @@ export class ExecutionMemory {
   /**
    * Store a CompletedTask record matching the workflow memory schema.
    */
-  async storeCompletedTask(
-    plan: WorkflowPlan,
-    state: WorkflowState,
-  ): Promise<CompletedTask> {
+  async storeCompletedTask(plan: WorkflowPlan, state: WorkflowState): Promise<CompletedTask> {
     const task: CompletedTask = {
       taskId: plan.id,
       type: 'workflow',
@@ -184,9 +181,7 @@ export class ExecutionMemory {
       completedWorkflows: completed.length,
       failedWorkflows: failed.length,
       totalSteps: workflows.reduce((sum, w) => sum + w.steps.length, 0),
-      avgDurationMs: withDuration.length > 0
-        ? Math.round(totalDuration / withDuration.length)
-        : 0,
+      avgDurationMs: withDuration.length > 0 ? Math.round(totalDuration / withDuration.length) : 0,
     };
   }
 

@@ -67,25 +67,20 @@ export function todoLine(item: TodoItem, index: number): string {
   }
 
   const statusIcon = colorText(icon, colorVariant);
-  const description = item.status === 'running'
-    ? colorText(item.description, 'primary')
-    : item.status === 'failed'
-      ? colorText(item.description, 'error')
-      : item.status === 'success'
-        ? colorText(item.description, 'success')
-        : item.description;
+  const description =
+    item.status === 'running'
+      ? colorText(item.description, 'primary')
+      : item.status === 'failed'
+        ? colorText(item.description, 'error')
+        : item.status === 'success'
+          ? colorText(item.description, 'success')
+          : item.description;
 
-  const duration = item.durationMs
-    ? colorText(formatShortDuration(item.durationMs), 'muted')
-    : '';
+  const duration = item.durationMs ? colorText(formatShortDuration(item.durationMs), 'muted') : '';
 
-  const typeTag = item.type && item.type !== 'tool_call'
-    ? colorText(`[${item.type}]`, 'dim')
-    : '';
+  const typeTag = item.type && item.type !== 'tool_call' ? colorText(`[${item.type}]`, 'dim') : '';
 
-  const errorHint = item.error
-    ? colorText(` — ${item.error.slice(0, 40)}`, 'error')
-    : '';
+  const errorHint = item.error ? colorText(` — ${item.error.slice(0, 40)}`, 'error') : '';
 
   return `  ${prefix} ${statusIcon} ${typeTag} ${description}${duration}${errorHint}`.trimEnd();
 }
@@ -99,10 +94,7 @@ export function todoBoardHeader(options: TodoListOptions): string {
   const lines: string[] = [];
 
   // Header line
-  const headerParts = [
-    colorText('⟳', 'primary'),
-    colorText(' Workflow ', 'bold'),
-  ];
+  const headerParts = [colorText('⟳', 'primary'), colorText(' Workflow ', 'bold')];
 
   if (title) {
     headerParts.push(colorText(title, 'dim'));
@@ -117,8 +109,7 @@ export function todoBoardHeader(options: TodoListOptions): string {
     const filled = Math.round((progress / 100) * barWidth);
     const empty = barWidth - filled;
 
-    const bar = colorText('█'.repeat(filled), 'primary') +
-      colorText('█'.repeat(empty), 'dim');
+    const bar = colorText('█'.repeat(filled), 'primary') + colorText('█'.repeat(empty), 'dim');
 
     const progressText = colorText(
       ` ${completed}/${total} (${progress}%)`,
@@ -139,10 +130,7 @@ export function todoBoardHeader(options: TodoListOptions): string {
 /**
  * Create a full TODO list rendering with header and items.
  */
-export function renderTodoList(
-  items: TodoItem[],
-  options: TodoListOptions = {},
-): string {
+export function renderTodoList(items: TodoItem[], options: TodoListOptions = {}): string {
   const parts: string[] = [];
 
   // Header
@@ -178,13 +166,12 @@ export function renderTodoList(
 /**
  * Format a status update line for the current active step.
  */
-export function statusLine(message: string, status: 'running' | 'success' | 'failed' = 'running'): string {
-  const color = status === 'running' ? 'primary'
-    : status === 'success' ? 'success'
-    : 'error';
-  const label = status === 'running' ? '→'
-    : status === 'success' ? '✓'
-    : '✗';
+export function statusLine(
+  message: string,
+  status: 'running' | 'success' | 'failed' = 'running',
+): string {
+  const color = status === 'running' ? 'primary' : status === 'success' ? 'success' : 'error';
+  const label = status === 'running' ? '→' : status === 'success' ? '✓' : '✗';
   return `  ${colorText(label, color)} ${message}`;
 }
 

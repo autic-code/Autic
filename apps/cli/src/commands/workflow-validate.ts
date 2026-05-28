@@ -79,14 +79,22 @@ export async function workflowValidateCommand(action?: string): Promise<void> {
       console.log(divider());
       console.log(`  ${colorText('Summary', 'bold')}`);
       console.log(`  Total validations: ${allResults.length}`);
-      console.log(`  Passed: ${colorText(allResults.filter(r => r.success).length.toString(), 'success')}`);
-      console.log(`  Failed: ${colorText(allResults.filter(r => !r.success).length.toString(), 'error')}`);
+      console.log(
+        `  Passed: ${colorText(allResults.filter((r) => r.success).length.toString(), 'success')}`,
+      );
+      console.log(
+        `  Failed: ${colorText(allResults.filter((r) => !r.success).length.toString(), 'error')}`,
+      );
       break;
     }
   }
 }
 
-function printResult(result: { success: boolean; metrics: Record<string, number>; issues: string[] }): void {
+function printResult(result: {
+  success: boolean;
+  metrics: Record<string, number>;
+  issues: string[];
+}): void {
   const icon = result.success ? colorText('✓', 'success') : colorText('✗', 'error');
   const status = result.success ? colorText('PASSED', 'success') : colorText('FAILED', 'error');
   console.log(`  ${icon} ${status}`);

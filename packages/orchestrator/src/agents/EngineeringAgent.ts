@@ -13,28 +13,40 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  EngineeringOutput, 
-  PlanningOutput, 
-  TaskContract, 
+import type {
+  EngineeringOutput,
+  PlanningOutput,
+  TaskContract,
   OrchestrationStage,
 } from '@autic/shared';
 import { SkillExecutor } from '@autic/skills';
 import { SkillRegistry, AgentRegistry } from '@autic/skills';
-import { createContract, fulfillContract, rejectContract, getContractOutput } from '../contracts.js';
+import {
+  createContract,
+  fulfillContract,
+  rejectContract,
+  getContractOutput,
+} from '../contracts.js';
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class EngineeringAgent {
   private skillExecutor: SkillExecutor;
 
   constructor(skillRegistry?: SkillRegistry, agentRegistry?: AgentRegistry) {
-    this.skillExecutor = new SkillExecutor(skillRegistry ?? new SkillRegistry(), agentRegistry ?? new AgentRegistry(), {
-      maxDepth: 15,
-      defaultTimeoutMs: 300_000,
-      maxSteps: 25,
-      maxRetries: 3,
-    });
+    this.skillExecutor = new SkillExecutor(
+      skillRegistry ?? new SkillRegistry(),
+      agentRegistry ?? new AgentRegistry(),
+      {
+        maxDepth: 15,
+        defaultTimeoutMs: 300_000,
+        maxSteps: 25,
+        maxRetries: 3,
+      },
+    );
   }
 
   /**
@@ -83,7 +95,9 @@ export class EngineeringAgent {
       }
 
       if (planningOutput) {
-        warnings.push(`Planned ${planningOutput.tasks.length} tasks, executed via "${skillId}" skill`);
+        warnings.push(
+          `Planned ${planningOutput.tasks.length} tasks, executed via "${skillId}" skill`,
+        );
       }
 
       const output: EngineeringOutput = {
@@ -100,10 +114,7 @@ export class EngineeringAgent {
         ? contract
         : fulfillContract(contract, output as unknown as Record<string, unknown>);
     } catch (error) {
-      return rejectContract(
-        contract,
-        error instanceof Error ? error.message : String(error),
-      );
+      return rejectContract(contract, error instanceof Error ? error.message : String(error));
     }
   }
 

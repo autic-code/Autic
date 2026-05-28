@@ -44,10 +44,7 @@ export class PreBuildIntelligence {
    * Load pre-build intelligence for a given framework/dependency context.
    * Results are cached for 5 minutes.
    */
-  load(params: {
-    framework: string;
-    dependencies: string[];
-  }): PreBuildContext {
+  load(params: { framework: string; dependencies: string[] }): PreBuildContext {
     const cacheKey = `${params.framework}:${params.dependencies.sort().join(',')}`;
 
     // Check cache

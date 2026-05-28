@@ -32,7 +32,10 @@ export class CrashDiagnostics {
   }
 
   /** Capture a crash snapshot from an error */
-  async captureCrash(error: Error, context?: Partial<CrashSnapshot['context']>): Promise<CrashSnapshot> {
+  async captureCrash(
+    error: Error,
+    context?: Partial<CrashSnapshot['context']>,
+  ): Promise<CrashSnapshot> {
     const config = this.configManager.getDiagnosticsConfig();
     const snapshot: CrashSnapshot = {
       id: `crash-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,

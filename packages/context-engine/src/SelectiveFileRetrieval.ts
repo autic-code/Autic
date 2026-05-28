@@ -35,10 +35,19 @@ export class SelectiveFileRetrieval {
 
   // Priority by extension and role
   private readonly FILE_PRIORITY: Record<string, number> = {
-    '.ts': 90, '.tsx': 90, '.js': 80, '.jsx': 80,
-    '.py': 80, '.go': 80, '.rs': 80,
-    '.json': 50, '.yaml': 40, '.toml': 40,
-    '.md': 30, '.css': 20, '.html': 20,
+    '.ts': 90,
+    '.tsx': 90,
+    '.js': 80,
+    '.jsx': 80,
+    '.py': 80,
+    '.go': 80,
+    '.rs': 80,
+    '.json': 50,
+    '.yaml': 40,
+    '.toml': 40,
+    '.md': 30,
+    '.css': 20,
+    '.html': 20,
   };
 
   // Stage-specific file relevance tags
@@ -141,7 +150,7 @@ export class SelectiveFileRetrieval {
 
   private async getCandidates(explicitFiles?: string[]): Promise<string[]> {
     if (explicitFiles && explicitFiles.length > 0) {
-      return explicitFiles.filter(f => existsSync(join(this.rootDir, f)));
+      return explicitFiles.filter((f) => existsSync(join(this.rootDir, f)));
     }
 
     const candidates: string[] = [];
@@ -165,7 +174,8 @@ export class SelectiveFileRetrieval {
     try {
       const entries = await readdir(dir, { withFileTypes: true });
       for (const entry of entries) {
-        if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist') continue;
+        if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist')
+          continue;
         const fullPath = join(dir, entry.name);
         if (entry.isDirectory()) {
           await this.collectSourceFiles(fullPath, files, maxDepth, depth + 1);
@@ -179,13 +189,9 @@ export class SelectiveFileRetrieval {
     }
   }
 
-  private async scoreFiles(
-    files: string[],
-    goal: string,
-    stage?: string,
-  ): Promise<FileContext[]> {
+  private async scoreFiles(files: string[], goal: string, stage?: string): Promise<FileContext[]> {
     const goalLower = goal.toLowerCase();
-    const goalWords = goalLower.split(/\s+/).filter(w => w.length > 3);
+    const goalWords = goalLower.split(/\s+/).filter((w) => w.length > 3);
     const stageTags = stage ? this.STAGE_KEYWORDS[stage] || [] : [];
 
     const scored: FileContext[] = [];
@@ -208,7 +214,9 @@ export class SelectiveFileRetrieval {
             // Goal keyword matching
             for (const kw of goalWords) {
               if (file.toLowerCase().includes(kw)) relevanceBoost += 20;
-              const matches = (contentLower.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
+              const matches = (
+                contentLower.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []
+              ).length;
               relevanceBoost += Math.min(matches * 2, 15);
             }
 
@@ -225,7 +233,11 @@ export class SelectiveFileRetrieval {
 
             // Architecture-aware: config files and entry points get boost
             const baseName = basename(file);
-            if (['package.json', 'tsconfig.json', 'next.config.ts', 'vite.config.ts'].includes(baseName)) {
+            if (
+              ['package.json', 'tsconfig.json', 'next.config.ts', 'vite.config.ts'].includes(
+                baseName,
+              )
+            ) {
               relevanceBoost += 15;
             }
             if (file.includes('/index.') || file.includes('/main.')) {
@@ -239,7 +251,12 @@ export class SelectiveFileRetrieval {
               priority: basePriority,
               relevanceScore: Math.min(basePriority + relevanceBoost, 100),
               tokenCount,
-              reason: relevanceBoost > 20 ? 'High relevance' : relevanceBoost > 10 ? 'Moderate relevance' : 'General source',
+              reason:
+                relevanceBoost > 20
+                  ? 'High relevance'
+                  : relevanceBoost > 10
+                    ? 'Moderate relevance'
+                    : 'General source',
             };
           } catch {
             return null;

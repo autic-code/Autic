@@ -36,7 +36,10 @@ export class MemoryLeakDetector extends EventEmitter {
   private options: Required<MemoryLeakDetectorOptions>;
   private samples: MemorySample[] = [];
   private timer: ReturnType<typeof setInterval> | null = null;
-  private trackedWorkers: Map<string, { allocated: number; freed: number; allocationTime: number }> = new Map();
+  private trackedWorkers: Map<
+    string,
+    { allocated: number; freed: number; allocationTime: number }
+  > = new Map();
   private trackedSessions: Map<string, number> = new Map();
 
   constructor(options: MemoryLeakDetectorOptions = {}) {
@@ -64,7 +67,11 @@ export class MemoryLeakDetector extends EventEmitter {
   }
 
   trackWorkerAllocation(workerId: string): void {
-    const existing = this.trackedWorkers.get(workerId) || { allocated: 0, freed: 0, allocationTime: Date.now() };
+    const existing = this.trackedWorkers.get(workerId) || {
+      allocated: 0,
+      freed: 0,
+      allocationTime: Date.now(),
+    };
     existing.allocated++;
     this.trackedWorkers.set(workerId, existing);
   }
@@ -139,21 +146,24 @@ export class MemoryLeakDetector extends EventEmitter {
   private check(): void {
     this.sample();
 
-    const heapPercent = process.memoryUsage().heapTotal > 0
-      ? (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100
-      : 0;
+    const heapPercent =
+      process.memoryUsage().heapTotal > 0
+        ? (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100
+        : 0;
 
     if (heapPercent > this.options.heapWarningPercent) {
       this.emit('warning', `Heap usage at ${heapPercent.toFixed(1)}% — above warning threshold`);
     }
 
     if (this.samples.length >= this.options.sampleCount) {
-      this.generateReport().then(report => {
-        this.emit('reportGenerated', report);
-        if (report.leakDetected) {
-          this.emit('leakDetected', report);
-        }
-      }).catch(() => {});
+      this.generateReport()
+        .then((report) => {
+          this.emit('reportGenerated', report);
+          if (report.leakDetected) {
+            this.emit('leakDetected', report);
+          }
+        })
+        .catch(() => {});
     }
   }
 
@@ -199,10 +209,14 @@ export class MemoryLeakDetector extends EventEmitter {
       recommendations.push('Potential memory leak detected — run detailed heap profiling');
     }
     if (orphanedTasks.length > 0) {
-      recommendations.push(`${orphanedTasks.length} orphaned worker(s) detected — review worker lifecycle management`);
+      recommendations.push(
+        `${orphanedTasks.length} orphaned worker(s) detected — review worker lifecycle management`,
+      );
     }
     if (this.trackedSessions.size > 20) {
-      recommendations.push(`${this.trackedSessions.size} active sessions — consider session pruning`);
+      recommendations.push(
+        `${this.trackedSessions.size} active sessions — consider session pruning`,
+      );
     }
     recommendations.push('Enable --debug flag for detailed memory tracing');
     return recommendations;

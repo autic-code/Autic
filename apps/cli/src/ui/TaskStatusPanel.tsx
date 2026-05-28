@@ -10,7 +10,17 @@ import { Text, Box } from 'ink';
 export interface TaskStatusItem {
   id: string;
   description: string;
-  state: 'pending' | 'queued' | 'planning' | 'running' | 'awaiting_tool' | 'completed' | 'failed' | 'retrying' | 'paused' | 'cancelled';
+  state:
+    | 'pending'
+    | 'queued'
+    | 'planning'
+    | 'running'
+    | 'awaiting_tool'
+    | 'completed'
+    | 'failed'
+    | 'retrying'
+    | 'paused'
+    | 'cancelled';
   type: string;
   steps: number;
   completedSteps: number;
@@ -51,7 +61,9 @@ interface TaskStatusPanelProps {
 
 export function TaskStatusPanel({ title = 'Tasks', tasks, maxDisplay = 10 }: TaskStatusPanelProps) {
   const displayed = tasks.slice(0, maxDisplay);
-  const activeCount = tasks.filter((t) => ['queued', 'planning', 'running', 'awaiting_tool', 'retrying'].includes(t.state)).length;
+  const activeCount = tasks.filter((t) =>
+    ['queued', 'planning', 'running', 'awaiting_tool', 'retrying'].includes(t.state),
+  ).length;
 
   return (
     <Box flexDirection="column" marginBottom={1}>
@@ -60,7 +72,8 @@ export function TaskStatusPanel({ title = 'Tasks', tasks, maxDisplay = 10 }: Tas
           ❯ {title}
         </Text>
         <Text dimColor>
-          {' '}{tasks.length} total{activeCount > 0 ? ` · ${activeCount} active` : ''}
+          {' '}
+          {tasks.length} total{activeCount > 0 ? ` · ${activeCount} active` : ''}
         </Text>
       </Box>
       <Box marginLeft={2} flexDirection="column">
@@ -76,9 +89,12 @@ export function TaskStatusPanel({ title = 'Tasks', tasks, maxDisplay = 10 }: Tas
             return (
               <Box key={task.id || index}>
                 <Text color={color}>{symbol}</Text>
-                <Text color={color}>{' '}</Text>
+                <Text color={color}> </Text>
                 <Text color={color}>{task.description.slice(0, 60)}</Text>
-                <Text dimColor>{progress}{time}</Text>
+                <Text dimColor>
+                  {progress}
+                  {time}
+                </Text>
               </Box>
             );
           })

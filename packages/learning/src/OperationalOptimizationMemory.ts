@@ -66,8 +66,9 @@ export class OperationalOptimizationMemory {
 
     // Enforce limit
     if (this.optimizations.size > this.maxEntries) {
-      const oldest = Array.from(this.optimizations.entries())
-        .sort(([, a], [, b]) => a.createdAt - b.createdAt)[0];
+      const oldest = Array.from(this.optimizations.entries()).sort(
+        ([, a], [, b]) => a.createdAt - b.createdAt,
+      )[0];
       if (oldest) this.optimizations.delete(oldest[0]);
     }
 

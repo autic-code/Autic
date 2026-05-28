@@ -84,9 +84,7 @@ export class ExtensionLoader {
           break;
         }
 
-        const result = await this.loadFromDirectory(
-          path.join(searchPath, entry.name),
-        );
+        const result = await this.loadFromDirectory(path.join(searchPath, entry.name));
         results.push(result);
 
         if (result.success) {
@@ -184,10 +182,7 @@ export class ExtensionLoader {
 
     // Check entry point extension
     const entryExt = path.extname(entryPath);
-    if (
-      this.config.allowedExtensions &&
-      !this.config.allowedExtensions.includes(entryExt)
-    ) {
+    if (this.config.allowedExtensions && !this.config.allowedExtensions.includes(entryExt)) {
       return {
         manifest: fullManifest,
         extensionPath: extensionDir,

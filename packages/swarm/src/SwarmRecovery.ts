@@ -28,7 +28,12 @@ export class SwarmRecovery {
   private observability: SwarmObservability;
   private swarmId: string = '';
   private maxRetries = 3;
-  private recoveryHistory: Array<{ contractId: string; strategy: RecoveryStrategy; timestamp: number; success: boolean }> = [];
+  private recoveryHistory: Array<{
+    contractId: string;
+    strategy: RecoveryStrategy;
+    timestamp: number;
+    success: boolean;
+  }> = [];
   private historyLimit = 100;
 
   constructor(delegationManager: AgentDelegation, observability: SwarmObservability) {
@@ -119,7 +124,10 @@ export class SwarmRecovery {
         }
         case 'skip': {
           // Mark as completed with no output (skipped)
-          this.delegationManager.completeContract(plan.contractId, { skipped: true, reason: plan.reason });
+          this.delegationManager.completeContract(plan.contractId, {
+            skipped: true,
+            reason: plan.reason,
+          });
           success = true;
           break;
         }
@@ -158,7 +166,10 @@ export class SwarmRecovery {
   }
 
   /** Recover multiple failed contracts */
-  async recoverBatch(failedContracts: DelegationContract[], availableAgents: string[]): Promise<{
+  async recoverBatch(
+    failedContracts: DelegationContract[],
+    availableAgents: string[],
+  ): Promise<{
     recovered: number;
     failed: number;
     skipped: number;
@@ -188,7 +199,7 @@ export class SwarmRecovery {
     const now = Date.now();
     const stalledThreshold = 120_000; // 2 minutes
 
-    return running.filter((c) => (now - c.startedAt) > stalledThreshold);
+    return running.filter((c) => now - c.startedAt > stalledThreshold);
   }
 
   /** Get recovery metrics */

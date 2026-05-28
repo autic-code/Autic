@@ -88,7 +88,8 @@ export class RuntimeAuditSystem extends EventEmitter {
         message: `Heap: ${heapPercent.toFixed(1)}%, RSS: ${(mem.rss / 1024 / 1024).toFixed(0)}MB, Uptime: ${Math.floor(uptime)}s`,
         details: `heapUsed: ${(mem.heapUsed / 1024 / 1024).toFixed(1)}MB, heapTotal: ${(mem.heapTotal / 1024 / 1024).toFixed(1)}MB`,
         durationMs: Date.now() - start,
-        recommendation: heapPercent > 90 ? 'High memory pressure detected — run memory cleanup' : undefined,
+        recommendation:
+          heapPercent > 90 ? 'High memory pressure detected — run memory cleanup' : undefined,
       };
     } catch (err) {
       return {
@@ -159,7 +160,8 @@ export class RuntimeAuditSystem extends EventEmitter {
       message: `RSS: ${rssMB.toFixed(0)}MB, Heap: ${heapMB.toFixed(0)}MB, External: ${externalMB.toFixed(0)}MB`,
       details: `heapUsed: ${heapMB.toFixed(1)}MB, rss: ${rssMB.toFixed(1)}MB`,
       durationMs: Date.now() - start,
-      recommendation: rssMB > 1024 ? 'Memory usage exceeds 1GB — investigate potential leak' : undefined,
+      recommendation:
+        rssMB > 1024 ? 'Memory usage exceeds 1GB — investigate potential leak' : undefined,
     };
   }
 
@@ -169,24 +171,24 @@ export class RuntimeAuditSystem extends EventEmitter {
       name: 'Safety Status',
       category: 'safety',
       status: 'pass',
-      message: 'Safety systems active — loop protection, execution bounds, and permission boundaries operational',
+      message:
+        'Safety systems active — loop protection, execution bounds, and permission boundaries operational',
       durationMs: Date.now() - start,
     };
   }
 
   private buildReport(checks: AuditCheck[], durationMs: number): AuditReport {
     const summary = {
-      passed: checks.filter(c => c.status === 'pass').length,
-      warnings: checks.filter(c => c.status === 'warn').length,
-      failed: checks.filter(c => c.status === 'fail').length,
-      errors: checks.filter(c => c.status === 'error').length,
+      passed: checks.filter((c) => c.status === 'pass').length,
+      warnings: checks.filter((c) => c.status === 'warn').length,
+      failed: checks.filter((c) => c.status === 'fail').length,
+      errors: checks.filter((c) => c.status === 'error').length,
       total: checks.length,
     };
 
-    const failedChecks = checks.filter(c => c.status === 'fail' || c.status === 'error');
+    const failedChecks = checks.filter((c) => c.status === 'fail' || c.status === 'error');
     const overallStatus: AuditReport['overallStatus'] =
-      failedChecks.length > 0 ? 'unhealthy' :
-      summary.warnings > 2 ? 'degraded' : 'healthy';
+      failedChecks.length > 0 ? 'unhealthy' : summary.warnings > 2 ? 'degraded' : 'healthy';
 
     return {
       timestamp: Date.now(),
@@ -195,8 +197,8 @@ export class RuntimeAuditSystem extends EventEmitter {
       summary,
       overallStatus,
       recommendations: checks
-        .filter(c => c.recommendation)
-        .map(c => `[${c.name}] ${c.recommendation}`),
+        .filter((c) => c.recommendation)
+        .map((c) => `[${c.name}] ${c.recommendation}`),
     };
   }
 }

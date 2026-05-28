@@ -33,6 +33,7 @@ autic providers add openrouter --key YOUR_API_KEY
 ```
 
 **Environment variables:**
+
 - `AUTIC_OPENROUTER_KEY` or `OPENROUTER_API_KEY`
 
 **Available models:** GPT-4o, GPT-4o-mini, Claude 3.5 Sonnet, Claude 3 Opus, Gemini Pro, Gemini Ultra, Llama 3, Mixtral, DeepSeek, and 200+ more.
@@ -40,6 +41,7 @@ autic providers add openrouter --key YOUR_API_KEY
 **Rate limits:** Varies by model. OpenRouter applies credits-based rate limiting.
 
 **Configuration options:**
+
 ```bash
 autic config set openrouter.base_url https://openrouter.ai/api/v1
 autic config set openrouter.timeout 60000
@@ -54,15 +56,18 @@ autic providers add ollama --url http://localhost:11434
 ```
 
 **Environment variables:**
+
 - `AUTIC_OLLAMA_URL`
 
 **Requirements:**
+
 - [Ollama](https://ollama.com) installed and running
 - Models pulled: `ollama pull llama3`, `ollama pull mistral`, etc.
 
 **Available models:** All Ollama-compatible models (Llama 3, Mistral, CodeLlama, DeepSeek, etc.)
 
 **Configuration:**
+
 ```bash
 autic config set ollama.timeout 120000
 autic config set ollama.keep_alive 5m
@@ -77,6 +82,7 @@ autic providers add openai --key YOUR_API_KEY
 ```
 
 **Environment variables:**
+
 - `AUTIC_OPENAI_KEY` or `OPENAI_API_KEY`
 
 **Available models:** GPT-4o, GPT-4o-mini, GPT-4 Turbo, GPT-3.5 Turbo, o1-preview, o1-mini.
@@ -92,6 +98,7 @@ autic providers add anthropic --key YOUR_API_KEY
 ```
 
 **Environment variables:**
+
 - `AUTIC_ANTHROPIC_KEY` or `ANTHROPIC_API_KEY`
 
 **Available models:** Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku.
@@ -120,6 +127,7 @@ autic providers check
 ### Provider Priority
 
 Autic routes requests based on:
+
 1. Explicit model/provider selection (`--model`, `--provider`)
 2. Provider health and availability
 3. Model capability matching task requirements

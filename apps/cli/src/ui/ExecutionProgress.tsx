@@ -37,7 +37,11 @@ interface ExecutionProgressProps {
   maxDisplay?: number;
 }
 
-export function ExecutionProgress({ title = 'Execution Steps', steps, maxDisplay = 20 }: ExecutionProgressProps) {
+export function ExecutionProgress({
+  title = 'Execution Steps',
+  steps,
+  maxDisplay = 20,
+}: ExecutionProgressProps) {
   const displayed = steps.slice(-maxDisplay);
 
   return (
@@ -56,14 +60,29 @@ export function ExecutionProgress({ title = 'Execution Steps', steps, maxDisplay
             const color = statusColors[step.status] || '#94A3B8';
             const toolInfo = step.toolName ? ` ${step.toolName}` : '';
             const durationInfo = step.duration ? ` (${step.duration})` : '';
-            const statusSymbol = step.status === 'running' ? '●' : step.status === 'success' ? '✓' : step.status === 'failed' ? '✗' : '○';
+            const statusSymbol =
+              step.status === 'running'
+                ? '●'
+                : step.status === 'success'
+                  ? '✓'
+                  : step.status === 'failed'
+                    ? '✗'
+                    : '○';
 
             return (
               <Box key={step.id || index}>
                 <Text color={color}>{statusSymbol}</Text>
-                <Text color={color}>{' '}{icon}{toolInfo}</Text>
+                <Text color={color}>
+                  {' '}
+                  {icon}
+                  {toolInfo}
+                </Text>
                 {step.input && (
-                  <Text dimColor>{' '}{step.input.slice(0, 40)}{step.input.length > 40 ? '...' : ''}</Text>
+                  <Text dimColor>
+                    {' '}
+                    {step.input.slice(0, 40)}
+                    {step.input.length > 40 ? '...' : ''}
+                  </Text>
                 )}
                 <Text dimColor>{durationInfo}</Text>
               </Box>

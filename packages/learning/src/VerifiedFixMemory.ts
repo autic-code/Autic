@@ -58,8 +58,9 @@ export class VerifiedFixMemory {
 
     // Enforce max limit — remove oldest if full
     if (this.fixes.size >= this.maxFixes) {
-      const oldest = Array.from(this.fixes.entries())
-        .sort(([, a], [, b]) => a.fix.verifiedAt - b.fix.verifiedAt)[0];
+      const oldest = Array.from(this.fixes.entries()).sort(
+        ([, a], [, b]) => a.fix.verifiedAt - b.fix.verifiedAt,
+      )[0];
       if (oldest) this.fixes.delete(oldest[0]);
     }
 
@@ -98,7 +99,8 @@ export class VerifiedFixMemory {
     if (params.framework) results = results.filter((f) => f.framework === params.framework);
     if (params.dependency) results = results.filter((f) => f.dependency === params.dependency);
     if (params.errorType) results = results.filter((f) => f.errorType === params.errorType);
-    if (params.minConfidence) results = results.filter((f) => f.confidence >= params.minConfidence!);
+    if (params.minConfidence)
+      results = results.filter((f) => f.confidence >= params.minConfidence!);
 
     results.sort((a, b) => b.confidence - a.confidence);
     return results.slice(0, params.maxResults ?? 20);

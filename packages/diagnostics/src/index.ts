@@ -15,12 +15,7 @@ export { DocumentationGenerator } from './DocumentationGenerator.js';
 export { ObservabilityEnhancer } from './ObservabilityEnhancer.js';
 export { SecurityValidator } from './SecurityValidator.js';
 
-export type {
-  DocSection,
-  DocPage,
-  CommandDoc,
-  DocGenOptions,
-} from './DocumentationGenerator.js';
+export type { DocSection, DocPage, CommandDoc, DocGenOptions } from './DocumentationGenerator.js';
 
 export type {
   ObservableMetric,

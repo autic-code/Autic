@@ -69,7 +69,7 @@ export class ContextSafetySystem {
     this.retrievalTimestamps.push(now);
     // Clean up old timestamps
     const cutoff = now - this.RETRIEVAL_WINDOW_MS;
-    this.retrievalTimestamps = this.retrievalTimestamps.filter(t => t > cutoff);
+    this.retrievalTimestamps = this.retrievalTimestamps.filter((t) => t > cutoff);
     if (this.retrievalTimestamps.length > this.MAX_RETRIEVALS_PER_WINDOW) {
       return this.violation({
         type: 'runaway_retrieval',

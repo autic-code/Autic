@@ -18,7 +18,11 @@ export class VerificationEngine {
    * Verify a build/typecheck command output.
    * Returns structured result with all checks.
    */
-  async verifyBuild(output: string, exitCode: number, durationMs: number): Promise<VerificationResult> {
+  async verifyBuild(
+    output: string,
+    exitCode: number,
+    durationMs: number,
+  ): Promise<VerificationResult> {
     const checks: VerificationCheck[] = [];
 
     // Check exit code
@@ -26,7 +30,8 @@ export class VerificationEngine {
       type: 'command_success',
       name: 'Build exit code',
       passed: exitCode === 0,
-      output: exitCode === 0 ? 'Build completed successfully' : `Build failed with exit code ${exitCode}`,
+      output:
+        exitCode === 0 ? 'Build completed successfully' : `Build failed with exit code ${exitCode}`,
       error: exitCode !== 0 ? `Exit code ${exitCode}` : undefined,
       durationMs,
     });
@@ -62,9 +67,10 @@ export class VerificationEngine {
     return {
       passed: checks.every((c) => c.passed),
       checks,
-      summary: checks.length > 0
-        ? `${checks.filter((c) => c.passed).length}/${checks.length} checks passed`
-        : 'No verification checks performed',
+      summary:
+        checks.length > 0
+          ? `${checks.filter((c) => c.passed).length}/${checks.length} checks passed`
+          : 'No verification checks performed',
       durationMs,
     };
   }
@@ -72,7 +78,11 @@ export class VerificationEngine {
   /**
    * Verify test output.
    */
-  async verifyTestOutput(output: string, exitCode: number, durationMs: number): Promise<VerificationResult> {
+  async verifyTestOutput(
+    output: string,
+    exitCode: number,
+    durationMs: number,
+  ): Promise<VerificationResult> {
     const checks: VerificationCheck[] = [];
 
     // Exit code check
@@ -101,9 +111,10 @@ export class VerificationEngine {
     return {
       passed: checks.every((c) => c.passed),
       checks,
-      summary: checks.length > 0
-        ? `${checks.filter((c) => c.passed).length}/${checks.length} checks passed`
-        : 'No test output to verify',
+      summary:
+        checks.length > 0
+          ? `${checks.filter((c) => c.passed).length}/${checks.length} checks passed`
+          : 'No test output to verify',
       durationMs,
     };
   }
@@ -111,7 +122,11 @@ export class VerificationEngine {
   /**
    * Verify lint output.
    */
-  async verifyLintOutput(output: string, exitCode: number, durationMs: number): Promise<VerificationResult> {
+  async verifyLintOutput(
+    output: string,
+    exitCode: number,
+    durationMs: number,
+  ): Promise<VerificationResult> {
     const checks: VerificationCheck[] = [
       {
         type: 'lint',
@@ -188,7 +203,11 @@ export class VerificationEngine {
   /**
    * Verify a generic command success.
    */
-  async verifyCommandSuccess(output: string, exitCode: number, durationMs: number): Promise<VerificationResult> {
+  async verifyCommandSuccess(
+    output: string,
+    exitCode: number,
+    durationMs: number,
+  ): Promise<VerificationResult> {
     return {
       passed: exitCode === 0,
       checks: [
@@ -209,9 +228,7 @@ export class VerificationEngine {
   /**
    * Run multiple verification checks and aggregate results.
    */
-  async verifyAll(
-    checks: Array<() => Promise<VerificationResult>>,
-  ): Promise<VerificationResult> {
+  async verifyAll(checks: Array<() => Promise<VerificationResult>>): Promise<VerificationResult> {
     const allChecks: VerificationCheck[] = [];
     let totalDuration = 0;
     let allPassed = true;
@@ -260,14 +277,21 @@ export class VerificationEngine {
 
   private hasFailurePatterns(output: string): boolean {
     const failurePatterns = [
-      /error/i, /failure/i, /failed/i,
-      /cannot find/i, /not found/i,
-      /TS\d{4}/, /ERR!/, /✗/,
+      /error/i,
+      /failure/i,
+      /failed/i,
+      /cannot find/i,
+      /not found/i,
+      /TS\d{4}/,
+      /ERR!/,
+      /✗/,
     ];
     return failurePatterns.some((p) => p.test(output));
   }
 
-  private parseTestResults(output: string): { passed: number; failed: number; skipped: number } | null {
+  private parseTestResults(
+    output: string,
+  ): { passed: number; failed: number; skipped: number } | null {
     const passed = this.extractCount(output, /(\d+)\s+passed/i);
     const failed = this.extractCount(output, /(\d+)\s+failed/i);
     const skipped = this.extractCount(output, /(\d+)\s+skipped/i);

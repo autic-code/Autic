@@ -38,12 +38,16 @@ export class ReleaseValidator {
       if (pkg.dependencies) {
         for (const [dep, ver] of Object.entries(pkg.dependencies)) {
           if (ver === 'workspace:*' || ver === 'workspace:^' || ver === 'workspace:~') {
-            issues.push(`Dependency "${dep}" uses workspace protocol — must be replaced for publishing`);
+            issues.push(
+              `Dependency "${dep}" uses workspace protocol — must be replaced for publishing`,
+            );
           }
         }
       }
     } catch (error) {
-      issues.push(`Cannot read package.json: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      issues.push(
+        `Cannot read package.json: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     // Check dist directory
@@ -70,7 +74,10 @@ export class ReleaseValidator {
   /** Compare two semantic versions */
   compareVersions(a: string, b: string): 'newer' | 'older' | 'equal' {
     const parse = (v: string): number[] =>
-      v.replace(/[^0-9.]/g, '').split('.').map(Number);
+      v
+        .replace(/[^0-9.]/g, '')
+        .split('.')
+        .map(Number);
 
     const aParts = parse(a);
     const bParts = parse(b);
@@ -167,7 +174,11 @@ export class ReleaseValidator {
         const fullPath = join(dir, entry.name);
         if (entry.isDirectory()) {
           await walk(fullPath);
-        } else if (entry.name.endsWith('.js') || entry.name.endsWith('.d.ts') || entry.name.endsWith('.json')) {
+        } else if (
+          entry.name.endsWith('.js') ||
+          entry.name.endsWith('.d.ts') ||
+          entry.name.endsWith('.json')
+        ) {
           const content = await readFile(fullPath);
           const hash = createHash('sha256').update(content).digest('hex');
           const stats = await stat(fullPath);
@@ -198,7 +209,10 @@ export class ReleaseValidator {
   }
 
   /** Verify a release manifest */
-  async verifyManifest(manifest: ReleaseManifest, distPath: string): Promise<{
+  async verifyManifest(
+    manifest: ReleaseManifest,
+    distPath: string,
+  ): Promise<{
     valid: boolean;
     mismatches: Array<{ file: string; expected: string; actual: string }>;
   }> {

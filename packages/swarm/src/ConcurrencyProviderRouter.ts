@@ -15,8 +15,8 @@ import type { ConcurrencyRouteDecision } from '@autic/shared';
 export interface ProviderInfo {
   id: string;
   name: string;
-  load: number;        // 0-100: current utilization
-  queueDepth: number;   // How many requests queued
+  load: number; // 0-100: current utilization
+  queueDepth: number; // How many requests queued
   rateLimited: boolean;
   cooldownUntil: number;
   avgLatencyMs: number;
@@ -57,12 +57,11 @@ export class ConcurrencyProviderRouter {
     minHealth?: boolean;
   }): ConcurrencyRouteDecision | null {
     const now = Date.now();
-    const candidates = Array.from(this.providers.values())
-      .filter((p) => {
-        if (p.rateLimited && p.cooldownUntil > now) return false;
-        if (params.minHealth && !p.healthy) return false;
-        return true;
-      });
+    const candidates = Array.from(this.providers.values()).filter((p) => {
+      if (p.rateLimited && p.cooldownUntil > now) return false;
+      if (params.minHealth && !p.healthy) return false;
+      return true;
+    });
 
     if (candidates.length === 0) return null;
 
@@ -106,7 +105,9 @@ export class ConcurrencyProviderRouter {
   getFallbackProviders(excludeProviderId: string): ProviderInfo[] {
     const now = Date.now();
     return Array.from(this.providers.values())
-      .filter((p) => p.id !== excludeProviderId && !p.rateLimited && p.cooldownUntil <= now && p.healthy)
+      .filter(
+        (p) => p.id !== excludeProviderId && !p.rateLimited && p.cooldownUntil <= now && p.healthy,
+      )
       .sort((a, b) => a.load - b.load);
   }
 
@@ -146,7 +147,13 @@ export class ConcurrencyProviderRouter {
   } {
     const all = Array.from(this.providers.values());
     if (all.length === 0) {
-      return { totalProviders: 0, healthyProviders: 0, rateLimitedProviders: 0, avgLoad: 0, avgLatencyMs: 0 };
+      return {
+        totalProviders: 0,
+        healthyProviders: 0,
+        rateLimitedProviders: 0,
+        avgLoad: 0,
+        avgLatencyMs: 0,
+      };
     }
 
     return {

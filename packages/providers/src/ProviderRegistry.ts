@@ -6,7 +6,12 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { ProviderConfig, ProviderStatus, ProviderEntry, ProviderCapability } from '@autic/shared';
+import type {
+  ProviderConfig,
+  ProviderStatus,
+  ProviderEntry,
+  ProviderCapability,
+} from '@autic/shared';
 import type { LLMProvider } from './types.js';
 
 export interface RegistryOptions {
@@ -71,8 +76,13 @@ export class ProviderRegistry {
   /**
    * Get all registered providers.
    */
-  listProviders(): Array<{ provider: LLMProvider; config: ProviderConfig; status: ProviderStatus }> {
-    const result: Array<{ provider: LLMProvider; config: ProviderConfig; status: ProviderStatus }> = [];
+  listProviders(): Array<{
+    provider: LLMProvider;
+    config: ProviderConfig;
+    status: ProviderStatus;
+  }> {
+    const result: Array<{ provider: LLMProvider; config: ProviderConfig; status: ProviderStatus }> =
+      [];
     for (const [id, provider] of this.providers) {
       const config = this.configs.get(id);
       const status = this.statuses.get(id);
@@ -125,7 +135,12 @@ export class ProviderRegistry {
       this.updateStatus(providerId, connected ? 'healthy' : 'unhealthy', connected);
       return connected;
     } catch (error) {
-      this.updateStatus(providerId, 'unhealthy', false, error instanceof Error ? error.message : 'Connection failed');
+      this.updateStatus(
+        providerId,
+        'unhealthy',
+        false,
+        error instanceof Error ? error.message : 'Connection failed',
+      );
       return false;
     }
   }
@@ -331,7 +346,10 @@ export class ProviderRegistry {
     const caps: ProviderCapability[] = ['chat'];
 
     // Check if provider supports streaming by checking method existence
-    if ('stream' in provider && typeof (provider as unknown as Record<string, unknown>).stream === 'function') {
+    if (
+      'stream' in provider &&
+      typeof (provider as unknown as Record<string, unknown>).stream === 'function'
+    ) {
       caps.push('streaming');
     }
 

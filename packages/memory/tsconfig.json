@@ -5,8 +5,5 @@
     "rootDir": "./src"
   },
   "include": ["src/**/*.ts"],
-  "references": [
-    { "path": "../shared" },
-    { "path": "../security" }
-  ]
+  "references": [{ "path": "../shared" }, { "path": "../security" }]
 }

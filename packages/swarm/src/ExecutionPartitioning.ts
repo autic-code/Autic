@@ -112,7 +112,9 @@ export class ExecutionPartitioning {
     if (role === 'researcher' || role === 'planner' || role === 'architect') {
       return this.findPartitionByDomain('documentation') || this.listPartitions()[0];
     }
-    return this.listPartitions().find((p) => p.activeJobs < p.maxJobs * 0.8) || this.listPartitions()[0];
+    return (
+      this.listPartitions().find((p) => p.activeJobs < p.maxJobs * 0.8) || this.listPartitions()[0]
+    );
   }
 
   /** Get total active jobs across all partitions */

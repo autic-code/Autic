@@ -150,8 +150,10 @@ export class LearningEngine {
     if (params.framework) results = results.filter((e) => e.framework === params.framework);
     if (params.dependency) results = results.filter((e) => e.dependency === params.dependency);
     if (params.tags) results = results.filter((e) => params.tags!.some((t) => e.tags.includes(t)));
-    if (params.minConfidence) results = results.filter((e) => e.confidence >= params.minConfidence!);
-    if (params.verified !== undefined) results = results.filter((e) => e.verified === params.verified);
+    if (params.minConfidence)
+      results = results.filter((e) => e.confidence >= params.minConfidence!);
+    if (params.verified !== undefined)
+      results = results.filter((e) => e.verified === params.verified);
 
     results.sort((a, b) => b.confidence - a.confidence);
     return results.slice(0, params.maxResults ?? 50);

@@ -33,7 +33,12 @@ export interface ChaosSimulatorConfig {
   scenarios: ChaosScenario[];
   concurrency?: number;
   reportIntervalMs?: number;
-  metricsCallback?: (metrics: { activeScenarios: number; completedScenarios: number; failedRequests: number; totalRequests: number }) => void;
+  metricsCallback?: (metrics: {
+    activeScenarios: number;
+    completedScenarios: number;
+    failedRequests: number;
+    totalRequests: number;
+  }) => void;
 }
 
 export interface ChaosTestResult {
@@ -73,7 +78,14 @@ export interface ChaosTestResult {
 
 export class ChaosSimulator {
   private config: ChaosSimulatorConfig;
-  private defaultScenarioTypes: ChaosScenarioType[] = ['outage', 'invalid_key', 'slow_streaming', 'rate_limit_storm', 'partial_failure', 'degraded_response'];
+  private defaultScenarioTypes: ChaosScenarioType[] = [
+    'outage',
+    'invalid_key',
+    'slow_streaming',
+    'rate_limit_storm',
+    'partial_failure',
+    'degraded_response',
+  ];
   private defaultProviders = ['openrouter', 'openai', 'anthropic'];
 
   constructor(config: Partial<ChaosSimulatorConfig> = {}) {
@@ -157,7 +169,9 @@ export class ChaosSimulator {
   /**
    * Simulate rate-limit storms
    */
-  async simulateRateLimitStorms(): Promise<Array<{ name: string; passed: boolean; error?: string }>> {
+  async simulateRateLimitStorms(): Promise<
+    Array<{ name: string; passed: boolean; error?: string }>
+  > {
     const results: Array<{ name: string; passed: boolean; error?: string }> = [];
     for (const provider of this.defaultProviders) {
       const scenario: ChaosScenario = {
@@ -180,7 +194,9 @@ export class ChaosSimulator {
   /**
    * Simulate partial (intermittent) failures
    */
-  async simulatePartialFailures(): Promise<Array<{ name: string; passed: boolean; error?: string }>> {
+  async simulatePartialFailures(): Promise<
+    Array<{ name: string; passed: boolean; error?: string }>
+  > {
     const results: Array<{ name: string; passed: boolean; error?: string }> = [];
     for (const provider of this.defaultProviders) {
       const scenario: ChaosScenario = {
@@ -203,7 +219,9 @@ export class ChaosSimulator {
   /**
    * Simulate degraded (low-quality) responses
    */
-  async simulateDegradedResponses(): Promise<Array<{ name: string; passed: boolean; error?: string }>> {
+  async simulateDegradedResponses(): Promise<
+    Array<{ name: string; passed: boolean; error?: string }>
+  > {
     const results: Array<{ name: string; passed: boolean; error?: string }> = [];
     for (const provider of this.defaultProviders) {
       const scenario: ChaosScenario = {
@@ -254,7 +272,7 @@ export class ChaosSimulator {
     for (let i = 0; i < this.config.scenarios.length; i += concurrency) {
       const batch = this.config.scenarios.slice(i, i + concurrency);
       const batchResults = await Promise.all(
-        batch.map((scenario) => this.simulateScenario(scenario))
+        batch.map((scenario) => this.simulateScenario(scenario)),
       );
       scenarioResults.push(...batchResults);
 
@@ -273,7 +291,9 @@ export class ChaosSimulator {
     const totalRequests = scenarioResults.reduce((s, r) => s + r.requestsAttempted, 0);
     const succeededRequests = scenarioResults.reduce((s, r) => s + r.requestsSucceeded, 0);
     const failedRequests = scenarioResults.reduce((s, r) => s + r.requestsFailed, 0);
-    const avgRecoveryTimeMs = scenarioResults.reduce((s, r) => s + r.recoveryTimeMs, 0) / Math.max(scenarioResults.length, 1);
+    const avgRecoveryTimeMs =
+      scenarioResults.reduce((s, r) => s + r.recoveryTimeMs, 0) /
+      Math.max(scenarioResults.length, 1);
 
     return {
       passed: survivedScenarios === scenarioResults.length,
@@ -295,7 +315,9 @@ export class ChaosSimulator {
   /**
    * Simulate a single chaos scenario against runtime
    */
-  private async simulateScenario(scenario: ChaosScenario): Promise<ChaosTestResult['scenarios'][0]> {
+  private async simulateScenario(
+    scenario: ChaosScenario,
+  ): Promise<ChaosTestResult['scenarios'][0]> {
     const startTime = Date.now();
     const requestCount = this.getRequestCount(scenario);
     let succeeded = 0;
@@ -346,7 +368,11 @@ export class ChaosSimulator {
   /**
    * Determine if a specific request should succeed in the chaos scenario
    */
-  private shouldRequestSucceed(scenario: ChaosScenario, requestIndex: number, totalRequests: number): boolean {
+  private shouldRequestSucceed(
+    scenario: ChaosScenario,
+    requestIndex: number,
+    totalRequests: number,
+  ): boolean {
     switch (scenario.type) {
       case 'outage':
         return false; // All requests fail during outage
@@ -369,10 +395,16 @@ export class ChaosSimulator {
    * Simulate recovery time after chaos scenario
    */
   private simulateRecovery(scenario: ChaosScenario): number {
-    const baseRecovery = scenario.type === 'outage' ? 5000 :
-      scenario.type === 'rate_limit_storm' ? 3000 :
-      scenario.type === 'invalid_key' ? 2000 : 1000;
-    const multiplier = scenario.intensity === 'high' ? 2 : scenario.intensity === 'medium' ? 1.5 : 1;
+    const baseRecovery =
+      scenario.type === 'outage'
+        ? 5000
+        : scenario.type === 'rate_limit_storm'
+          ? 3000
+          : scenario.type === 'invalid_key'
+            ? 2000
+            : 1000;
+    const multiplier =
+      scenario.intensity === 'high' ? 2 : scenario.intensity === 'medium' ? 1.5 : 1;
     return baseRecovery * multiplier;
   }
 
@@ -386,7 +418,9 @@ export class ChaosSimulator {
     if (failedScenarios.length > 0) {
       recs.push(`Runtime failed to survive ${failedScenarios.length} chaos scenario(s)`);
       for (const s of failedScenarios) {
-        recs.push(`  ${s.type} on ${s.providerId}: ${s.requestsFailed}/${s.requestsAttempted} requests failed`);
+        recs.push(
+          `  ${s.type} on ${s.providerId}: ${s.requestsFailed}/${s.requestsAttempted} requests failed`,
+        );
       }
     }
 

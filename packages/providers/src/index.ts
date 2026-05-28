@@ -16,13 +16,12 @@ export { ModelRegistry } from './ModelRegistry.js';
 export type { ModelRegistryOptions } from './ModelRegistry.js';
 export { RateLimiter } from './RateLimiter.js';
 export type { RateLimiterOptions } from './RateLimiter.js';
-export {
-  classifyProviderError,
-  createProviderError,
-  formatProviderError,
-} from './errors.js';
+export { classifyProviderError, createProviderError, formatProviderError } from './errors.js';
 export type { ErrorClassificationResult } from './errors.js';
 
 // Stability
 export { ProviderStabilityLayer } from './ProviderStabilityLayer.js';
-export type { ProviderStabilityLayerOptions, ProviderStabilityEvents } from './ProviderStabilityLayer.js';
+export type {
+  ProviderStabilityLayerOptions,
+  ProviderStabilityEvents,
+} from './ProviderStabilityLayer.js';

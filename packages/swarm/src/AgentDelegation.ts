@@ -32,7 +32,9 @@ export class AgentDelegation {
     depth: number;
   }): Promise<DelegationContract> {
     if (params.depth > this.config.maxDelegationDepth) {
-      throw new Error(`Delegation depth ${params.depth} exceeds max ${this.config.maxDelegationDepth}`);
+      throw new Error(
+        `Delegation depth ${params.depth} exceeds max ${this.config.maxDelegationDepth}`,
+      );
     }
 
     const contract: DelegationContract = {
@@ -64,7 +66,8 @@ export class AgentDelegation {
   /** Mark a delegation contract as running */
   startContract(contractId: string): boolean {
     const contract = this.contracts.get(contractId);
-    if (!contract || (contract.status !== 'accepted' && contract.status !== 'pending')) return false;
+    if (!contract || (contract.status !== 'accepted' && contract.status !== 'pending'))
+      return false;
     contract.status = 'running';
     return true;
   }
@@ -82,7 +85,13 @@ export class AgentDelegation {
   /** Fail a delegation contract with an error */
   failContract(contractId: string, error: string): boolean {
     const contract = this.contracts.get(contractId);
-    if (!contract || (contract.status !== 'running' && contract.status !== 'accepted' && contract.status !== 'pending')) return false;
+    if (
+      !contract ||
+      (contract.status !== 'running' &&
+        contract.status !== 'accepted' &&
+        contract.status !== 'pending')
+    )
+      return false;
     contract.status = 'failed';
     contract.error = error;
     contract.completedAt = timestamp();
@@ -122,7 +131,9 @@ export class AgentDelegation {
 
   /** Get count of active (accepted + running) delegations */
   getActiveCount(): number {
-    return this.getContractsByStatus('accepted').length + this.getContractsByStatus('running').length;
+    return (
+      this.getContractsByStatus('accepted').length + this.getContractsByStatus('running').length
+    );
   }
 
   /** Get count of completed delegations */

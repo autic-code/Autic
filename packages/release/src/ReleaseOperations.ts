@@ -1,7 +1,7 @@
 /**
  * Release Operations — release verification, rollback validation,
  * package integrity checks, and dependency auditing.
- */import { EventEmitter } from 'events';
+ */ import { EventEmitter } from 'events';
 import { timestamp, generateId } from '@autic/shared';
 import type { ReleaseChannel } from './ReleaseChannels.js';
 
@@ -122,7 +122,8 @@ export class ReleaseOperationsManager extends EventEmitter {
   /** Audit reports */
   private auditReports: DependencyAuditReport[] = [];
   /** Known packages with expected hashes */
-  private packageRegistry: Map<string, { checksum: string; fileCount: number; totalSize: number }> = new Map();
+  private packageRegistry: Map<string, { checksum: string; fileCount: number; totalSize: number }> =
+    new Map();
 
   constructor() {
     super();
@@ -142,7 +143,7 @@ export class ReleaseOperationsManager extends EventEmitter {
       skipIntegrityCheck?: boolean;
       skipDependencyAudit?: boolean;
       skipRollbackValidation?: boolean;
-    }
+    },
   ): Promise<VerificationResult> {
     const checks: VerificationCheck[] = [];
     const id = generateId();
@@ -337,9 +338,7 @@ export class ReleaseOperationsManager extends EventEmitter {
     const issues: string[] = [];
 
     // Simulated checksum calculation
-    const actualChecksum = expected
-      ? this.computeChecksum(packageName)
-      : 'unknown';
+    const actualChecksum = expected ? this.computeChecksum(packageName) : 'unknown';
 
     const fileCountMatch = expected ? true : false;
     const fileSizeMatch = expected ? true : false;
@@ -407,7 +406,7 @@ export class ReleaseOperationsManager extends EventEmitter {
 
     const vulnerabilities = knownDeps.reduce((sum, d) => sum + d.vulnerabilities.length, 0);
     const outdated = knownDeps.filter(
-      (d) => d.latestVersion && d.latestVersion !== d.currentVersion
+      (d) => d.latestVersion && d.latestVersion !== d.currentVersion,
     ).length;
     const deprecated = knownDeps.filter((d) => d.deprecated).length;
     const licenseIssues = knownDeps.filter((d) => !d.license).length;
@@ -447,7 +446,9 @@ export class ReleaseOperationsManager extends EventEmitter {
    */
   private computeChecksum(name: string): string {
     // Simulated SHA-256 hash
-    const hash = Buffer.from(name + timestamp().toString()).toString('base64').slice(0, 16);
+    const hash = Buffer.from(name + timestamp().toString())
+      .toString('base64')
+      .slice(0, 16);
     return `sha256-${hash}`;
   }
 }

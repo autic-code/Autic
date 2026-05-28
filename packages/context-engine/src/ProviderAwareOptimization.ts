@@ -22,12 +22,54 @@ interface ProviderModelSpec {
 }
 
 const AVAILABLE_MODELS: ProviderModelSpec[] = [
-  { providerId: 'openrouter', modelId: 'gpt-4o', maxContextWindow: 128_000, costPerMillionInput: 2.5, costPerMillionOutput: 10, isLocal: false },
-  { providerId: 'openrouter', modelId: 'claude-3.5-sonnet', maxContextWindow: 200_000, costPerMillionInput: 3, costPerMillionOutput: 15, isLocal: false },
-  { providerId: 'openrouter', modelId: 'gemini-2.0-flash', maxContextWindow: 1_000_000, costPerMillionInput: 0.15, costPerMillionOutput: 0.6, isLocal: false },
-  { providerId: 'ollama', modelId: 'codellama', maxContextWindow: 16_000, costPerMillionInput: 0, costPerMillionOutput: 0, isLocal: true },
-  { providerId: 'ollama', modelId: 'llama3', maxContextWindow: 8_000, costPerMillionInput: 0, costPerMillionOutput: 0, isLocal: true },
-  { providerId: 'ollama', modelId: 'qwen2.5-coder', maxContextWindow: 32_000, costPerMillionInput: 0, costPerMillionOutput: 0, isLocal: true },
+  {
+    providerId: 'openrouter',
+    modelId: 'gpt-4o',
+    maxContextWindow: 128_000,
+    costPerMillionInput: 2.5,
+    costPerMillionOutput: 10,
+    isLocal: false,
+  },
+  {
+    providerId: 'openrouter',
+    modelId: 'claude-3.5-sonnet',
+    maxContextWindow: 200_000,
+    costPerMillionInput: 3,
+    costPerMillionOutput: 15,
+    isLocal: false,
+  },
+  {
+    providerId: 'openrouter',
+    modelId: 'gemini-2.0-flash',
+    maxContextWindow: 1_000_000,
+    costPerMillionInput: 0.15,
+    costPerMillionOutput: 0.6,
+    isLocal: false,
+  },
+  {
+    providerId: 'ollama',
+    modelId: 'codellama',
+    maxContextWindow: 16_000,
+    costPerMillionInput: 0,
+    costPerMillionOutput: 0,
+    isLocal: true,
+  },
+  {
+    providerId: 'ollama',
+    modelId: 'llama3',
+    maxContextWindow: 8_000,
+    costPerMillionInput: 0,
+    costPerMillionOutput: 0,
+    isLocal: true,
+  },
+  {
+    providerId: 'ollama',
+    modelId: 'qwen2.5-coder',
+    maxContextWindow: 32_000,
+    costPerMillionInput: 0,
+    costPerMillionOutput: 0,
+    isLocal: true,
+  },
 ];
 
 export class ProviderAwareOptimization {
@@ -36,11 +78,14 @@ export class ProviderAwareOptimization {
   /**
    * Get provider recommendations for a given context size.
    */
-  recommendProviders(contextTokens: number, options: {
-    preferLocal?: boolean;
-    preferLowCost?: boolean;
-    requiredCapabilities?: string[];
-  } = {}): ProviderContextRecommendation[] {
+  recommendProviders(
+    contextTokens: number,
+    options: {
+      preferLocal?: boolean;
+      preferLowCost?: boolean;
+      requiredCapabilities?: string[];
+    } = {},
+  ): ProviderContextRecommendation[] {
     const recommendations: ProviderContextRecommendation[] = [];
 
     const sorted = [...this.models];
@@ -84,10 +129,13 @@ export class ProviderAwareOptimization {
   /**
    * Select the best provider for a given context size.
    */
-  selectBestProvider(contextTokens: number, options: {
-    preferLocal?: boolean;
-    preferLowCost?: boolean;
-  } = {}): ProviderContextRecommendation {
+  selectBestProvider(
+    contextTokens: number,
+    options: {
+      preferLocal?: boolean;
+      preferLowCost?: boolean;
+    } = {},
+  ): ProviderContextRecommendation {
     const recommendations = this.recommendProviders(contextTokens, options);
     if (recommendations.length === 0) {
       return {
@@ -107,7 +155,7 @@ export class ProviderAwareOptimization {
    * Estimate cost for a context assembly.
    */
   estimateCost(tokens: number, providerId: string): number {
-    const model = this.models.find(m => m.providerId === providerId);
+    const model = this.models.find((m) => m.providerId === providerId);
     if (!model) return 0;
     return (tokens / 1_000_000) * model.costPerMillionInput;
   }
@@ -116,7 +164,7 @@ export class ProviderAwareOptimization {
    * Check if context fits in a provider's window.
    */
   fitsInWindow(contextTokens: number, providerId: string, modelId: string): boolean {
-    const model = this.models.find(m => m.providerId === providerId && m.modelId === modelId);
+    const model = this.models.find((m) => m.providerId === providerId && m.modelId === modelId);
     if (!model) return contextTokens <= 128_000;
     return contextTokens <= model.maxContextWindow * 0.9;
   }
@@ -125,14 +173,16 @@ export class ProviderAwareOptimization {
    * Get available models for a provider.
    */
   getModelsForProvider(providerId: string): ProviderModelSpec[] {
-    return this.models.filter(m => m.providerId === providerId);
+    return this.models.filter((m) => m.providerId === providerId);
   }
 
   /**
    * Register a custom model.
    */
   registerModel(model: ProviderModelSpec): void {
-    const existing = this.models.findIndex(m => m.providerId === model.providerId && m.modelId === model.modelId);
+    const existing = this.models.findIndex(
+      (m) => m.providerId === model.providerId && m.modelId === model.modelId,
+    );
     if (existing >= 0) {
       this.models[existing] = model;
     } else {
@@ -143,7 +193,11 @@ export class ProviderAwareOptimization {
   /**
    * Get cost savings from using optimal provider vs. default.
    */
-  getCostSavings(contextTokens: number, defaultProvider: string, optimalProvider: string): { defaultCost: number; optimalCost: number; savings: number; savingsPercent: string } {
+  getCostSavings(
+    contextTokens: number,
+    defaultProvider: string,
+    optimalProvider: string,
+  ): { defaultCost: number; optimalCost: number; savings: number; savingsPercent: string } {
     const defaultCost = this.estimateCost(contextTokens, defaultProvider);
     const optimalCost = this.estimateCost(contextTokens, optimalProvider);
     const savings = defaultCost - optimalCost;

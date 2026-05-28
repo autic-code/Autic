@@ -64,9 +64,7 @@ export function AuticApp({
 
       {/* Footer */}
       <Box marginTop={1} borderStyle="single" borderColor="#334155" paddingX={1}>
-        <Text dimColor>
-          Press Ctrl+C to exit · /help for commands
-        </Text>
+        <Text dimColor>Press Ctrl+C to exit · /help for commands</Text>
       </Box>
     </Box>
   );

@@ -46,10 +46,18 @@ export class ContextOptimizer {
 
   // Config files always get high priority
   private readonly CONFIG_FILES = new Set([
-    'package.json', 'tsconfig.json', '.env', '.env.example',
-    'next.config.ts', 'next.config.js', 'vite.config.ts',
-    'pnpm-workspace.yaml', 'docker-compose.yml', 'Dockerfile',
-    'tailwind.config.ts', 'postcss.config.js',
+    'package.json',
+    'tsconfig.json',
+    '.env',
+    '.env.example',
+    'next.config.ts',
+    'next.config.js',
+    'vite.config.ts',
+    'pnpm-workspace.yaml',
+    'docker-compose.yml',
+    'Dockerfile',
+    'tailwind.config.ts',
+    'postcss.config.js',
   ]);
 
   constructor(rootDir?: string) {
@@ -93,9 +101,10 @@ export class ContextOptimizer {
       reduction: scored.reduce((s, f) => s + f.tokenCount, 0) - usedTokens,
       filesSelected: selected.length,
       filesTotal: scored.length,
-      reductionPercentage: scored.length > 0
-        ? `${Math.round(((scored.reduce((s, f) => s + f.tokenCount, 0) - usedTokens) / scored.reduce((s, f) => s + f.tokenCount, 0)) * 100)}%`
-        : '0%',
+      reductionPercentage:
+        scored.length > 0
+          ? `${Math.round(((scored.reduce((s, f) => s + f.tokenCount, 0) - usedTokens) / scored.reduce((s, f) => s + f.tokenCount, 0)) * 100)}%`
+          : '0%',
     };
 
     return { files: selected, result };
@@ -167,7 +176,10 @@ export class ContextOptimizer {
     let totalTokens = pruned.reduce((sum, m) => sum + Math.ceil(m.content.length / 3), 0);
     if (totalTokens > maxTokens) {
       // Remove middle messages (between first batch and last batch)
-      const middle = pruned.slice(systemMsgs.length + firstBatch.length, pruned.length - lastBatch.length);
+      const middle = pruned.slice(
+        systemMsgs.length + firstBatch.length,
+        pruned.length - lastBatch.length,
+      );
       for (const msg of middle) {
         if (totalTokens <= maxTokens) break;
         const idx = pruned.indexOf(msg);
@@ -260,10 +272,7 @@ export class ContextOptimizer {
     }
   }
 
-  private async scoreFiles(
-    filePaths: string[],
-    taskDescription: string,
-  ): Promise<FileContext[]> {
+  private async scoreFiles(filePaths: string[], taskDescription: string): Promise<FileContext[]> {
     const taskLower = taskDescription.toLowerCase();
     const taskKeywords = taskLower.split(/\s+/).filter((w) => w.length > 3);
 
@@ -298,11 +307,12 @@ export class ContextOptimizer {
           priority: basePriority,
           relevanceScore: Math.min(basePriority + relevanceBoost, 100),
           tokenCount,
-          reason: relevanceBoost > 15
-            ? 'High keyword relevance'
-            : relevanceBoost > 5
-              ? 'Moderate relevance'
-              : 'General source file',
+          reason:
+            relevanceBoost > 15
+              ? 'High keyword relevance'
+              : relevanceBoost > 5
+                ? 'Moderate relevance'
+                : 'General source file',
         });
       } catch {
         // Skip files we can't read

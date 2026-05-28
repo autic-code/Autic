@@ -21,7 +21,12 @@ export async function releaseCommand(action?: string, value?: string): Promise<v
   // Register known releases
   manager.registerRelease('0.1.0', 'stable', {
     notes: 'Initial release',
-    features: ['Full Autic runtime', 'Provider orchestration', 'Security system', 'Hardening systems'],
+    features: [
+      'Full Autic runtime',
+      'Provider orchestration',
+      'Security system',
+      'Hardening systems',
+    ],
   });
 
   switch (action ?? 'status') {
@@ -78,7 +83,9 @@ export async function releaseCommand(action?: string, value?: string): Promise<v
       } else {
         for (const r of releases) {
           const marker = r.latest ? '← latest' : '';
-          console.log(`  ${r.version.padEnd(14)} ${r.channel.padEnd(8)} ${r.notes ?? ''} ${marker}`);
+          console.log(
+            `  ${r.version.padEnd(14)} ${r.channel.padEnd(8)} ${r.notes ?? ''} ${marker}`,
+          );
         }
       }
       break;

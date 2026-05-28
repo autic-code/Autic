@@ -89,14 +89,19 @@ export class SwarmOrchestrator {
   /** Register an agent into the swarm */
   registerAgent(agent: SwarmAgent): boolean {
     if (this.agents.size >= this.config.maxAgents) {
-      this.emitEvent('safety:blocked', { message: `Max agents (${this.config.maxAgents}) reached` });
+      this.emitEvent('safety:blocked', {
+        message: `Max agents (${this.config.maxAgents}) reached`,
+      });
       return false;
     }
     if (this.agents.has(agent.id)) {
       return false;
     }
     this.agents.set(agent.id, agent);
-    this.emitEvent('agent:registered', { message: `Agent registered: ${agent.name}`, agentId: agent.id });
+    this.emitEvent('agent:registered', {
+      message: `Agent registered: ${agent.name}`,
+      agentId: agent.id,
+    });
     return true;
   }
 
@@ -159,7 +164,9 @@ export class SwarmOrchestrator {
     const source = this.agents.get(params.sourceAgentId);
     const target = this.agents.get(params.targetAgentId);
     if (!source || !target) {
-      throw new Error(`Unknown agent: source=${params.sourceAgentId}, target=${params.targetAgentId}`);
+      throw new Error(
+        `Unknown agent: source=${params.sourceAgentId}, target=${params.targetAgentId}`,
+      );
     }
 
     const violation = this.safety.checkDelegationDepth(params.depth ?? 0);
@@ -242,7 +249,13 @@ export class SwarmOrchestrator {
         chunk.map(async (job) => {
           const agent = this.agents.get(job.agentId);
           if (!agent) {
-            return { jobId: job.id, agentId: job.agentId, success: false, error: 'Unknown agent', durationMs: 0 };
+            return {
+              jobId: job.id,
+              agentId: job.agentId,
+              success: false,
+              error: 'Unknown agent',
+              durationMs: 0,
+            };
           }
           const jobStart = Date.now();
           try {
@@ -289,7 +302,9 @@ export class SwarmOrchestrator {
 
       // Safety check after each chunk
       if (this.safety.isRunaway()) {
-        this.emitEvent('safety:violation', { message: 'Runaway execution detected, stopping batch' });
+        this.emitEvent('safety:violation', {
+          message: 'Runaway execution detected, stopping batch',
+        });
         break;
       }
     }
@@ -397,7 +412,16 @@ export class SwarmOrchestrator {
   }
 
   /** Emit an event */
-  private emitEvent(type: SwarmEventType, data: { message: string; agentId?: string; delegationId?: string; error?: string; data?: Record<string, unknown> }): void {
+  private emitEvent(
+    type: SwarmEventType,
+    data: {
+      message: string;
+      agentId?: string;
+      delegationId?: string;
+      error?: string;
+      data?: Record<string, unknown>;
+    },
+  ): void {
     this.observability.record({
       type,
       timestamp: timestamp(),

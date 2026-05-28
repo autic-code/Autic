@@ -53,9 +53,7 @@ export class PermissionManager {
   }
 
   removeRule(action: string, resource: string): void {
-    this.rules = this.rules.filter(
-      (r) => !(r.action === action && r.resource === resource),
-    );
+    this.rules = this.rules.filter((r) => !(r.action === action && r.resource === resource));
   }
 
   /**

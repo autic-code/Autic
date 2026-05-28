@@ -78,8 +78,8 @@ export async function platformCertifyCommand(action?: string): Promise<void> {
       for (const v of validations) {
         console.log(`  ${colorText('⟳', 'primary')} ${v.name}...`);
         const results = await v.fn();
-        const passed = results.filter(r => r.passed).length;
-        const failed = results.filter(r => !r.passed).length;
+        const passed = results.filter((r) => r.passed).length;
+        const failed = results.filter((r) => !r.passed).length;
         totalPassed += passed;
         totalFailed += failed;
         totalChecks += results.length;
@@ -101,7 +101,9 @@ export async function platformCertifyCommand(action?: string): Promise<void> {
       console.log(`  ${colorText('Certification Summary', 'bold')}`);
       console.log(`  Total checks: ${totalChecks}`);
       console.log(`  Passed: ${colorText(totalPassed.toString(), 'success')}`);
-      console.log(`  Failed: ${colorText(totalFailed.toString(), totalFailed > 0 ? 'error' : 'success')}`);
+      console.log(
+        `  Failed: ${colorText(totalFailed.toString(), totalFailed > 0 ? 'error' : 'success')}`,
+      );
       console.log(`  Pass rate: ${((totalPassed / totalChecks) * 100).toFixed(1)}%`);
 
       const certified = totalFailed === 0;
@@ -110,14 +112,18 @@ export async function platformCertifyCommand(action?: string): Promise<void> {
         console.log(`  ${colorText('  PLATFORM CERTIFIED ✓', 'success')}`);
         console.log(`  ${colorText('═══════════════════════════════════════', 'success')}`);
       } else {
-        console.log(`\n  ${colorText('  Platform certification requires all checks to pass', 'warning')}`);
+        console.log(
+          `\n  ${colorText('  Platform certification requires all checks to pass', 'warning')}`,
+        );
       }
       break;
     }
   }
 }
 
-function printCertificationResults(results: Array<{ name: string; passed: boolean; detail?: string; severity?: string }>): void {
+function printCertificationResults(
+  results: Array<{ name: string; passed: boolean; detail?: string; severity?: string }>,
+): void {
   for (const r of results) {
     const icon = r.passed ? colorText('✓', 'success') : colorText('✗', 'error');
     console.log(`  ${icon} ${r.name}`);

@@ -22,7 +22,9 @@ export async function observabilityCommand(action?: string): Promise<void> {
       console.log(`  │ Memory:     ${formatHealth(health.memory)}                          │`);
       console.log(`  │ Uptime:     ${formatDuration(health.uptimeMs)}`);
       console.log(`  │ Workers:    ${health.activeWorkers} active                         │`);
-      console.log(`  │ Error Rate: ${(health.errorRate5m * 100).toFixed(1)}% (5 min)                    │`);
+      console.log(
+        `  │ Error Rate: ${(health.errorRate5m * 100).toFixed(1)}% (5 min)                    │`,
+      );
       console.log('  ╰──────────────────────────────────────────────╯');
       break;
     }
@@ -33,7 +35,9 @@ export async function observabilityCommand(action?: string): Promise<void> {
       console.log(`  │ Active Pipelines:  ${orch.activePipelines}                         │`);
       console.log(`  │ Completed:         ${orch.completedPipelines}                         │`);
       console.log(`  │ Failed:            ${orch.failedPipelines}                         │`);
-      console.log(`  │ Throughput:        ${orch.pipelineThroughput.toFixed(1)}/min                     │`);
+      console.log(
+        `  │ Throughput:        ${orch.pipelineThroughput.toFixed(1)}/min                     │`,
+      );
       console.log(`  │ Avg Duration:      ${formatDuration(orch.avgPipelineDurationMs)}`);
       console.log('  ╰──────────────────────────────────────────────╯');
       break;
@@ -48,7 +52,9 @@ export async function observabilityCommand(action?: string): Promise<void> {
       console.log(`  │ Processed: ${queue.tasksProcessed}                               │`);
       console.log(`  │ Failed:    ${queue.tasksFailed}                               │`);
       console.log(`  │ Wait Time: ${formatDuration(queue.avgWaitTimeMs)}`);
-      console.log(`  │ Throughput: ${queue.queueThroughput.toFixed(1)}/min                       │`);
+      console.log(
+        `  │ Throughput: ${queue.queueThroughput.toFixed(1)}/min                       │`,
+      );
       console.log('  ╰──────────────────────────────────────────────╯');
       break;
     }
@@ -58,9 +64,15 @@ export async function observabilityCommand(action?: string): Promise<void> {
       console.log('\n  ╭─── Provider ──────────────────────────────╮');
       console.log(`  │ ID:        ${provider.providerId.padEnd(30)}│`);
       console.log(`  │ Status:    ${formatStatus(provider.status)}                         │`);
-      console.log(`  │ Requests:  ${provider.totalRequests} (${provider.failedRequests} failed)           │`);
-      console.log(`  │ Latency:   ${provider.avgLatencyMs.toFixed(0)}ms avg                       │`);
-      console.log(`  │ Error Rate: ${(provider.errorRate * 100).toFixed(1)}%                            │`);
+      console.log(
+        `  │ Requests:  ${provider.totalRequests} (${provider.failedRequests} failed)           │`,
+      );
+      console.log(
+        `  │ Latency:   ${provider.avgLatencyMs.toFixed(0)}ms avg                       │`,
+      );
+      console.log(
+        `  │ Error Rate: ${(provider.errorRate * 100).toFixed(1)}%                            │`,
+      );
       console.log(`  │ Models:    ${provider.modelsAvailable} available                       │`);
       console.log('  ╰──────────────────────────────────────────────╯');
       break;
@@ -70,9 +82,15 @@ export async function observabilityCommand(action?: string): Promise<void> {
       const ctx = obs.getContextSnapshot();
       console.log('\n  ╭─── Context Engineering ────────────────────╮');
       console.log(`  │ Active Sessions:  ${ctx.activeSessions}                         │`);
-      console.log(`  │ Tokens Managed:   ${(ctx.totalTokensManaged / 1000).toFixed(0)}K                        │`);
-      console.log(`  │ Cache Hit Rate:   ${(ctx.cacheHitRate * 100).toFixed(0)}%                            │`);
-      console.log(`  │ Compression:      ${(ctx.compressionRatio * 100).toFixed(0)}%                           │`);
+      console.log(
+        `  │ Tokens Managed:   ${(ctx.totalTokensManaged / 1000).toFixed(0)}K                        │`,
+      );
+      console.log(
+        `  │ Cache Hit Rate:   ${(ctx.cacheHitRate * 100).toFixed(0)}%                            │`,
+      );
+      console.log(
+        `  │ Compression:      ${(ctx.compressionRatio * 100).toFixed(0)}%                           │`,
+      );
       console.log(`  │ Retrievals:       ${ctx.retrievalOperations}                           │`);
       console.log('  ╰──────────────────────────────────────────────╯');
       break;
@@ -84,8 +102,12 @@ export async function observabilityCommand(action?: string): Promise<void> {
       console.log(`  │ Patterns:   ${learn.patternsLearned}                               │`);
       console.log(`  │ Fixes:      ${learn.fixesMemorized}                               │`);
       console.log(`  │ Experience: ${learn.experienceEntries}                               │`);
-      console.log(`  │ Accuracy:   ${(learn.learningAccuracy * 100).toFixed(0)}%                             │`);
-      console.log(`  │ Last Learn: ${learn.lastLearningAt ? new Date(learn.lastLearningAt).toISOString() : 'Never'}        │`);
+      console.log(
+        `  │ Accuracy:   ${(learn.learningAccuracy * 100).toFixed(0)}%                             │`,
+      );
+      console.log(
+        `  │ Last Learn: ${learn.lastLearningAt ? new Date(learn.lastLearningAt).toISOString() : 'Never'}        │`,
+      );
       console.log('  ╰──────────────────────────────────────────────╯');
       break;
     }
@@ -107,7 +129,9 @@ export async function observabilityCommand(action?: string): Promise<void> {
 
     default: {
       console.log(`\n  ✗ Unknown action: ${action}`);
-      console.log('  Usage: autic observability [health|orchestration|queue|provider|context|learning|events]');
+      console.log(
+        '  Usage: autic observability [health|orchestration|queue|provider|context|learning|events]',
+      );
     }
   }
 }
@@ -117,12 +141,18 @@ export async function observabilityCommand(action?: string): Promise<void> {
  */
 function formatHealth(status: string): string {
   switch (status) {
-    case 'healthy': return '✓ Healthy';
-    case 'degraded': return '⚠ Degraded';
-    case 'unhealthy': return '✗ Unhealthy';
-    case 'warning': return '⚠ Warning';
-    case 'critical': return '✗ Critical';
-    default: return status;
+    case 'healthy':
+      return '✓ Healthy';
+    case 'degraded':
+      return '⚠ Degraded';
+    case 'unhealthy':
+      return '✗ Unhealthy';
+    case 'warning':
+      return '⚠ Warning';
+    case 'critical':
+      return '✗ Critical';
+    default:
+      return status;
   }
 }
 
@@ -131,10 +161,14 @@ function formatHealth(status: string): string {
  */
 function formatStatus(status: string): string {
   switch (status) {
-    case 'healthy': return '✓ Healthy';
-    case 'degraded': return '⚠ Degraded';
-    case 'unhealthy': return '✗ Unhealthy';
-    default: return status;
+    case 'healthy':
+      return '✓ Healthy';
+    case 'degraded':
+      return '⚠ Degraded';
+    case 'unhealthy':
+      return '✗ Unhealthy';
+    default:
+      return status;
   }
 }
 

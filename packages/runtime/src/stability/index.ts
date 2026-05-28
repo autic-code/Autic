@@ -15,7 +15,10 @@ export { LoopProtection } from './LoopProtection.js';
 export type { LoopProtectionOptions, LoopProtectionEvents } from './LoopProtection.js';
 
 export { BackgroundScheduler } from './BackgroundScheduler.js';
-export type { BackgroundSchedulerOptions, BackgroundSchedulerEvents } from './BackgroundScheduler.js';
+export type {
+  BackgroundSchedulerOptions,
+  BackgroundSchedulerEvents,
+} from './BackgroundScheduler.js';
 
 export { GracefulShutdown } from './GracefulShutdown.js';
 export type { GracefulShutdownOptions, GracefulShutdownEvents } from './GracefulShutdown.js';

@@ -78,10 +78,7 @@ export class ContextHooks {
   /**
    * Emit a context event
    */
-  emit(
-    event: ContextHookEvent,
-    context: Omit<ContextHookContext, 'event' | 'timestamp'>,
-  ): void {
+  emit(event: ContextHookEvent, context: Omit<ContextHookContext, 'event' | 'timestamp'>): void {
     const fullContext: ContextHookContext = {
       ...context,
       event,

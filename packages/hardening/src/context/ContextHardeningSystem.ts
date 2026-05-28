@@ -56,9 +56,8 @@ export class ContextHardeningSystem {
       overflowProtectionActive,
       largeRepoPerformance,
       issues,
-      recommendations: recommendations.length > 0
-        ? recommendations
-        : ['All context hardening checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['All context hardening checks passed'],
     };
   }
 
@@ -83,7 +82,10 @@ export class ContextHardeningSystem {
     return true;
   }
 
-  async validateContextAssembly(assemblyCount: number, maxFiles: number): Promise<ContextHardeningValidation> {
+  async validateContextAssembly(
+    assemblyCount: number,
+    maxFiles: number,
+  ): Promise<ContextHardeningValidation> {
     const issues: string[] = [];
     const recommendations: string[] = [];
 
@@ -106,7 +108,10 @@ export class ContextHardeningSystem {
       overflowProtectionActive: passed,
       largeRepoPerformance: maxFiles <= 1000,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['Context assembly parameters within safe limits'],
+      recommendations:
+        recommendations.length > 0
+          ? recommendations
+          : ['Context assembly parameters within safe limits'],
     };
   }
 }

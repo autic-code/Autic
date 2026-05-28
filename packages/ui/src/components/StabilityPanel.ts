@@ -71,35 +71,49 @@ function formatBytes(bytes: number): string {
 
 function healthIcon(status: HealthStatus): string {
   switch (status) {
-    case 'healthy': return `${theme.colors.success}${theme.icon.check}${theme.colors.text}`;
-    case 'degraded': return `${theme.colors.warning}${theme.icon.warning}${theme.colors.text}`;
-    case 'unhealthy': return `${theme.colors.error}${theme.icon.cross}${theme.colors.text}`;
+    case 'healthy':
+      return `${theme.colors.success}${theme.icon.check}${theme.colors.text}`;
+    case 'degraded':
+      return `${theme.colors.warning}${theme.icon.warning}${theme.colors.text}`;
+    case 'unhealthy':
+      return `${theme.colors.error}${theme.icon.cross}${theme.colors.text}`;
   }
 }
 
 function pressureIcon(level: PressureLevel): string {
   switch (level) {
-    case 'low': return `${theme.colors.success}●${theme.colors.text}`;
-    case 'medium': return `${theme.colors.info}●${theme.colors.text}`;
-    case 'high': return `${theme.colors.warning}●${theme.colors.text}`;
-    case 'critical': return `${theme.colors.error}●${theme.colors.text}`;
+    case 'low':
+      return `${theme.colors.success}●${theme.colors.text}`;
+    case 'medium':
+      return `${theme.colors.info}●${theme.colors.text}`;
+    case 'high':
+      return `${theme.colors.warning}●${theme.colors.text}`;
+    case 'critical':
+      return `${theme.colors.error}●${theme.colors.text}`;
   }
 }
 
 function pressureColor(level: PressureLevel): string {
   switch (level) {
-    case 'low': return theme.colors.success;
-    case 'medium': return theme.colors.info;
-    case 'high': return theme.colors.warning;
-    case 'critical': return theme.colors.error;
+    case 'low':
+      return theme.colors.success;
+    case 'medium':
+      return theme.colors.info;
+    case 'high':
+      return theme.colors.warning;
+    case 'critical':
+      return theme.colors.error;
   }
 }
 
 function healthColor(status: HealthStatus): string {
   switch (status) {
-    case 'healthy': return theme.colors.success;
-    case 'degraded': return theme.colors.warning;
-    case 'unhealthy': return theme.colors.error;
+    case 'healthy':
+      return theme.colors.success;
+    case 'degraded':
+      return theme.colors.warning;
+    case 'unhealthy':
+      return theme.colors.error;
   }
 }
 
@@ -112,40 +126,62 @@ export function renderStabilityPanel(display: StabilityDisplay): string[] {
   const lines: string[] = [];
 
   // Header
-  lines.push(`${healthIcon(display.runtime.status)} ${healthColor(display.runtime.status)}Runtime Health${theme.colors.text} ${theme.colors.textDim}— ${display.runtime.status}${theme.colors.text}`);
+  lines.push(
+    `${healthIcon(display.runtime.status)} ${healthColor(display.runtime.status)}Runtime Health${theme.colors.text} ${theme.colors.textDim}— ${display.runtime.status}${theme.colors.text}`,
+  );
 
   // Runtime section
   lines.push(`  ${theme.colors.textDim}Uptime:${theme.colors.text} ${display.runtime.uptime}`);
-  lines.push(`  ${theme.colors.textDim}Memory:${theme.colors.text} ${formatBytes(display.runtime.memoryMB * 1024 * 1024)} ${memoryGrowthIndicator(display.runtime.memoryGrowthMBPerHour)}`);
+  lines.push(
+    `  ${theme.colors.textDim}Memory:${theme.colors.text} ${formatBytes(display.runtime.memoryMB * 1024 * 1024)} ${memoryGrowthIndicator(display.runtime.memoryGrowthMBPerHour)}`,
+  );
 
   // Queue section
-  lines.push(`  ${theme.colors.textDim}Queue:${theme.colors.text} ${pressureIcon(display.queue.pressure)} ${pressureColor(display.queue.pressure)}${display.queue.pressure}${theme.colors.text} ${theme.colors.textDim}(${display.queue.pending} pending, ${display.queue.running} running, ${display.queue.avgWaitMs}ms avg wait)${theme.colors.text}`);
+  lines.push(
+    `  ${theme.colors.textDim}Queue:${theme.colors.text} ${pressureIcon(display.queue.pressure)} ${pressureColor(display.queue.pressure)}${display.queue.pressure}${theme.colors.text} ${theme.colors.textDim}(${display.queue.pending} pending, ${display.queue.running} running, ${display.queue.avgWaitMs}ms avg wait)${theme.colors.text}`,
+  );
 
   // Workers section
-  const workerUtil = display.workers.total > 0
-    ? Math.round((display.workers.active / display.workers.total) * 100)
-    : 0;
-  lines.push(`  ${theme.colors.textDim}Workers:${theme.colors.text} ${display.workers.active}/${display.workers.total} active ${theme.colors.textDim}(${workerUtil}% util)${theme.colors.text}`);
+  const workerUtil =
+    display.workers.total > 0
+      ? Math.round((display.workers.active / display.workers.total) * 100)
+      : 0;
+  lines.push(
+    `  ${theme.colors.textDim}Workers:${theme.colors.text} ${display.workers.active}/${display.workers.total} active ${theme.colors.textDim}(${workerUtil}% util)${theme.colors.text}`,
+  );
 
   // Providers section
-  const providerHealthStr = `${display.providers.healthy} healthy` +
-    (display.providers.degraded > 0 ? `, ${theme.colors.warning}${display.providers.degraded} degraded${theme.colors.text}` : '') +
-    (display.providers.unhealthy > 0 ? `, ${theme.colors.error}${display.providers.unhealthy} unhealthy${theme.colors.text}` : '');
-  lines.push(`  ${theme.colors.textDim}Providers:${theme.colors.text} ${display.providers.total} total ${theme.colors.textDim}(${providerHealthStr})${display.providers.avgLatencyMs > 0 ? `, ${display.providers.avgLatencyMs}ms avg latency` : ''}${theme.colors.text}`);
+  const providerHealthStr =
+    `${display.providers.healthy} healthy` +
+    (display.providers.degraded > 0
+      ? `, ${theme.colors.warning}${display.providers.degraded} degraded${theme.colors.text}`
+      : '') +
+    (display.providers.unhealthy > 0
+      ? `, ${theme.colors.error}${display.providers.unhealthy} unhealthy${theme.colors.text}`
+      : '');
+  lines.push(
+    `  ${theme.colors.textDim}Providers:${theme.colors.text} ${display.providers.total} total ${theme.colors.textDim}(${providerHealthStr})${display.providers.avgLatencyMs > 0 ? `, ${display.providers.avgLatencyMs}ms avg latency` : ''}${theme.colors.text}`,
+  );
 
   // Pipelines section
   if (display.pipelines.active > 0 || display.pipelines.completed > 0) {
-    lines.push(`  ${theme.colors.textDim}Pipelines:${theme.colors.text} ${display.pipelines.active} active, ${display.pipelines.completed} completed${display.pipelines.failed > 0 ? `, ${theme.colors.error}${display.pipelines.failed} failed${theme.colors.text}` : ''}`);
+    lines.push(
+      `  ${theme.colors.textDim}Pipelines:${theme.colors.text} ${display.pipelines.active} active, ${display.pipelines.completed} completed${display.pipelines.failed > 0 ? `, ${theme.colors.error}${display.pipelines.failed} failed${theme.colors.text}` : ''}`,
+    );
   }
 
   // Loop protection section
   if (display.loops.detected > 0) {
-    lines.push(`  ${theme.colors.textDim}Loop Protection:${theme.colors.text} ${theme.colors.warning}${display.loops.detected} loops detected${theme.colors.text}${theme.colors.text}${theme.colors.text}`);
+    lines.push(
+      `  ${theme.colors.textDim}Loop Protection:${theme.colors.text} ${theme.colors.warning}${display.loops.detected} loops detected${theme.colors.text}${theme.colors.text}${theme.colors.text}`,
+    );
   }
 
   // Background tasks section
   if (display.background.registered > 0) {
-    lines.push(`  ${theme.colors.textDim}Background Tasks:${theme.colors.text} ${display.background.running} running, ${display.background.registered} registered`);
+    lines.push(
+      `  ${theme.colors.textDim}Background Tasks:${theme.colors.text} ${display.background.running} running, ${display.background.registered} registered`,
+    );
   }
 
   return lines;
@@ -175,7 +211,11 @@ export function compactStabilityLine(display: StabilityDisplay): string {
 /**
  * Render a queue pressure line.
  */
-export function queuePressureLine(pressure: PressureLevel, pending: number, running: number): string {
+export function queuePressureLine(
+  pressure: PressureLevel,
+  pending: number,
+  running: number,
+): string {
   const icon = pressureIcon(pressure);
   const color = pressureColor(pressure);
   return `  Queue: ${icon} ${color}${pressure}${theme.colors.text} ${theme.colors.textDim}(${pending} pending, ${running} running)${theme.colors.text}`;
@@ -185,11 +225,12 @@ export function queuePressureLine(pressure: PressureLevel, pending: number, runn
  * Render a memory usage line.
  */
 export function memoryLine(memoryMB: number, growthMBPerHour: number): string {
-  const growthStr = growthMBPerHour > 0
-    ? ` ${theme.colors.warning}(${growthMBPerHour.toFixed(1)} MB/h growth)${theme.colors.text}`
-    : growthMBPerHour < -1
-      ? ` ${theme.colors.success}(declining)${theme.colors.text}`
-      : ` ${theme.colors.textDim}(stable)${theme.colors.text}`;
+  const growthStr =
+    growthMBPerHour > 0
+      ? ` ${theme.colors.warning}(${growthMBPerHour.toFixed(1)} MB/h growth)${theme.colors.text}`
+      : growthMBPerHour < -1
+        ? ` ${theme.colors.success}(declining)${theme.colors.text}`
+        : ` ${theme.colors.textDim}(stable)${theme.colors.text}`;
 
   return `  Memory: ${formatBytes(memoryMB * 1024 * 1024)}${growthStr}`;
 }

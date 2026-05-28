@@ -45,13 +45,16 @@ export interface ProfileSnapshot {
     avgTotalMs: number;
     maxMs: number;
   };
-  providerLatency: Record<string, {
-    avgMs: number;
-    p95Ms: number;
-    maxMs: number;
-    requestCount: number;
-    errorRate: number;
-  }>;
+  providerLatency: Record<
+    string,
+    {
+      avgMs: number;
+      p95Ms: number;
+      maxMs: number;
+      requestCount: number;
+      errorRate: number;
+    }
+  >;
   orchestration: {
     activeStages: number;
     avgStageDurationMs: number;
@@ -164,12 +167,15 @@ export class RuntimeProfiler {
     const bottlenecks: ProfileReport['bottlenecks'] = [];
     const avgCPU = samples.reduce((s, p) => s + p.cpu.totalCPUPct, 0) / samples.length;
     const peakMemoryMB = Math.max(...samples.map((p) => p.memory.rssMB));
-    const avgQueueLatencyMs = samples.reduce((s, p) => s + p.queueLatency.avgTotalMs, 0) / samples.length;
+    const avgQueueLatencyMs =
+      samples.reduce((s, p) => s + p.queueLatency.avgTotalMs, 0) / samples.length;
     const allProviderAvg = Object.values(samples[samples.length - 1]?.providerLatency ?? {});
-    const avgProviderLatencyMs = allProviderAvg.length > 0
-      ? allProviderAvg.reduce((s, p) => s + p.avgMs, 0) / allProviderAvg.length
-      : 0;
-    const avgPipelineDurationMs = samples.reduce((s, p) => s + p.orchestration.totalPipelineDurationMs, 0) / samples.length;
+    const avgProviderLatencyMs =
+      allProviderAvg.length > 0
+        ? allProviderAvg.reduce((s, p) => s + p.avgMs, 0) / allProviderAvg.length
+        : 0;
+    const avgPipelineDurationMs =
+      samples.reduce((s, p) => s + p.orchestration.totalPipelineDurationMs, 0) / samples.length;
 
     // Detect bottlenecks
     if (avgCPU > 80) {
@@ -199,7 +205,8 @@ export class RuntimeProfiler {
         value: avgQueueLatencyMs,
         threshold: 5000,
         severity: 'warning',
-        recommendation: 'High queue latency — consider increasing concurrency or optimizing processing',
+        recommendation:
+          'High queue latency — consider increasing concurrency or optimizing processing',
       });
     }
     if (avgProviderLatencyMs > 10000) {
@@ -217,7 +224,13 @@ export class RuntimeProfiler {
       timestamp: timestamp(),
       durationMs: Date.now() - startTime,
       snapshots: samples,
-      summary: { avgCPU, peakMemoryMB, avgQueueLatencyMs, avgProviderLatencyMs, avgPipelineDurationMs },
+      summary: {
+        avgCPU,
+        peakMemoryMB,
+        avgQueueLatencyMs,
+        avgProviderLatencyMs,
+        avgPipelineDurationMs,
+      },
       bottlenecks,
     };
   }
@@ -261,15 +274,16 @@ export class RuntimeProfiler {
       }
     }
 
-    const totalCPUPct = cpuUsage.user > 0
-      ? Math.round(((cpuUsage.user + cpuUsage.system) / 1_000_000) * 100) / 100
-      : 0;
+    const totalCPUPct =
+      cpuUsage.user > 0
+        ? Math.round(((cpuUsage.user + cpuUsage.system) / 1_000_000) * 100) / 100
+        : 0;
 
     return {
       timestamp: timestamp(),
       cpu: {
-        userCPUPct: Math.round(cpuUsage.user / 1_000_000 * 100) / 100,
-        systemCPUPct: Math.round(cpuUsage.system / 1_000_000 * 100) / 100,
+        userCPUPct: Math.round((cpuUsage.user / 1_000_000) * 100) / 100,
+        systemCPUPct: Math.round((cpuUsage.system / 1_000_000) * 100) / 100,
         totalCPUPct,
       },
       memory: {
@@ -277,9 +291,8 @@ export class RuntimeProfiler {
         heapTotalMB: Math.round((mem.heapTotal / (1024 * 1024)) * 100) / 100,
         rssMB: Math.round((mem.rss / (1024 * 1024)) * 100) / 100,
         externalMB: Math.round((mem.external / (1024 * 1024)) * 100) / 100,
-        heapUtilization: mem.heapTotal > 0
-          ? Math.round((mem.heapUsed / mem.heapTotal) * 10000) / 100
-          : 0,
+        heapUtilization:
+          mem.heapTotal > 0 ? Math.round((mem.heapUsed / mem.heapTotal) * 10000) / 100 : 0,
       },
       queueLatency: {
         avgEnqueueToStartMs: Math.round(avgQueueTotal * 0.3),
@@ -290,8 +303,13 @@ export class RuntimeProfiler {
       providerLatency,
       orchestration: {
         activeStages: Object.keys(stageDistribution).length,
-        avgStageDurationMs: Object.values(stageDistribution).reduce((s, v) => s + v.avgMs, 0) / Math.max(Object.keys(stageDistribution).length, 1),
-        totalPipelineDurationMs: Object.values(stageDistribution).reduce((s, v) => s + v.avgMs * v.count, 0),
+        avgStageDurationMs:
+          Object.values(stageDistribution).reduce((s, v) => s + v.avgMs, 0) /
+          Math.max(Object.keys(stageDistribution).length, 1),
+        totalPipelineDurationMs: Object.values(stageDistribution).reduce(
+          (s, v) => s + v.avgMs * v.count,
+          0,
+        ),
         stageDistribution,
       },
     };
@@ -300,7 +318,11 @@ export class RuntimeProfiler {
   /**
    * Profile CPU usage specifically
    */
-  async profileCPU(): Promise<{ metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] }> {
+  async profileCPU(): Promise<{
+    metrics: Record<string, number>;
+    bottlenecks: string[];
+    recommendations: string[];
+  }> {
     const snapshot = await this.takeSnapshot();
     return {
       metrics: {
@@ -309,16 +331,21 @@ export class RuntimeProfiler {
         totalCPU: snapshot.cpu.totalCPUPct,
       },
       bottlenecks: snapshot.cpu.totalCPUPct > 80 ? ['High CPU usage detected'] : [],
-      recommendations: snapshot.cpu.totalCPUPct > 80
-        ? ['Consider reducing polling intervals', 'Check for runaway processes']
-        : ['CPU usage is within normal range'],
+      recommendations:
+        snapshot.cpu.totalCPUPct > 80
+          ? ['Consider reducing polling intervals', 'Check for runaway processes']
+          : ['CPU usage is within normal range'],
     };
   }
 
   /**
    * Profile memory usage specifically
    */
-  async profileMemory(): Promise<{ metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] }> {
+  async profileMemory(): Promise<{
+    metrics: Record<string, number>;
+    bottlenecks: string[];
+    recommendations: string[];
+  }> {
     const snapshot = await this.takeSnapshot();
     const bottlenecks: string[] = [];
     const recommendations: string[] = [];
@@ -341,14 +368,19 @@ export class RuntimeProfiler {
         heapUtilization: snapshot.memory.heapUtilization,
       },
       bottlenecks,
-      recommendations: recommendations.length > 0 ? recommendations : ['Memory usage is within normal range'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['Memory usage is within normal range'],
     };
   }
 
   /**
    * Profile queue latency specifically
    */
-  async profileQueueLatency(): Promise<{ metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] }> {
+  async profileQueueLatency(): Promise<{
+    metrics: Record<string, number>;
+    bottlenecks: string[];
+    recommendations: string[];
+  }> {
     const snapshot = await this.takeSnapshot();
     return {
       metrics: {
@@ -357,22 +389,29 @@ export class RuntimeProfiler {
         avgTotalMs: snapshot.queueLatency.avgTotalMs,
         maxMs: snapshot.queueLatency.maxMs,
       },
-      bottlenecks: snapshot.queueLatency.avgTotalMs > 5000 ? ['Queue latency exceeds 5s threshold'] : [],
-      recommendations: snapshot.queueLatency.avgTotalMs > 5000
-        ? ['Increase worker concurrency', 'Optimize task processing logic']
-        : ['Queue latency is acceptable'],
+      bottlenecks:
+        snapshot.queueLatency.avgTotalMs > 5000 ? ['Queue latency exceeds 5s threshold'] : [],
+      recommendations:
+        snapshot.queueLatency.avgTotalMs > 5000
+          ? ['Increase worker concurrency', 'Optimize task processing logic']
+          : ['Queue latency is acceptable'],
     };
   }
 
   /**
    * Profile provider latency specifically
    */
-  async profileProviderLatency(): Promise<{ metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] }> {
+  async profileProviderLatency(): Promise<{
+    metrics: Record<string, number>;
+    bottlenecks: string[];
+    recommendations: string[];
+  }> {
     const snapshot = await this.takeSnapshot();
     const allLatencies = Object.values(snapshot.providerLatency);
-    const avgMs = allLatencies.length > 0
-      ? Math.round(allLatencies.reduce((s, p) => s + p.avgMs, 0) / allLatencies.length)
-      : 0;
+    const avgMs =
+      allLatencies.length > 0
+        ? Math.round(allLatencies.reduce((s, p) => s + p.avgMs, 0) / allLatencies.length)
+        : 0;
 
     return {
       metrics: {
@@ -380,16 +419,21 @@ export class RuntimeProfiler {
         activeProviders: allLatencies.length,
       },
       bottlenecks: avgMs > 10000 ? ['High provider latency detected'] : [],
-      recommendations: avgMs > 10000
-        ? ['Consider adding fallback providers', 'Check provider health status']
-        : ['Provider latency is acceptable'],
+      recommendations:
+        avgMs > 10000
+          ? ['Consider adding fallback providers', 'Check provider health status']
+          : ['Provider latency is acceptable'],
     };
   }
 
   /**
    * Profile orchestration performance specifically
    */
-  async profileOrchestration(): Promise<{ metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] }> {
+  async profileOrchestration(): Promise<{
+    metrics: Record<string, number>;
+    bottlenecks: string[];
+    recommendations: string[];
+  }> {
     const snapshot = await this.takeSnapshot();
     return {
       metrics: {
@@ -397,10 +441,14 @@ export class RuntimeProfiler {
         avgStageDurationMs: snapshot.orchestration.avgStageDurationMs,
         totalPipelineDurationMs: snapshot.orchestration.totalPipelineDurationMs,
       },
-      bottlenecks: snapshot.orchestration.avgStageDurationMs > 30000 ? ['Orchestration stage duration exceeds 30s'] : [],
-      recommendations: snapshot.orchestration.avgStageDurationMs > 30000
-        ? ['Break down long-running stages', 'Optimize pipeline processing']
-        : ['Orchestration performance is normal'],
+      bottlenecks:
+        snapshot.orchestration.avgStageDurationMs > 30000
+          ? ['Orchestration stage duration exceeds 30s']
+          : [],
+      recommendations:
+        snapshot.orchestration.avgStageDurationMs > 30000
+          ? ['Break down long-running stages', 'Optimize pipeline processing']
+          : ['Orchestration performance is normal'],
     };
   }
 

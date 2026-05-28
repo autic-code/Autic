@@ -14,12 +14,7 @@ import { readFile, writeFile, access, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
 import { timestamp } from '@autic/shared';
-import type {
-  ArchitectureMemory,
-  RepoSummary,
-  CompletedTask,
-  WorkflowMemory,
-} from '@autic/shared';
+import type { ArchitectureMemory, RepoSummary, CompletedTask, WorkflowMemory } from '@autic/shared';
 
 const MEMORY_DIR = join(homedir(), '.autic', 'memory', 'workspace');
 
@@ -201,7 +196,12 @@ export class WorkspaceMemory {
     let totalSizeBytes = 0;
     let totalFiles = 0;
 
-    const files = ['architecture.json', 'repo-summary.json', 'completed-tasks.json', 'workflow-memory.json'];
+    const files = [
+      'architecture.json',
+      'repo-summary.json',
+      'completed-tasks.json',
+      'workflow-memory.json',
+    ];
     for (const file of files) {
       try {
         const data = await readFile(join(this.basePath, file), 'utf-8');

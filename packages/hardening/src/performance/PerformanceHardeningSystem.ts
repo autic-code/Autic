@@ -18,9 +18,15 @@ export class PerformanceHardener {
   private queueProcessedCount = 0;
   private cleanupCount = 0;
 
-  recordRender(): void { this.renderCount++; }
-  recordQueueProcess(): void { this.queueProcessedCount++; }
-  recordCleanup(): void { this.cleanupCount++; }
+  recordRender(): void {
+    this.renderCount++;
+  }
+  recordQueueProcess(): void {
+    this.queueProcessedCount++;
+  }
+  recordCleanup(): void {
+    this.cleanupCount++;
+  }
 
   async validatePerformance(): Promise<PerformanceHardeningReport> {
     const startupMs = Date.now() - this.startTime;
@@ -55,11 +61,15 @@ export class PerformanceHardener {
       providerPollingMs: 5000,
       retrievalMs: 200,
       issues,
-      improvements: improvements.length > 0 ? improvements : ['Performance within acceptable parameters'],
+      improvements:
+        improvements.length > 0 ? improvements : ['Performance within acceptable parameters'],
     };
   }
 
-  async measureOperation<T>(_name: string, fn: () => Promise<T>): Promise<{ result: T; durationMs: number }> {
+  async measureOperation<T>(
+    _name: string,
+    fn: () => Promise<T>,
+  ): Promise<{ result: T; durationMs: number }> {
     const start = Date.now();
     const result = await fn();
     return { result, durationMs: Date.now() - start };
@@ -67,7 +77,8 @@ export class PerformanceHardener {
 
   getRecommendations(report: PerformanceHardeningReport): string[] {
     const recs: string[] = [];
-    if (report.startupMs > 3000) recs.push('Use --lazy-init flag to defer non-critical initialization');
+    if (report.startupMs > 3000)
+      recs.push('Use --lazy-init flag to defer non-critical initialization');
     if (report.renderFrequencyMs < 16) recs.push('Set AUTIC_RENDER_THROTTLE=16 to cap render rate');
     if (report.queueThroughput < 5) recs.push('Increase queue concurrency with --concurrency flag');
     if (report.memoryCleanupMs > 100) recs.push('Run manual cleanup with `autic debug --gc`');

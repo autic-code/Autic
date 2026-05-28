@@ -100,13 +100,8 @@ function getCommandDocs(): CommandDoc[] {
       description: 'Initialize Autic in the current directory',
       usage: 'autic init [--force]',
       arguments: [],
-      options: [
-        { flag: '--force', description: 'Force reinitialization' },
-      ],
-      examples: [
-        'autic init',
-        'autic init --force',
-      ],
+      options: [{ flag: '--force', description: 'Force reinitialization' }],
+      examples: ['autic init', 'autic init --force'],
     },
     {
       name: 'chat',
@@ -119,11 +114,7 @@ function getCommandDocs(): CommandDoc[] {
         { flag: '-s, --session <session>', description: 'Session ID to restore' },
         { flag: '-f, --file <file>', description: 'Context file to load' },
       ],
-      examples: [
-        'autic chat',
-        'autic chat --model gpt-4o',
-        'autic chat --session my-session',
-      ],
+      examples: ['autic chat', 'autic chat --model gpt-4o', 'autic chat --session my-session'],
     },
     {
       name: 'fix',
@@ -135,17 +126,18 @@ function getCommandDocs(): CommandDoc[] {
         { flag: '-m, --model <model>', description: 'Model to use' },
         { flag: '--dry-run', description: 'Preview changes without applying' },
       ],
-      examples: [
-        'autic fix --target src/',
-        'autic fix --target src/index.ts --dry-run',
-      ],
+      examples: ['autic fix --target src/', 'autic fix --target src/index.ts --dry-run'],
     },
     {
       name: 'providers',
       description: 'List and manage LLM providers',
       usage: 'autic providers [action] [name] [options]',
       arguments: [
-        { name: 'action', description: 'Action: list (default), check, add, or remove', required: false },
+        {
+          name: 'action',
+          description: 'Action: list (default), check, add, or remove',
+          required: false,
+        },
         { name: 'name', description: 'Provider name (for add/remove)', required: false },
       ],
       options: [
@@ -164,9 +156,7 @@ function getCommandDocs(): CommandDoc[] {
       usage: 'autic doctor',
       arguments: [],
       options: [],
-      examples: [
-        'autic doctor',
-      ],
+      examples: ['autic doctor'],
     },
     {
       name: 'orchestrate',
@@ -190,12 +180,14 @@ function getCommandDocs(): CommandDoc[] {
       description: 'View and manage security settings',
       usage: 'autic security [action] [sub] [options]',
       arguments: [
-        { name: 'action', description: 'Action: status (default), profile, permissions, events, vault', required: false },
+        {
+          name: 'action',
+          description: 'Action: status (default), profile, permissions, events, vault',
+          required: false,
+        },
         { name: 'sub', description: 'Sub-argument', required: false },
       ],
-      options: [
-        { flag: '--limit <n>', description: 'Event limit', default: '20' },
-      ],
+      options: [{ flag: '--limit <n>', description: 'Event limit', default: '20' }],
       examples: [
         'autic security',
         'autic security profile set safe',
@@ -204,10 +196,16 @@ function getCommandDocs(): CommandDoc[] {
     },
     {
       name: 'docs',
-      description: 'Generate command documentation and guides (architecture, SDK, security, contracts, concepts)',
+      description:
+        'Generate command documentation and guides (architecture, SDK, security, contracts, concepts)',
       usage: 'autic docs [action]',
       arguments: [
-        { name: 'action', description: 'Action: all (default), commands, providers, troubleshooting, examples, architecture, contracts, sdk, security, concepts, single', required: false },
+        {
+          name: 'action',
+          description:
+            'Action: all (default), commands, providers, troubleshooting, examples, architecture, contracts, sdk, security, concepts, single',
+          required: false,
+        },
       ],
       options: [],
       examples: [
@@ -224,7 +222,12 @@ function getCommandDocs(): CommandDoc[] {
       description: 'View system observability snapshots',
       usage: 'autic observability [action]',
       arguments: [
-        { name: 'action', description: 'Action: health (default), orchestration, queue, provider, context, learning, events', required: false },
+        {
+          name: 'action',
+          description:
+            'Action: health (default), orchestration, queue, provider, context, learning, events',
+          required: false,
+        },
       ],
       options: [],
       examples: [
@@ -239,17 +242,23 @@ function getCommandDocs(): CommandDoc[] {
       usage: 'autic validate-security',
       arguments: [],
       options: [],
-      examples: [
-        'autic validate-security',
-      ],
+      examples: ['autic validate-security'],
     },
     {
       name: 'template',
       description: 'Scaffold a new project from a template',
       usage: 'autic template <template> [target]',
       arguments: [
-        { name: 'template', description: 'Template name (saas-starter, cli-starter, api-starter, ai-tool-starter)', required: true },
-        { name: 'target', description: 'Target directory (defaults to project name)', required: false },
+        {
+          name: 'template',
+          description: 'Template name (saas-starter, cli-starter, api-starter, ai-tool-starter)',
+          required: true,
+        },
+        {
+          name: 'target',
+          description: 'Target directory (defaults to project name)',
+          required: false,
+        },
       ],
       options: [],
       examples: [
@@ -263,14 +272,14 @@ function getCommandDocs(): CommandDoc[] {
       description: 'Manage release channels and updates',
       usage: 'autic release [action]',
       arguments: [
-        { name: 'action', description: 'Action: status (default), check, channel, versions', required: false },
+        {
+          name: 'action',
+          description: 'Action: status (default), check, channel, versions',
+          required: false,
+        },
       ],
       options: [],
-      examples: [
-        'autic release',
-        'autic release check',
-        'autic release channel beta',
-      ],
+      examples: ['autic release', 'autic release check', 'autic release channel beta'],
     },
   ];
 }

@@ -20,16 +20,20 @@ export interface KeyManagerOptions {
 export class KeyManager {
   private keys: Map<string, KeyEntry> = new Map();
   private providerKeys: Map<string, string[]> = new Map(); // providerId -> keyIds
-  private vault: { set: (key: string, value: string) => Promise<void>; get: (key: string) => Promise<string | undefined> } | null = null;
+  private vault: {
+    set: (key: string, value: string) => Promise<void>;
+    get: (key: string) => Promise<string | undefined>;
+  } | null = null;
 
-  constructor(
-    private options: KeyManagerOptions = {},
-  ) {}
+  constructor(private options: KeyManagerOptions = {}) {}
 
   /**
    * Set the vault instance for encrypted storage.
    */
-  setVault(vault: { set: (key: string, value: string) => Promise<void>; get: (key: string) => Promise<string | undefined> }): void {
+  setVault(vault: {
+    set: (key: string, value: string) => Promise<void>;
+    get: (key: string) => Promise<string | undefined>;
+  }): void {
     this.vault = vault;
   }
 
@@ -37,12 +41,7 @@ export class KeyManager {
    * Add a new API key for a provider.
    * Returns the key entry ID.
    */
-  async addKey(
-    providerId: string,
-    label: string,
-    apiKey: string,
-    persist = true,
-  ): Promise<string> {
+  async addKey(providerId: string, label: string, apiKey: string, persist = true): Promise<string> {
     const id = generateId();
     const keyPrefix = apiKey.length > 8 ? apiKey.substring(0, 8) + '...' : '***';
 
@@ -137,12 +136,11 @@ export class KeyManager {
    * Skips keys in cooldown and deactivated keys.
    */
   getNextAvailableKey(providerId: string): KeyEntry | undefined {
-    const keys = this.getProviderKeys(providerId)
-      .filter((k) => {
-        if (!k.isActive) return false;
-        if (k.cooldownUntil && timestamp() < k.cooldownUntil) return false;
-        return true;
-      });
+    const keys = this.getProviderKeys(providerId).filter((k) => {
+      if (!k.isActive) return false;
+      if (k.cooldownUntil && timestamp() < k.cooldownUntil) return false;
+      return true;
+    });
 
     // Sort by last used (least recently used first)
     keys.sort((a, b) => (a.lastUsedAt || 0) - (b.lastUsedAt || 0));

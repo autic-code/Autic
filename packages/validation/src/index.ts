@@ -16,19 +16,11 @@ export type {
 
 // #2 — Provider Chaos Testing
 export { ChaosSimulator } from './ChaosSimulator.js';
-export type {
-  ChaosSimulatorConfig,
-  ChaosScenario,
-  ChaosTestResult,
-} from './ChaosSimulator.js';
+export type { ChaosSimulatorConfig, ChaosScenario, ChaosTestResult } from './ChaosSimulator.js';
 
 // #3 — Long-Run Autonomous Testing
 export { LongRunTester } from './LongRunTester.js';
-export type {
-  LongRunTestConfig,
-  LongRunPhase,
-  LongRunTestResult,
-} from './LongRunTester.js';
+export type { LongRunTestConfig, LongRunPhase, LongRunTestResult } from './LongRunTester.js';
 
 // #5 — Regression Prevention System
 export { RegressionPreventer } from './RegressionPreventer.js';

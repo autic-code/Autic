@@ -67,11 +67,17 @@ export class SkillValidator {
     }
 
     // Optional fields with type checks
-    if (skill.maxExecutionDepth !== undefined && (typeof skill.maxExecutionDepth !== 'number' || skill.maxExecutionDepth < 1)) {
+    if (
+      skill.maxExecutionDepth !== undefined &&
+      (typeof skill.maxExecutionDepth !== 'number' || skill.maxExecutionDepth < 1)
+    ) {
       warnings.push('maxExecutionDepth should be a positive number');
     }
 
-    if (skill.timeoutMs !== undefined && (typeof skill.timeoutMs !== 'number' || skill.timeoutMs < 1000)) {
+    if (
+      skill.timeoutMs !== undefined &&
+      (typeof skill.timeoutMs !== 'number' || skill.timeoutMs < 1000)
+    ) {
       warnings.push('timeoutMs should be at least 1000ms');
     }
 
@@ -146,7 +152,9 @@ export class SkillValidator {
         (p) => p.toolId === 'write_file' && p.allowed,
       );
       if (!hasWriteFile) {
-        warnings.push('Skill declares "code-generation" capability but has no write_file permission');
+        warnings.push(
+          'Skill declares "code-generation" capability but has no write_file permission',
+        );
       }
     }
 

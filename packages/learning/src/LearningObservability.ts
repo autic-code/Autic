@@ -59,9 +59,7 @@ export class LearningObservability {
    * Get recent learning events.
    */
   getRecent(limit = 20): LearningEvent[] {
-    return [...this.logs]
-      .sort((a, b) => b.timestamp - a.timestamp)
-      .slice(0, limit);
+    return [...this.logs].sort((a, b) => b.timestamp - a.timestamp).slice(0, limit);
   }
 
   /**
@@ -115,10 +113,7 @@ export class LearningObservability {
   /**
    * Query events matching a condition.
    */
-  query(
-    predicate: (event: LearningEvent) => boolean,
-    limit = 20,
-  ): LearningEvent[] {
+  query(predicate: (event: LearningEvent) => boolean, limit = 20): LearningEvent[] {
     return this.logs
       .filter(predicate)
       .sort((a, b) => b.timestamp - a.timestamp)

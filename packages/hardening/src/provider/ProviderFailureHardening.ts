@@ -113,8 +113,10 @@ export class ProviderFailureHardener extends EventEmitter {
   isProviderAvailable(providerId: string): boolean {
     const state = this.providerStates.get(providerId);
     if (!state) return true;
-    if (state.status === 'isolated' && state.isolationUntil && Date.now() < state.isolationUntil) return false;
-    if (state.status === 'degraded' && state.cooldownUntil && Date.now() < state.cooldownUntil) return false;
+    if (state.status === 'isolated' && state.isolationUntil && Date.now() < state.isolationUntil)
+      return false;
+    if (state.status === 'degraded' && state.cooldownUntil && Date.now() < state.cooldownUntil)
+      return false;
     return true;
   }
 
@@ -125,7 +127,7 @@ export class ProviderFailureHardener extends EventEmitter {
   }
 
   getAllProviderStates(): ProviderHardeningState[] {
-    return Array.from(this.providerStates.values()).map(s => ({ ...s }));
+    return Array.from(this.providerStates.values()).map((s) => ({ ...s }));
   }
 
   getCascadingFailureState(): CascadingFailureState | null {
@@ -180,7 +182,7 @@ export class ProviderFailureHardener extends EventEmitter {
     if (!state || state.status === 'healthy') return undefined;
 
     // Pick the healthiest available provider
-    const candidates = availableProviders.filter(id => {
+    const candidates = availableProviders.filter((id) => {
       if (id === providerId) return false;
       const s = this.providerStates.get(id);
       return !s || (s.status === 'healthy' && !s.fallbackActive);
@@ -189,7 +191,11 @@ export class ProviderFailureHardener extends EventEmitter {
     return candidates.length > 0 ? candidates[0] : undefined;
   }
 
-  getDegradedModeConfig(providerId: string): { reduceConcurrency: boolean; increaseTimeout: boolean; enableRetries: boolean } {
+  getDegradedModeConfig(providerId: string): {
+    reduceConcurrency: boolean;
+    increaseTimeout: boolean;
+    enableRetries: boolean;
+  } {
     const state = this.providerStates.get(providerId);
     if (!state || state.status === 'healthy') {
       return { reduceConcurrency: false, increaseTimeout: false, enableRetries: false };

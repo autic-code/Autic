@@ -65,10 +65,7 @@ export class PipelineCoordinator {
   private repairAgent?: RepairAgent;
   private finalReviewAgent?: FinalReviewAgent;
 
-  constructor(
-    registry: PipelineRegistry,
-    options: PipelineCoordinatorOptions = {},
-  ) {
+  constructor(registry: PipelineRegistry, options: PipelineCoordinatorOptions = {}) {
     this.graph = new ExecutionGraph(registry, {
       maxDelegations: options.maxStages ? options.maxStages * 3 : 50,
     });
@@ -102,7 +99,10 @@ export class PipelineCoordinator {
   async execute(
     goal: string,
     pipelineId: string,
-    runTool: (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>,
+    runTool: (
+      toolName: string,
+      args: Record<string, unknown>,
+    ) => Promise<{ success: boolean; data?: unknown; error?: string }>,
   ): Promise<{ state: PipelineState; results: StageResult[] }> {
     this.status = 'running';
     this.contractHistory = [];
@@ -199,19 +199,27 @@ export class PipelineCoordinator {
   private async executeStage(
     stage: OrchestrationStage,
     goal: string,
-    runTool: (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>,
+    runTool: (
+      toolName: string,
+      args: Record<string, unknown>,
+    ) => Promise<{ success: boolean; data?: unknown; error?: string }>,
   ): Promise<{ contract: TaskContract; success: boolean; error?: string }> {
     // Get the most recent contract as input context
-    const previousContract = this.contractHistory.length > 0
-      ? this.contractHistory[this.contractHistory.length - 1]
-      : undefined;
+    const previousContract =
+      this.contractHistory.length > 0
+        ? this.contractHistory[this.contractHistory.length - 1]
+        : undefined;
 
     let contract: TaskContract;
 
     switch (stage) {
       case 'research': {
         if (!this.researchAgent) {
-          return { contract: this.createErrorContract(stage, 'ResearchAgent not configured'), success: false, error: 'ResearchAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'ResearchAgent not configured'),
+            success: false,
+            error: 'ResearchAgent not configured',
+          };
         }
         contract = await this.researchAgent.execute(goal, runTool, previousContract);
         break;
@@ -219,7 +227,11 @@ export class PipelineCoordinator {
 
       case 'planning': {
         if (!this.planningAgent) {
-          return { contract: this.createErrorContract(stage, 'PlanningAgent not configured'), success: false, error: 'PlanningAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'PlanningAgent not configured'),
+            success: false,
+            error: 'PlanningAgent not configured',
+          };
         }
         contract = await this.planningAgent.execute(goal, runTool, previousContract);
         break;
@@ -227,7 +239,11 @@ export class PipelineCoordinator {
 
       case 'architecture': {
         if (!this.architectureAgent) {
-          return { contract: this.createErrorContract(stage, 'ArchitectureAgent not configured'), success: false, error: 'ArchitectureAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'ArchitectureAgent not configured'),
+            success: false,
+            error: 'ArchitectureAgent not configured',
+          };
         }
         contract = await this.architectureAgent.execute(goal, runTool, previousContract);
         break;
@@ -235,7 +251,11 @@ export class PipelineCoordinator {
 
       case 'engineering': {
         if (!this.engineeringAgent) {
-          return { contract: this.createErrorContract(stage, 'EngineeringAgent not configured'), success: false, error: 'EngineeringAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'EngineeringAgent not configured'),
+            success: false,
+            error: 'EngineeringAgent not configured',
+          };
         }
         contract = await this.engineeringAgent.execute(goal, runTool, previousContract);
         break;
@@ -243,7 +263,11 @@ export class PipelineCoordinator {
 
       case 'verification': {
         if (!this.verificationAgent) {
-          return { contract: this.createErrorContract(stage, 'VerificationAgent not configured'), success: false, error: 'VerificationAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'VerificationAgent not configured'),
+            success: false,
+            error: 'VerificationAgent not configured',
+          };
         }
         contract = await this.verificationAgent.execute(goal, runTool, previousContract);
         break;
@@ -251,7 +275,11 @@ export class PipelineCoordinator {
 
       case 'repair': {
         if (!this.repairAgent) {
-          return { contract: this.createErrorContract(stage, 'RepairAgent not configured'), success: false, error: 'RepairAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'RepairAgent not configured'),
+            success: false,
+            error: 'RepairAgent not configured',
+          };
         }
         contract = await this.repairAgent.execute(goal, runTool, previousContract);
         break;
@@ -259,15 +287,28 @@ export class PipelineCoordinator {
 
       case 'final_review': {
         if (!this.finalReviewAgent) {
-          return { contract: this.createErrorContract(stage, 'FinalReviewAgent not configured'), success: false, error: 'FinalReviewAgent not configured' };
+          return {
+            contract: this.createErrorContract(stage, 'FinalReviewAgent not configured'),
+            success: false,
+            error: 'FinalReviewAgent not configured',
+          };
         }
         const pipelineState = this.graph.getState();
-        contract = await this.finalReviewAgent.execute(goal, runTool, previousContract, pipelineState);
+        contract = await this.finalReviewAgent.execute(
+          goal,
+          runTool,
+          previousContract,
+          pipelineState,
+        );
         break;
       }
 
       default:
-        return { contract: this.createErrorContract(stage, `Unknown stage: ${stage}`), success: false, error: `Unknown stage: ${stage}` };
+        return {
+          contract: this.createErrorContract(stage, `Unknown stage: ${stage}`),
+          success: false,
+          error: `Unknown stage: ${stage}`,
+        };
     }
 
     return {

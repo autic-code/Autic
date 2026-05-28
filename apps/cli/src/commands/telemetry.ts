@@ -17,7 +17,9 @@ export async function telemetryCommand(action?: string): Promise<void> {
     case 'status': {
       const config = collector.getConfig();
       console.log(`  ${colorText('Telemetry Status', 'bold')}`);
-      console.log(`  Enabled: ${config.enabled ? colorText('✓', 'success') : colorText('✗', 'dim')}`);
+      console.log(
+        `  Enabled: ${config.enabled ? colorText('✓', 'success') : colorText('✗', 'dim')}`,
+      );
       console.log(`  Privacy mode: ${colorText(config.privacyMode, 'primary')}`);
       console.log(`  Data retention: ${config.retentionDays} days`);
       if (config.anonymizedOnly) {
@@ -29,7 +31,9 @@ export async function telemetryCommand(action?: string): Promise<void> {
       collector.enable();
       console.log(`  ${colorText('✓ Telemetry enabled', 'success')}`);
       console.log(`  ${colorText('Only anonymized runtime metrics are collected.', 'dim')}`);
-      console.log(`  ${colorText('Secrets, source code, prompts, and credentials are NEVER collected.', 'dim')}`);
+      console.log(
+        `  ${colorText('Secrets, source code, prompts, and credentials are NEVER collected.', 'dim')}`,
+      );
       break;
     }
     case 'disable': {

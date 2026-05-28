@@ -46,14 +46,46 @@ export class FailureClassificationEngine {
   ];
 
   private dependencyPatterns: DependencyPattern[] = [
-    { patterns: ['cannot find module', 'module not found', 'import resolution'], dependency: 'import', category: 'dependency' },
-    { patterns: ['peer dependency', 'version mismatch', 'incompatible'], dependency: 'peer_dependency', category: 'dependency' },
-    { patterns: ['npm error', 'pnpm error', 'yarn error', 'install failed'], dependency: 'package_manager', category: 'dependency' },
-    { patterns: ['enoent', 'no such file', 'does not exist'], dependency: 'file_system', category: 'dependency' },
-    { patterns: ['ts2304', 'ts2322', 'ts6133', 'ts2352', 'ts6196', 'ts2345', 'ts2554'], dependency: 'typescript', category: 'compilation_error' },
-    { patterns: ['ts18002', 'ts18003', 'ts18004'], dependency: 'typescript_config', category: 'compilation_error' },
-    { patterns: ['@types/', 'missing type', 'type declaration'], dependency: 'type_definitions', category: 'dependency' },
-    { patterns: ['polyfill', 'babel', 'esbuild', 'vite'], dependency: 'bundler', category: 'compilation_error' },
+    {
+      patterns: ['cannot find module', 'module not found', 'import resolution'],
+      dependency: 'import',
+      category: 'dependency',
+    },
+    {
+      patterns: ['peer dependency', 'version mismatch', 'incompatible'],
+      dependency: 'peer_dependency',
+      category: 'dependency',
+    },
+    {
+      patterns: ['npm error', 'pnpm error', 'yarn error', 'install failed'],
+      dependency: 'package_manager',
+      category: 'dependency',
+    },
+    {
+      patterns: ['enoent', 'no such file', 'does not exist'],
+      dependency: 'file_system',
+      category: 'dependency',
+    },
+    {
+      patterns: ['ts2304', 'ts2322', 'ts6133', 'ts2352', 'ts6196', 'ts2345', 'ts2554'],
+      dependency: 'typescript',
+      category: 'compilation_error',
+    },
+    {
+      patterns: ['ts18002', 'ts18003', 'ts18004'],
+      dependency: 'typescript_config',
+      category: 'compilation_error',
+    },
+    {
+      patterns: ['@types/', 'missing type', 'type declaration'],
+      dependency: 'type_definitions',
+      category: 'dependency',
+    },
+    {
+      patterns: ['polyfill', 'babel', 'esbuild', 'vite'],
+      dependency: 'bundler',
+      category: 'compilation_error',
+    },
   ];
 
   private tsErrorCodes: Record<string, string> = {
@@ -85,47 +117,221 @@ export class FailureClassificationEngine {
 
     // Check for TS error codes
     const tsErrorCode = this.detectTsErrorCode(error);
-    const isBuildError = this.matchesAny(lower, ['build failed', 'compilation', 'compile error', 'tsc exited', 'build error']);
+    const isBuildError = this.matchesAny(lower, [
+      'build failed',
+      'compilation',
+      'compile error',
+      'tsc exited',
+      'build error',
+    ]);
     const isLintError = this.matchesAny(lower, ['lint error', 'eslint', 'prettier', 'linting']);
-    const isTypeError = this.matchesAny(lower, ['type error', 'typeerror', 'is not assignable', 'is declared but', 'ts2304', 'ts2322', 'ts2345', 'ts2554', 'ts6133', 'ts6196']);
-    const isProviderError = this.matchesAny(lower, ['provider', 'api key', 'openrouter', 'ollama', 'rate limit', 'model not found', 'insufficient quota', 'auth failed']);
-    const isRuntimeError = this.matchesAny(lower, ['crash', 'segfault', 'segmentation fault', 'abort', 'panic', 'out of memory', 'runtime crash']);
+    const isTypeError = this.matchesAny(lower, [
+      'type error',
+      'typeerror',
+      'is not assignable',
+      'is declared but',
+      'ts2304',
+      'ts2322',
+      'ts2345',
+      'ts2554',
+      'ts6133',
+      'ts6196',
+    ]);
+    const isProviderError = this.matchesAny(lower, [
+      'provider',
+      'api key',
+      'openrouter',
+      'ollama',
+      'rate limit',
+      'model not found',
+      'insufficient quota',
+      'auth failed',
+    ]);
+    const isRuntimeError = this.matchesAny(lower, [
+      'crash',
+      'segfault',
+      'segmentation fault',
+      'abort',
+      'panic',
+      'out of memory',
+      'runtime crash',
+    ]);
 
     // Check dependency patterns
-    const depMatch = this.dependencyPatterns.find((d) =>
-      d.patterns.some((p) => lower.includes(p)),
-    );
+    const depMatch = this.dependencyPatterns.find((d) => d.patterns.some((p) => lower.includes(p)));
 
     // Existing FailureClassifier-style logic with enhancements
-    if (isProviderError) return this.enhanced('provider_error', error, detectedFramework, depMatch?.dependency, undefined, false, true, isLintError, isTypeError, isProviderError, isRuntimeError);
-    if (isBuildError) return this.enhanced('compilation_error', error, detectedFramework, depMatch?.dependency, tsErrorCode, true, false, isLintError, isTypeError, isProviderError, isRuntimeError);
-    if (isTypeError) return this.enhanced('type_error', error, detectedFramework, depMatch?.dependency, tsErrorCode, false, false, isLintError, isTypeError, isProviderError, isRuntimeError);
-    if (isLintError) return this.enhanced('compilation_error', error, detectedFramework, depMatch?.dependency, undefined, true, false, isLintError, isTypeError, isProviderError, isRuntimeError);
-    if (depMatch) return this.enhanced(depMatch.category, error, detectedFramework, depMatch.dependency, tsErrorCode, false, false, isLintError, isTypeError, isProviderError, isRuntimeError);
+    if (isProviderError)
+      return this.enhanced(
+        'provider_error',
+        error,
+        detectedFramework,
+        depMatch?.dependency,
+        undefined,
+        false,
+        true,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
+    if (isBuildError)
+      return this.enhanced(
+        'compilation_error',
+        error,
+        detectedFramework,
+        depMatch?.dependency,
+        tsErrorCode,
+        true,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
+    if (isTypeError)
+      return this.enhanced(
+        'type_error',
+        error,
+        detectedFramework,
+        depMatch?.dependency,
+        tsErrorCode,
+        false,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
+    if (isLintError)
+      return this.enhanced(
+        'compilation_error',
+        error,
+        detectedFramework,
+        depMatch?.dependency,
+        undefined,
+        true,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
+    if (depMatch)
+      return this.enhanced(
+        depMatch.category,
+        error,
+        detectedFramework,
+        depMatch.dependency,
+        tsErrorCode,
+        false,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
 
     // Tool errors
-    if (toolName) return this.enhanced('tool_error', error, detectedFramework, undefined, undefined, false, true, isLintError, isTypeError, isProviderError, isRuntimeError);
+    if (toolName)
+      return this.enhanced(
+        'tool_error',
+        error,
+        detectedFramework,
+        undefined,
+        undefined,
+        false,
+        true,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
 
     // Timeout
-    if (this.matchesAny(lower, ['timeout', 'timed out', 'etimedout', 'econnrefused']) || (durationMs && durationMs > 60_000)) {
-      return this.enhanced('timeout', error, detectedFramework, undefined, undefined, false, true, isLintError, isTypeError, isProviderError, isRuntimeError);
+    if (
+      this.matchesAny(lower, ['timeout', 'timed out', 'etimedout', 'econnrefused']) ||
+      (durationMs && durationMs > 60_000)
+    ) {
+      return this.enhanced(
+        'timeout',
+        error,
+        detectedFramework,
+        undefined,
+        undefined,
+        false,
+        true,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
     }
 
     // Permission
     if (this.matchesAny(lower, ['permission denied', 'eacces', 'eprem', 'forbidden'])) {
-      return this.enhanced('permission_denied', error, detectedFramework, undefined, undefined, false, false, isLintError, isTypeError, isProviderError, isRuntimeError);
+      return this.enhanced(
+        'permission_denied',
+        error,
+        detectedFramework,
+        undefined,
+        undefined,
+        false,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
     }
 
     // Verification
     if (stepType === 'verify' || this.matchesAny(lower, ['verification failed', 'test failed'])) {
-      return this.enhanced('verification_failed', error, detectedFramework, undefined, undefined, false, false, isLintError, isTypeError, isProviderError, isRuntimeError);
+      return this.enhanced(
+        'verification_failed',
+        error,
+        detectedFramework,
+        undefined,
+        undefined,
+        false,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
     }
 
     // Runtime crash
-    if (isRuntimeError) return this.enhanced('runtime_crash', error, detectedFramework, undefined, undefined, false, false, isLintError, isTypeError, isProviderError, isRuntimeError);
+    if (isRuntimeError)
+      return this.enhanced(
+        'runtime_crash',
+        error,
+        detectedFramework,
+        undefined,
+        undefined,
+        false,
+        false,
+        isLintError,
+        isTypeError,
+        isProviderError,
+        isRuntimeError,
+      );
 
     // Default
-    return this.enhanced('unknown', error, detectedFramework, undefined, tsErrorCode, false, true, isLintError, isTypeError, isProviderError, isRuntimeError);
+    return this.enhanced(
+      'unknown',
+      error,
+      detectedFramework,
+      undefined,
+      tsErrorCode,
+      false,
+      true,
+      isLintError,
+      isTypeError,
+      isProviderError,
+      isRuntimeError,
+    );
   }
 
   private enhanced(
@@ -143,7 +349,12 @@ export class FailureClassificationEngine {
   ): EnhancedFailureClassification {
     return {
       category,
-      severity: category === 'runtime_crash' || category === 'permission_denied' ? 'high' : isRetryable ? 'medium' : 'low',
+      severity:
+        category === 'runtime_crash' || category === 'permission_denied'
+          ? 'high'
+          : isRetryable
+            ? 'medium'
+            : 'low',
       retryable: isRetryable,
       retryStrategy: isRetryable ? 'backoff' : 'skip_step',
       description: error.slice(0, 200),

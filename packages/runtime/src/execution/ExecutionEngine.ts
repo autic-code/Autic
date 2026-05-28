@@ -138,7 +138,10 @@ export class ExecutionEngine extends EventEmitter {
    * Assess risk level of a tool call based on the tool type and arguments.
    * Used by the permission system to determine if approval is needed.
    */
-  assessRisk(toolName: string, _args: Record<string, unknown>): { level: RiskLevel; score: number; reasons: string[] } {
+  assessRisk(
+    toolName: string,
+    _args: Record<string, unknown>,
+  ): { level: RiskLevel; score: number; reasons: string[] } {
     const highRiskTools = ['run_terminal', 'write_file', 'delete_file'];
     const mediumRiskTools = ['create_file', 'install_package', 'modify_config'];
     const lowRiskTools = ['read_file', 'list_files', 'search_files', 'grep'];

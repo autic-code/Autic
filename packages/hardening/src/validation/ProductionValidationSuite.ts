@@ -24,14 +24,17 @@ export class ProductionValidationSuite {
 
     const summary = {
       totalSuites: suites.length,
-      passedSuites: suites.filter(s => s.passed).length,
-      failedSuites: suites.filter(s => !s.passed).length,
-      totalTests: suites.reduce((s, suite) => s + suite.testsPassed + suite.testsFailed + suite.testsSkipped, 0),
+      passedSuites: suites.filter((s) => s.passed).length,
+      failedSuites: suites.filter((s) => !s.passed).length,
+      totalTests: suites.reduce(
+        (s, suite) => s + suite.testsPassed + suite.testsFailed + suite.testsSkipped,
+        0,
+      ),
       passedTests: suites.reduce((s, suite) => s + suite.testsPassed, 0),
       failedTests: suites.reduce((s, suite) => s + suite.testsFailed, 0),
     };
 
-    const allErrors = suites.flatMap(s => s.errors);
+    const allErrors = suites.flatMap((s) => s.errors);
     const allPassed = summary.failedSuites === 0;
 
     return {
@@ -40,9 +43,13 @@ export class ProductionValidationSuite {
       durationMs: Date.now() - startTime,
       suites,
       summary,
-      recommendations: allErrors.length > 0
-        ? ['Review suite failures before release', 'Run detailed diagnostics with `autic validate`']
-        : ['All validation suites passed'],
+      recommendations:
+        allErrors.length > 0
+          ? [
+              'Review suite failures before release',
+              'Run detailed diagnostics with `autic validate`',
+            ]
+          : ['All validation suites passed'],
     };
   }
 

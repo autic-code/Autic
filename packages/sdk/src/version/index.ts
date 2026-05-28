@@ -4,7 +4,4 @@
 
 export { VersionCompatibilityChecker } from './VersionCompatibility.js';
 
-export type {
-  CompatibilityCheckResult,
-  CompatibilityCheckConfig,
-} from './VersionCompatibility.js';
+export type { CompatibilityCheckResult, CompatibilityCheckConfig } from './VersionCompatibility.js';

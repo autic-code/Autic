@@ -67,8 +67,8 @@ export async function securityAuditCommand(action?: string): Promise<void> {
       for (const audit of audits) {
         console.log(`  ${colorText('⟳', 'primary')} ${audit.name}...`);
         const results = await audit.fn();
-        const passed = results.filter(r => r.passed).length;
-        const failed = results.filter(r => !r.passed).length;
+        const passed = results.filter((r) => r.passed).length;
+        const failed = results.filter((r) => !r.passed).length;
         totalPassed += passed;
         totalFailed += failed;
         const icon = failed === 0 ? colorText('✓', 'success') : colorText('✗', 'error');
@@ -84,15 +84,21 @@ export async function securityAuditCommand(action?: string): Promise<void> {
       console.log(divider());
       console.log(`  ${colorText('Audit Summary', 'bold')}`);
       console.log(`  Passed: ${colorText(totalPassed.toString(), 'success')}`);
-      console.log(`  Failed: ${colorText(totalFailed.toString(), totalFailed > 0 ? 'error' : 'success')}`);
+      console.log(
+        `  Failed: ${colorText(totalFailed.toString(), totalFailed > 0 ? 'error' : 'success')}`,
+      );
       const secure = totalFailed === 0;
-      console.log(`  Status: ${secure ? colorText('SECURE — All checks passed', 'success') : colorText('ISSUES DETECTED', 'error')}`);
+      console.log(
+        `  Status: ${secure ? colorText('SECURE — All checks passed', 'success') : colorText('ISSUES DETECTED', 'error')}`,
+      );
       break;
     }
   }
 }
 
-function printAuditResults(results: Array<{ name: string; passed: boolean; detail?: string; severity?: string }>): void {
+function printAuditResults(
+  results: Array<{ name: string; passed: boolean; detail?: string; severity?: string }>,
+): void {
   for (const r of results) {
     const icon = r.passed ? colorText('✓', 'success') : colorText('✗', 'error');
     console.log(`  ${icon} ${r.name}`);

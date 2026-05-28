@@ -18,11 +18,7 @@ async function getConfigManager(): Promise<ConfigManager> {
   return configManager;
 }
 
-export async function configCommand(
-  action?: string,
-  key?: string,
-  value?: string,
-): Promise<void> {
+export async function configCommand(action?: string, key?: string, value?: string): Promise<void> {
   await handleConfig(action, key, value);
 }
 
@@ -131,8 +127,14 @@ async function setConfigValue(cm: ConfigManager, key?: string, value?: string): 
   // Coerce types
   const prefKey = actualKey as keyof RuntimePreferences;
   const allowedKeys: Array<keyof RuntimePreferences> = [
-    'defaultModel', 'defaultProvider', 'maxTokens', 'temperature',
-    'verbose', 'debug', 'logLevel', 'outputFormat',
+    'defaultModel',
+    'defaultProvider',
+    'maxTokens',
+    'temperature',
+    'verbose',
+    'debug',
+    'logLevel',
+    'outputFormat',
   ];
 
   if (!allowedKeys.includes(prefKey)) {

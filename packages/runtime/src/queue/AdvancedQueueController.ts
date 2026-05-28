@@ -17,10 +17,10 @@ import { EventEmitter } from 'node:events';
 export interface AdvancedQueueControllerOptions {
   minConcurrency?: number;
   maxConcurrency?: number;
-  scaleUpThreshold?: number;   // Queue pressure % to scale up
+  scaleUpThreshold?: number; // Queue pressure % to scale up
   scaleDownThreshold?: number; // Queue pressure % to scale down
-  cooldownMs?: number;          // Min time between scale changes
-  maxPendingTasks?: number;     // Hard limit on pending tasks
+  cooldownMs?: number; // Min time between scale changes
+  maxPendingTasks?: number; // Hard limit on pending tasks
   enableAutoScaling?: boolean;
 }
 
@@ -48,7 +48,9 @@ export class AdvancedQueueController extends EventEmitter {
   private throttled = false;
   private snapshots: QueueSnapshot[] = [];
   private _setConcurrency: ((n: number) => void) | null = null;
-  private _getQueueStats: (() => { pending: number; running: number; completed: number; failed: number }) | null = null;
+  private _getQueueStats:
+    | (() => { pending: number; running: number; completed: number; failed: number })
+    | null = null;
 
   constructor(options: AdvancedQueueControllerOptions = {}) {
     super();
@@ -156,15 +158,21 @@ export class AdvancedQueueController extends EventEmitter {
     const throughput = this.getThroughput();
     if (throughput <= 0) return 0;
     const stats = this._getQueueStats?.() || { pending: 0, running: 0, completed: 0, failed: 0 };
-    return stats.pending > 0 ? Math.round((stats.pending / Math.max(throughput, 1)) * 60 * 1000) : 0;
+    return stats.pending > 0
+      ? Math.round((stats.pending / Math.max(throughput, 1)) * 60 * 1000)
+      : 0;
   }
 
   // --- Private ---
 
-  private assessPressure(stats: { pending: number; running: number; completed: number; failed: number }): QueuePressure {
-    const concurrencyUtil = this.currentConcurrency > 0
-      ? (stats.running / this.currentConcurrency) * 100
-      : 0;
+  private assessPressure(stats: {
+    pending: number;
+    running: number;
+    completed: number;
+    failed: number;
+  }): QueuePressure {
+    const concurrencyUtil =
+      this.currentConcurrency > 0 ? (stats.running / this.currentConcurrency) * 100 : 0;
 
     let level: QueuePressure['level'] = 'low';
 
@@ -187,11 +195,17 @@ export class AdvancedQueueController extends EventEmitter {
     const now = Date.now();
     if (now - this.lastScaleTime < this.options.cooldownMs) return;
 
-    if (pressure.concurrencyUtilization > this.options.scaleUpThreshold && this.currentConcurrency < this.options.maxConcurrency) {
+    if (
+      pressure.concurrencyUtilization > this.options.scaleUpThreshold &&
+      this.currentConcurrency < this.options.maxConcurrency
+    ) {
       const newVal = Math.min(this.options.maxConcurrency, this.currentConcurrency + 1);
       this.emit('scaleUp', this.currentConcurrency, newVal);
       this.applyConcurrency(newVal, 'scale_up');
-    } else if (pressure.concurrencyUtilization < this.options.scaleDownThreshold && this.currentConcurrency > this.options.minConcurrency) {
+    } else if (
+      pressure.concurrencyUtilization < this.options.scaleDownThreshold &&
+      this.currentConcurrency > this.options.minConcurrency
+    ) {
       const newVal = Math.max(this.options.minConcurrency, this.currentConcurrency - 1);
       this.emit('scaleDown', this.currentConcurrency, newVal);
       this.applyConcurrency(newVal, 'scale_down');
@@ -212,12 +226,19 @@ export class AdvancedQueueController extends EventEmitter {
     }
   }
 
-  private getRecommendation(level: QueuePressure['level'], stats: { pending: number; running: number }): string {
+  private getRecommendation(
+    level: QueuePressure['level'],
+    stats: { pending: number; running: number },
+  ): string {
     switch (level) {
-      case 'low': return 'Normal operation';
-      case 'medium': return `Monitor queue — ${stats.pending} pending with ${stats.running} running`;
-      case 'high': return `Increase concurrency or add workers — ${stats.pending} tasks waiting`;
-      case 'critical': return `Immediate action needed — ${stats.pending} tasks queued, consider reducing inflow`;
+      case 'low':
+        return 'Normal operation';
+      case 'medium':
+        return `Monitor queue — ${stats.pending} pending with ${stats.running} running`;
+      case 'high':
+        return `Increase concurrency or add workers — ${stats.pending} tasks waiting`;
+      case 'critical':
+        return `Immediate action needed — ${stats.pending} tasks queued, consider reducing inflow`;
     }
   }
 }

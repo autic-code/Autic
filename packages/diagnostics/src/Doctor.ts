@@ -11,11 +11,7 @@ import { access } from 'node:fs/promises';
 import { platform, arch, totalmem, freemem, cpus } from 'node:os';
 import { join } from 'node:path';
 import { Vault } from '@autic/security';
-import {
-  OpenRouterProvider,
-  OllamaProvider,
-  ModelRegistry,
-} from '@autic/providers';
+import { OpenRouterProvider, OllamaProvider, ModelRegistry } from '@autic/providers';
 import type { DiagnosticCheck, DiagnosticReport } from '@autic/shared';
 import { ConfigManager } from '@autic/config';
 
@@ -165,8 +161,12 @@ export class Doctor {
     const icons: Record<string, string> = { pass: '✓', warn: '○', fail: '✗', skip: '→' };
 
     console.log(`\n  Autic Doctor — Environment Diagnostics\n`);
-    console.log(`  System: ${report.system.nodeVersion} | ${report.system.platform} (${report.system.arch})`);
-    console.log(`  Memory: ${report.system.memoryFree}MB free / ${report.system.memoryTotal}MB total`);
+    console.log(
+      `  System: ${report.system.nodeVersion} | ${report.system.platform} (${report.system.arch})`,
+    );
+    console.log(
+      `  Memory: ${report.system.memoryFree}MB free / ${report.system.memoryTotal}MB total`,
+    );
     console.log(`  Duration: ${report.durationMs}ms\n`);
 
     // Group by category
@@ -410,9 +410,10 @@ export class Doctor {
         name: 'Model registry',
         category: 'provider',
         status: stats.totalModels > 0 ? 'pass' : 'warn',
-        message: stats.totalModels > 0
-          ? `${stats.totalModels} models (${stats.localModels} local, ${stats.cloudModels} cloud)`
-          : 'No models registered',
+        message:
+          stats.totalModels > 0
+            ? `${stats.totalModels} models (${stats.localModels} local, ${stats.cloudModels} cloud)`
+            : 'No models registered',
         durationMs: Date.now() - start,
       };
     } catch {
@@ -436,9 +437,10 @@ export class Doctor {
         name: 'Secret vault',
         category: 'security',
         status: 'pass',
-        message: keys.length > 0
-          ? `Initialized with ${keys.length} stored secret(s)`
-          : 'Initialized (no secrets)',
+        message:
+          keys.length > 0
+            ? `Initialized with ${keys.length} stored secret(s)`
+            : 'Initialized (no secrets)',
         durationMs: Date.now() - start,
       };
     } catch (error) {
@@ -539,10 +541,18 @@ export class Doctor {
 
     for (const check of checks) {
       switch (check.status) {
-        case 'pass': passed++; break;
-        case 'warn': warnings++; break;
-        case 'fail': failed++; break;
-        case 'skip': skipped++; break;
+        case 'pass':
+          passed++;
+          break;
+        case 'warn':
+          warnings++;
+          break;
+        case 'fail':
+          failed++;
+          break;
+        case 'skip':
+          skipped++;
+          break;
       }
     }
 

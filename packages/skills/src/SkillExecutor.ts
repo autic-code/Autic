@@ -10,10 +10,7 @@
  *   - Cancellation support
  */
 
-import type {
-  AgentExecutionContext,
-  WorkflowStep,
-} from '@autic/shared';
+import type { AgentExecutionContext, WorkflowStep } from '@autic/shared';
 import { generateId } from '@autic/shared';
 import { ExecutionCoordinator } from '@autic/workflow';
 import type { ToolExecutor } from '@autic/workflow';
@@ -139,7 +136,17 @@ export class SkillExecutor {
     // Check cancellation
     if (this.cancelled.has(taskId)) {
       this.agentRegistry.failContext(agentId, 'Cancelled before execution');
-      return { agentId, skillId, taskId, goal, success: false, steps: 0, durationMs: 0, error: 'Cancelled', retries: 0 };
+      return {
+        agentId,
+        skillId,
+        taskId,
+        goal,
+        success: false,
+        steps: 0,
+        durationMs: 0,
+        error: 'Cancelled',
+        retries: 0,
+      };
     }
 
     // 4. Build and run coordinator
@@ -175,7 +182,7 @@ export class SkillExecutor {
       );
 
       // 6. Record steps and complete
-      for (const step of (result.steps || [])) {
+      for (const step of result.steps || []) {
         this.agentRegistry.addStep(agentId, step);
       }
 
@@ -183,7 +190,10 @@ export class SkillExecutor {
         this.agentRegistry.completeContext(agentId, result);
       } else {
         const failedStep = (result.steps || []).find((s: WorkflowStep) => s.status === 'failed');
-        this.agentRegistry.failContext(agentId, failedStep?.error || 'Workflow completed with failures');
+        this.agentRegistry.failContext(
+          agentId,
+          failedStep?.error || 'Workflow completed with failures',
+        );
       }
 
       return {
@@ -199,7 +209,10 @@ export class SkillExecutor {
       };
     } catch (error) {
       clearTimeout(cancelTimer);
-      this.agentRegistry.failContext(agentId, error instanceof Error ? error.message : String(error));
+      this.agentRegistry.failContext(
+        agentId,
+        error instanceof Error ? error.message : String(error),
+      );
       return {
         agentId,
         skillId,
@@ -231,9 +244,11 @@ export class SkillExecutor {
   /**
    * Check if an agent's tool access permits a given tool.
    */
-  static isToolAllowed(_agentId: string, toolName: string, context: AgentExecutionContext): boolean {
-    return context.toolAccess.some(
-      (t) => t === '*' || t === toolName,
-    );
+  static isToolAllowed(
+    _agentId: string,
+    toolName: string,
+    context: AgentExecutionContext,
+  ): boolean {
+    return context.toolAccess.some((t) => t === '*' || t === toolName);
   }
 }

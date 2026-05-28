@@ -4,7 +4,13 @@
  */
 
 import { generateId, timestamp } from '@autic/shared';
-import type { TaskRecord, ExecutionStep, TaskState, ExecutionResult, RuntimeEvent } from '@autic/shared';
+import type {
+  TaskRecord,
+  ExecutionStep,
+  TaskState,
+  ExecutionResult,
+  RuntimeEvent,
+} from '@autic/shared';
 import { EventEmitter } from 'node:events';
 import { transitionTask, canCancel, isTerminal } from './TaskState.js';
 import { ExecutionEngine } from '../execution/ExecutionEngine.js';

@@ -18,11 +18,7 @@ export type {
 
 // #9 — Security Audit Framework
 export { SecurityAuditor } from './SecurityAuditor.js';
-export type {
-  AuditScope,
-  AuditFinding,
-  AuditReport,
-} from './SecurityAuditor.js';
+export type { AuditScope, AuditFinding, AuditReport } from './SecurityAuditor.js';
 
 // #10 — Ecosystem Maintenance Tooling
 export { EcosystemMaintenance } from './EcosystemMaintenance.js';

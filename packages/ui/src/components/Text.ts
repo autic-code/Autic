@@ -4,7 +4,15 @@
 
 import { theme } from '../theme.js';
 
-export type TextVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'dim' | 'muted' | 'bold';
+export type TextVariant =
+  | 'default'
+  | 'primary'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'dim'
+  | 'muted'
+  | 'bold';
 
 const variantColors: Record<TextVariant, string> = {
   default: theme.colors.text,

@@ -11,7 +11,12 @@
  *   autic system          — Performance (#14), CLI resilience (#12), context hardening (#7)
  */
 
-import type { AuditReport, StressTestResult, MemoryLeakReport, DeadlockReport } from '@autic/shared';
+import type {
+  AuditReport,
+  StressTestResult,
+  MemoryLeakReport,
+  DeadlockReport,
+} from '@autic/shared';
 import { RuntimeAuditSystem } from '@autic/hardening';
 import { StressTestRunner } from '@autic/hardening';
 import { MemoryLeakDetector } from '@autic/hardening';
@@ -53,11 +58,13 @@ export async function auditCommand(action?: string): Promise<void> {
 
 function printAuditReport(report: AuditReport): void {
   const { summary } = report;
-  const statusIcon = (s: string) => s === 'pass' ? '✓' : s === 'warn' ? '⚠' : '✗';
+  const statusIcon = (s: string) => (s === 'pass' ? '✓' : s === 'warn' ? '⚠' : '✗');
 
   console.log(`\n  Audit Report — ${new Date(report.timestamp).toISOString()}`);
   console.log(`  Duration: ${report.durationMs}ms | Status: ${report.overallStatus}`);
-  console.log(`  Summary: ${summary.passed} passed, ${summary.warnings} warnings, ${summary.failed} failed, ${summary.errors} errors\n`);
+  console.log(
+    `  Summary: ${summary.passed} passed, ${summary.warnings} warnings, ${summary.failed} failed, ${summary.errors} errors\n`,
+  );
 
   for (const check of report.checks) {
     console.log(`  ${statusIcon(check.status)} [${check.category}] ${check.name}`);
@@ -109,7 +116,9 @@ function printStressResult(result: StressTestResult): void {
   for (const phase of result.phases) {
     const icon = phase.errors.length === 0 && phase.tasksFailed === 0 ? '✓' : '⚠';
     console.log(`  ${icon} ${phase.name}`);
-    console.log(`    Tasks: ${phase.tasksCompleted} ok, ${phase.tasksFailed} failed | Latency: ${phase.avgLatencyMs}ms`);
+    console.log(
+      `    Tasks: ${phase.tasksCompleted} ok, ${phase.tasksFailed} failed | Latency: ${phase.avgLatencyMs}ms`,
+    );
     if (phase.errors.length > 0) {
       for (const err of phase.errors) console.log(`    Error: ${err}`);
     }
@@ -147,7 +156,9 @@ export async function protectCommand(action?: string, name?: string): Promise<vo
   if (action === 'safety') {
     const validator = new ExecutionSafetyValidator();
     const result = await validator.validateAll();
-    console.log(`\n  Execution Safety: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`);
+    console.log(
+      `\n  Execution Safety: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`,
+    );
     for (const check of result.checks) {
       console.log(`  ${check.passed ? '✓' : '✗'} ${check.name}: ${check.message}`);
     }
@@ -158,7 +169,9 @@ export async function protectCommand(action?: string, name?: string): Promise<vo
   if (action === 'security') {
     const security = new SecurityHardeningSystem();
     const result = await security.validateAll();
-    console.log(`\n  Security Hardening: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`);
+    console.log(
+      `\n  Security Hardening: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`,
+    );
     if (result.issues.length > 0) {
       for (const issue of result.issues) console.log(`  ✗ ${issue}`);
     }
@@ -176,7 +189,8 @@ export async function protectCommand(action?: string, name?: string): Promise<vo
       for (const d of deadlocks) console.log(`  ✗ Deadlock cycle: ${d.cycle?.join(' → ')}`);
     }
     if (stalls.length > 0) {
-      for (const s of stalls) console.log(`  ⚠ Stalled: ${s.componentId} (${(s.stalledDurationMs / 1000).toFixed(0)}s)`);
+      for (const s of stalls)
+        console.log(`  ⚠ Stalled: ${s.componentId} (${(s.stalledDurationMs / 1000).toFixed(0)}s)`);
     }
     console.log('');
     return;
@@ -213,18 +227,25 @@ export async function memoryCommand(action?: string): Promise<void> {
 }
 
 function printMemoryReport(report: MemoryLeakReport): void {
-  const riskIcon = report.riskLevel === 'none' ? '✓' : report.riskLevel === 'low' || report.riskLevel === 'medium' ? '⚠' : '✗';
+  const riskIcon =
+    report.riskLevel === 'none'
+      ? '✓'
+      : report.riskLevel === 'low' || report.riskLevel === 'medium'
+        ? '⚠'
+        : '✗';
   console.log(`\n  Memory Report — Risk: ${report.riskLevel} ${riskIcon}`);
   console.log(`  Heap: ${report.heapUsedMB.toFixed(1)}MB / ${report.heapTotalMB.toFixed(1)}MB`);
   console.log(`  RSS: ${report.rssMB.toFixed(0)}MB | External: ${report.externalMB.toFixed(0)}MB`);
   console.log(`  Active sessions: ${report.sessionsActive} | Workers: ${report.workersActive}`);
   if (report.orphanedTasks.length > 0) {
     console.log(`  Orphaned tasks: ${report.orphanedTasks.length}`);
-    for (const t of report.orphanedTasks) console.log(`    ${t.id} — idle ${(t.idleMs / 1000).toFixed(0)}s`);
+    for (const t of report.orphanedTasks)
+      console.log(`    ${t.id} — idle ${(t.idleMs / 1000).toFixed(0)}s`);
   }
   if (report.suspiciousGrowth.length > 0) {
     console.log(`  Suspicious growth:`);
-    for (const g of report.suspiciousGrowth) console.log(`    ${g.component}: +${g.growthMB}MB (${(g.timeWindowMs / 1000).toFixed(0)}s)`);
+    for (const g of report.suspiciousGrowth)
+      console.log(`    ${g.component}: +${g.growthMB}MB (${(g.timeWindowMs / 1000).toFixed(0)}s)`);
   }
   if (report.recommendations.length > 0) {
     console.log('  Recommendations:');
@@ -247,7 +268,9 @@ export async function validateCommand(action?: string): Promise<void> {
     const suite = new ProductionValidationSuite();
     const result = await suite.runSuite('custom');
     console.log(`\n  Suite: ${result.name} — ${result.passed ? '✓' : '✗'}`);
-    console.log(`  Tests: ${result.testsPassed} passed, ${result.testsFailed} failed, ${result.testsSkipped} skipped`);
+    console.log(
+      `  Tests: ${result.testsPassed} passed, ${result.testsFailed} failed, ${result.testsSkipped} skipped`,
+    );
     console.log('');
     return;
   }
@@ -255,7 +278,9 @@ export async function validateCommand(action?: string): Promise<void> {
   if (action === 'release') {
     const checker = new ReleaseReadinessChecker();
     const result = await checker.checkAll('0.1.0');
-    console.log(`\n  Release Readiness: ${result.passed ? '✓ Ready for release' : '✗ Issues found'}`);
+    console.log(
+      `\n  Release Readiness: ${result.passed ? '✓ Ready for release' : '✗ Issues found'}`,
+    );
     for (const check of result.checks) {
       console.log(`  ${check.passed ? '✓' : '✗'} ${check.name}: ${check.message}`);
     }
@@ -270,14 +295,30 @@ export async function validateCommand(action?: string): Promise<void> {
   console.log(`\n  Usage: autic validate [all|suite|release]`);
 }
 
-function printValidationResult(result: { passed: boolean; summary: { totalSuites: number; passedSuites: number; failedSuites: number; totalTests: number; passedTests: number; failedTests: number }; suites: Array<{ name: string; passed: boolean; testsPassed: number; testsFailed: number }>; recommendations: string[] }): void {
+function printValidationResult(result: {
+  passed: boolean;
+  summary: {
+    totalSuites: number;
+    passedSuites: number;
+    failedSuites: number;
+    totalTests: number;
+    passedTests: number;
+    failedTests: number;
+  };
+  suites: Array<{ name: string; passed: boolean; testsPassed: number; testsFailed: number }>;
+  recommendations: string[];
+}): void {
   console.log(`\n  Validation Suite — ${result.passed ? '✓ ALL PASSED' : '✗ SOME FAILED'}`);
   console.log(`  Suites: ${result.summary.passedSuites}/${result.summary.totalSuites} passed`);
-  console.log(`  Tests: ${result.summary.passedTests}/${result.summary.totalTests} passed, ${result.summary.failedTests} failed\n`);
+  console.log(
+    `  Tests: ${result.summary.passedTests}/${result.summary.totalTests} passed, ${result.summary.failedTests} failed\n`,
+  );
 
   for (const suite of result.suites) {
     const icon = suite.passed ? '✓' : '✗';
-    console.log(`  ${icon} ${suite.name}: ${suite.testsPassed} passed, ${suite.testsFailed} failed`);
+    console.log(
+      `  ${icon} ${suite.name}: ${suite.testsPassed} passed, ${suite.testsFailed} failed`,
+    );
   }
   console.log('');
 
@@ -316,7 +357,12 @@ export async function diagnoseCommand(action?: string): Promise<void> {
     console.log(`\n  CLI UX Hardening: ${result.passed ? '✓ Good' : '✗ Issues'}`);
     for (const [key, val] of Object.entries(result)) {
       if (typeof val === 'boolean' && key !== 'passed') {
-        console.log(`  ${val ? '✓' : '✗'} ${key.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`);
+        console.log(
+          `  ${val ? '✓' : '✗'} ${key
+            .replace(/([A-Z])/g, ' $1')
+            .toLowerCase()
+            .trim()}`,
+        );
       }
     }
     console.log('');
@@ -334,7 +380,9 @@ export async function systemCommand(action?: string): Promise<void> {
     const report = await perf.validatePerformance();
     console.log(`\n  Performance Report`);
     console.log(`  Startup: ${report.startupMs}ms | Render: ${report.renderFrequencyMs}ms`);
-    console.log(`  Queue throughput: ${report.queueThroughput}/min | Memory cleanup: ${report.memoryCleanupMs}ms`);
+    console.log(
+      `  Queue throughput: ${report.queueThroughput}/min | Memory cleanup: ${report.memoryCleanupMs}ms`,
+    );
     if (report.issues.length > 0) {
       console.log('\n  Issues:');
       for (const issue of report.issues) console.log(`    • ${issue}`);
@@ -362,7 +410,9 @@ export async function systemCommand(action?: string): Promise<void> {
   if (action === 'context') {
     const context = new ContextHardeningSystem();
     const result = await context.validateAll();
-    console.log(`\n  Context Hardening: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`);
+    console.log(
+      `\n  Context Hardening: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`,
+    );
     if (result.issues.length > 0) {
       for (const issue of result.issues) console.log(`  ✗ ${issue}`);
     }
@@ -403,7 +453,9 @@ export async function fsCommand(action?: string, path?: string): Promise<void> {
   if (!action || action === 'check') {
     const validator = new FilesystemSafetyValidator();
     const result = await validator.validateAll();
-    console.log(`\n  Filesystem Safety: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`);
+    console.log(
+      `\n  Filesystem Safety: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`,
+    );
     if (result.issues.length > 0) {
       for (const issue of result.issues) console.log(`  ✗ ${issue}`);
     }
@@ -433,7 +485,12 @@ export async function recoveryCommand(action?: string): Promise<void> {
     console.log(`\n  Crash Recovery: ${result.passed ? '✓ All checks passed' : '✗ Issues found'}`);
     for (const [key, val] of Object.entries(result)) {
       if (typeof val === 'boolean' && key !== 'passed') {
-        console.log(`  ${val ? '✓' : '✗'} ${key.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`);
+        console.log(
+          `  ${val ? '✓' : '✗'} ${key
+            .replace(/([A-Z])/g, ' $1')
+            .toLowerCase()
+            .trim()}`,
+        );
       }
     }
     if (result.issues.length > 0) {

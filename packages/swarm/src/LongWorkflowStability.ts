@@ -48,10 +48,18 @@ export class LongWorkflowStability {
     this.cleanupTimer = setInterval(() => this.runCleanup(), 60_000);
     this.adaptationTimer = setInterval(() => this.runAdaptation(), 30_000);
 
-    if (this.cleanupTimer && typeof this.cleanupTimer === 'object' && 'unref' in this.cleanupTimer) {
+    if (
+      this.cleanupTimer &&
+      typeof this.cleanupTimer === 'object' &&
+      'unref' in this.cleanupTimer
+    ) {
       this.cleanupTimer.unref();
     }
-    if (this.adaptationTimer && typeof this.adaptationTimer === 'object' && 'unref' in this.adaptationTimer) {
+    if (
+      this.adaptationTimer &&
+      typeof this.adaptationTimer === 'object' &&
+      'unref' in this.adaptationTimer
+    ) {
       this.adaptationTimer.unref();
     }
   }
@@ -97,7 +105,8 @@ export class LongWorkflowStability {
 
     if (this.cooldownHistory.length > this.maxCooldownHistory) {
       this.cooldownHistory = this.cooldownHistory.slice(-this.maxCooldownHistory);
-    }      this.observability.record({
+    }
+    this.observability.record({
       type: 'stability:cooldown',
       timestamp: Date.now(),
       swarmId: this.swarmId,
@@ -145,10 +154,14 @@ export class LongWorkflowStability {
   getRecommendedConcurrency(baseConcurrency: number): number {
     const level = this.getAdaptationLevel();
     switch (level) {
-      case 'paused': return 0;
-      case 'minimal': return Math.max(1, Math.floor(baseConcurrency * 0.25));
-      case 'reduced': return Math.max(1, Math.floor(baseConcurrency * 0.5));
-      case 'normal': return baseConcurrency;
+      case 'paused':
+        return 0;
+      case 'minimal':
+        return Math.max(1, Math.floor(baseConcurrency * 0.25));
+      case 'reduced':
+        return Math.max(1, Math.floor(baseConcurrency * 0.5));
+      case 'normal':
+        return baseConcurrency;
     }
   }
 
@@ -179,9 +192,10 @@ export class LongWorkflowStability {
   private runAdaptation(): void {
     if (this.state.cooldownActive) return;
 
-    const idleRatio = this.state.idleWorkers > 0
-      ? this.state.idleWorkers / Math.max(1, this.state.idleWorkers + this.consecutiveDelegations)
-      : 0;
+    const idleRatio =
+      this.state.idleWorkers > 0
+        ? this.state.idleWorkers / Math.max(1, this.state.idleWorkers + this.consecutiveDelegations)
+        : 0;
 
     if (idleRatio > 0.8 && this.consecutiveDelegations < 5) {
       // Too many idle workers — nothing happening

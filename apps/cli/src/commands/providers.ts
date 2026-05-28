@@ -5,7 +5,15 @@
  * Integrates with ProviderRegistry, KeyManager, ModelRegistry, RateLimiter.
  */
 
-import { OpenRouterProvider, OllamaProvider, ProviderRegistry, KeyManager, ModelRegistry, RateLimiter, createProviderError } from '@autic/providers';
+import {
+  OpenRouterProvider,
+  OllamaProvider,
+  ProviderRegistry,
+  KeyManager,
+  ModelRegistry,
+  RateLimiter,
+  createProviderError,
+} from '@autic/providers';
 import type { ProviderConfig } from '@autic/shared';
 
 const DEFAULT_CONFIGS: ProviderConfig[] = [
@@ -121,7 +129,9 @@ export async function providersCommand(
 
 async function guidedProviderSetup(name?: string): Promise<void> {
   console.log('');
-  console.log('  \u2554\u2550\u2550\u2550\u2550 Provider Setup Wizard \u2550\u2550\u2550\u2550\u2557');
+  console.log(
+    '  \u2554\u2550\u2550\u2550\u2550 Provider Setup Wizard \u2550\u2550\u2550\u2550\u2557',
+  );
   console.log('');
 
   if (!name) {
@@ -157,7 +167,9 @@ async function setupOpenRouter(): Promise<void> {
 
   // Step 1: API Key verification
   console.log('  Step 1: API Key Verification');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
 
   const envKey = process.env.OPENROUTER_API_KEY || process.env.AUTIC_OPENROUTER_KEY;
   if (envKey) {
@@ -175,7 +187,9 @@ async function setupOpenRouter(): Promise<void> {
 
   // Step 2: Connection verification
   console.log('  Step 2: Connection Verification');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
 
   const provider = new OpenRouterProvider({ apiKey: envKey });
   try {
@@ -197,7 +211,9 @@ async function setupOpenRouter(): Promise<void> {
 
   // Step 3: Model discovery
   console.log('  Step 3: Model Discovery');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
 
   try {
     const models = await provider.listModels();
@@ -233,7 +249,9 @@ async function setupOpenRouter(): Promise<void> {
 
   // Step 4: Runtime recommendations
   console.log('  Step 4: Runtime Recommendations');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
   console.log('  \u2713 OpenRouter is configured and ready.');
   console.log('  \u25CB For large repos, consider models with 128K+ context');
   console.log('  \u25CB For quick fixes, smaller models are faster and cheaper');
@@ -245,7 +263,9 @@ async function setupOpenRouter(): Promise<void> {
   console.log('  \u2502 OpenRouter: Ready');
   console.log('  \u2502 API Key:    Verified');
   console.log('  \u2502 Models:     Discovered');
-  console.log('  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D');
+  console.log(
+    '  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D',
+  );
   console.log('');
   console.log('  Next: autic doctor quick');
   console.log('        autic chat');
@@ -260,7 +280,9 @@ async function setupOllama(): Promise<void> {
 
   // Step 1: Check if Ollama is installed
   console.log('  Step 1: Installation Check');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
 
   let ollamaInstalled = false;
   try {
@@ -278,13 +300,17 @@ async function setupOllama(): Promise<void> {
 
   // Step 2: Connection check
   console.log('  Step 2: Connection Check');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
 
   const provider = new OllamaProvider();
   let connected = false;
   try {
     connected = await provider.connect();
-    console.log(`  ${connected ? '\u2713' : '\u2717'} Ollama server: ${connected ? 'running' : 'not running'}`);
+    console.log(
+      `  ${connected ? '\u2713' : '\u2717'} Ollama server: ${connected ? 'running' : 'not running'}`,
+    );
     if (!connected) {
       console.log('     Start with: ollama serve');
       console.log('');
@@ -302,7 +328,9 @@ async function setupOllama(): Promise<void> {
 
   // Step 3: Model discovery
   console.log('  Step 3: Local Model Discovery');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
 
   try {
     const models = await provider.listModels();
@@ -325,7 +353,9 @@ async function setupOllama(): Promise<void> {
 
   // Step 4: Runtime recommendations
   console.log('  Step 4: Runtime Recommendations');
-  console.log('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+  console.log(
+    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+  );
   console.log('  \u2713 Ollama is configured and ready.');
   console.log('  \u25CB Local models work offline — no API costs');
   console.log('  \u25CB For coding, pull models like deepseek-coder or codellama');
@@ -338,7 +368,9 @@ async function setupOllama(): Promise<void> {
   console.log('  \u2502 Ollama:     Running');
   console.log('  \u2502 Models:     Scanned');
   console.log('  \u2502 Offline:    Supported');
-  console.log('  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D');
+  console.log(
+    '  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D',
+  );
   console.log('');
   console.log('  Next: autic doctor quick');
   console.log('        autic chat');
@@ -356,7 +388,8 @@ async function listProviders(): Promise<void> {
   const statuses = await reg.healthCheckAll();
 
   for (const status of statuses) {
-    const icon = status.status === 'healthy' ? '\u2713' : status.status === 'unknown' ? '\u25CB' : '\u2717';
+    const icon =
+      status.status === 'healthy' ? '\u2713' : status.status === 'unknown' ? '\u25CB' : '\u2717';
     const latencyInfo = status.latencyMs ? ` (${status.latencyMs}ms)` : '';
 
     console.log(`  ${icon} ${status.providerName}${latencyInfo}`);
@@ -371,7 +404,9 @@ async function listProviders(): Promise<void> {
     if (keyManager) {
       const keyStats = keyManager.getProviderKeyStats(status.providerId);
       if (keyStats.total > 0) {
-        console.log(`     Keys: ${keyStats.active} active, ${keyStats.inCooldown} cooldown, ${keyStats.verified} verified`);
+        console.log(
+          `     Keys: ${keyStats.active} active, ${keyStats.inCooldown} cooldown, ${keyStats.verified} verified`,
+        );
       } else {
         console.log(`     Keys: none configured`);
       }
@@ -380,7 +415,9 @@ async function listProviders(): Promise<void> {
     if (rateLimiter) {
       const util = rateLimiter.getUtilization(status.providerId);
       if (util.rpmUtilization > 0 || util.tpmUtilization > 0) {
-        console.log(`     Rate: ${util.rpmUtilization.toFixed(1)}% RPM, ${util.tpmUtilization.toFixed(1)}% TPM`);
+        console.log(
+          `     Rate: ${util.rpmUtilization.toFixed(1)}% RPM, ${util.tpmUtilization.toFixed(1)}% TPM`,
+        );
       }
     }
 
@@ -420,7 +457,9 @@ async function checkProviders(): Promise<void> {
   if (modelRegistry) {
     const modelStats = modelRegistry.getStats();
     process.stdout.write(`  Model registry: ${modelStats.totalModels} total models\n`);
-    process.stdout.write(`    ${modelStats.localModels} local, ${modelStats.cloudModels} cloud\n\n`);
+    process.stdout.write(
+      `    ${modelStats.localModels} local, ${modelStats.cloudModels} cloud\n\n`,
+    );
 
     if (modelStats.totalModels > 0) {
       process.stdout.write('  Capability coverage:\n');
@@ -468,7 +507,15 @@ async function addProvider(name?: string, options: Record<string, unknown> = {})
         return;
       }
       provider = new OpenRouterProvider({ apiKey, baseUrl });
-      config = { id: 'openrouter', name: 'OpenRouter', type: 'openrouter', baseUrl, apiKey, models: [], enabled: true };
+      config = {
+        id: 'openrouter',
+        name: 'OpenRouter',
+        type: 'openrouter',
+        baseUrl,
+        apiKey,
+        models: [],
+        enabled: true,
+      };
       break;
     }
     case 'ollama': {

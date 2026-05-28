@@ -98,15 +98,14 @@ export class ContextObservability {
       totalCacheHits: this.totalCacheHits,
       totalCacheMisses: this.totalCacheMisses,
       totalSafetyTriggers: this.totalSafetyTriggers,
-      averageTokensPerAssembly: this.totalAssemblies > 0
-        ? Math.round(this.totalTokensUsed / this.totalAssemblies)
-        : 0,
-      averageFilesPerAssembly: this.totalAssemblies > 0
-        ? Math.round(this.totalFilesRetrieved / this.totalAssemblies)
-        : 0,
-      averageCompressionRatio: this.compressionCount > 0
-        ? Math.round((this.totalCompressionRatio / this.compressionCount) * 100) / 100
-        : 0,
+      averageTokensPerAssembly:
+        this.totalAssemblies > 0 ? Math.round(this.totalTokensUsed / this.totalAssemblies) : 0,
+      averageFilesPerAssembly:
+        this.totalAssemblies > 0 ? Math.round(this.totalFilesRetrieved / this.totalAssemblies) : 0,
+      averageCompressionRatio:
+        this.compressionCount > 0
+          ? Math.round((this.totalCompressionRatio / this.compressionCount) * 100) / 100
+          : 0,
     };
   }
 
@@ -121,9 +120,7 @@ export class ContextObservability {
    * Get events filtered by type.
    */
   getEventsByType(type: string, limit = 20): ContextEvent[] {
-    return this.events
-      .filter(e => e.type === type)
-      .slice(-limit);
+    return this.events.filter((e) => e.type === type).slice(-limit);
   }
 
   /**
@@ -131,9 +128,10 @@ export class ContextObservability {
    */
   getTokenUsageSummary(): { used: number; saved: number; net: number; percentSaved: string } {
     const net = this.totalTokensUsed - this.totalTokensSaved;
-    const percentSaved = this.totalTokensUsed > 0
-      ? `${Math.round((this.totalTokensSaved / (this.totalTokensUsed + this.totalTokensSaved)) * 100)}%`
-      : '0%';
+    const percentSaved =
+      this.totalTokensUsed > 0
+        ? `${Math.round((this.totalTokensSaved / (this.totalTokensUsed + this.totalTokensSaved)) * 100)}%`
+        : '0%';
     return {
       used: this.totalTokensUsed,
       saved: this.totalTokensSaved,

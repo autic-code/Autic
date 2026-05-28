@@ -7,13 +7,13 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "pnpm -r build",
+    "build": "pnpm -r --workspace-concurrency=4 build",
     "build:cli": "pnpm --filter @autic/cli build",
     "clean": "pnpm -r clean",
-    "lint": "pnpm -r lint",
+    "lint": "pnpm -r --workspace-concurrency=4 lint",
     "format": "prettier --write \"**/*.{ts,tsx,json,md,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yaml}\"",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r --workspace-concurrency=4 typecheck"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

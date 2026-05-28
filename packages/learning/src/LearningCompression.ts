@@ -76,9 +76,7 @@ export class LearningCompression {
     // Step 3: Enforce max entries (keep highest confidence)
     let finalEntries = validEntries;
     if (finalEntries.length > maxEntries) {
-      finalEntries = finalEntries
-        .sort((a, b) => b.confidence - a.confidence)
-        .slice(0, maxEntries);
+      finalEntries = finalEntries.sort((a, b) => b.confidence - a.confidence).slice(0, maxEntries);
     }
 
     // Build new map
@@ -113,14 +111,10 @@ export class LearningCompression {
   /**
    * Suggest entries to remove when over budget.
    */
-  suggestRemovals(
-    entries: Map<string, LearningEntry>,
-    targetCount: number,
-  ): string[] {
+  suggestRemovals(entries: Map<string, LearningEntry>, targetCount: number): string[] {
     if (entries.size <= targetCount) return [];
 
-    const sorted = Array.from(entries.values())
-      .sort((a, b) => a.confidence - b.confidence);
+    const sorted = Array.from(entries.values()).sort((a, b) => a.confidence - b.confidence);
 
     const toRemove: string[] = [];
     for (const entry of sorted) {

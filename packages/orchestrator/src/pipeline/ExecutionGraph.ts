@@ -154,7 +154,7 @@ export class ExecutionGraph {
 
     this.transitions.push({
       from: current.stage,
-      to: this.getNextStage() || 'failed' as OrchestrationStage,
+      to: this.getNextStage() || ('failed' as OrchestrationStage),
       reason: `failed: ${error.slice(0, 80)}`,
       timestamp: timestamp(),
     });
@@ -198,9 +198,7 @@ export class ExecutionGraph {
     next.status = 'running';
 
     this.transitions.push({
-      from: this.currentStageIndex > 0
-        ? this.stages[this.currentStageIndex - 1].stage
-        : 'research',
+      from: this.currentStageIndex > 0 ? this.stages[this.currentStageIndex - 1].stage : 'research',
       to: next.stage,
       reason: 'advance',
       timestamp: timestamp(),
@@ -305,9 +303,10 @@ export class ExecutionGraph {
       stagesCompleted: Array.from(this.completedStages),
       stagesFailed: Array.from(this.failedStages),
       startedAt: this.startTime,
-      completedAt: this.status === 'completed' || this.status === 'failed' || this.status === 'cancelled'
-        ? timestamp()
-        : undefined,
+      completedAt:
+        this.status === 'completed' || this.status === 'failed' || this.status === 'cancelled'
+          ? timestamp()
+          : undefined,
       error: this.getCurrentRecord()?.error,
       delegations: this.transitions.length,
       contractHistory: [],

@@ -48,11 +48,20 @@ export class ExecutionLoadBalancer {
 
     let recommendation: string;
 
-    if (cpuPressure >= this.options.cpuThreshold || memoryPressure >= this.options.memoryThreshold) {
+    if (
+      cpuPressure >= this.options.cpuThreshold ||
+      memoryPressure >= this.options.memoryThreshold
+    ) {
       recommendation = 'throttle';
-    } else if (cpuPressure >= this.options.cpuThreshold * 0.8 || memoryPressure >= this.options.memoryThreshold * 0.8) {
+    } else if (
+      cpuPressure >= this.options.cpuThreshold * 0.8 ||
+      memoryPressure >= this.options.memoryThreshold * 0.8
+    ) {
       recommendation = 'reduce';
-    } else if (providerPressure >= this.options.providerThreshold || params.queuePressure >= this.options.queueThreshold) {
+    } else if (
+      providerPressure >= this.options.providerThreshold ||
+      params.queuePressure >= this.options.queueThreshold
+    ) {
       recommendation = 'caution';
     } else if (cpuPressure < 30 && memoryPressure < 30 && params.queuePressure < 20) {
       recommendation = 'scale_up';
@@ -77,7 +86,10 @@ export class ExecutionLoadBalancer {
 
   /** Should we scale up? */
   shouldScaleUp(metrics: LoadBalancerMetrics): boolean {
-    return metrics.recommendation === 'scale_up' && metrics.pendingDelegations > metrics.activeDelegations * 2;
+    return (
+      metrics.recommendation === 'scale_up' &&
+      metrics.pendingDelegations > metrics.activeDelegations * 2
+    );
   }
 
   /** Should we throttle? */
@@ -99,7 +111,8 @@ export class ExecutionLoadBalancer {
   calculateSafeConcurrency(metrics: LoadBalancerMetrics, baseConcurrency: number): number {
     if (this.shouldThrottle(metrics)) return Math.max(1, Math.floor(baseConcurrency / 4));
     if (this.shouldReduce(metrics)) return Math.max(1, Math.floor(baseConcurrency / 2));
-    if (this.shouldProceedWithCaution(metrics)) return Math.max(1, Math.floor(baseConcurrency * 0.75));
+    if (this.shouldProceedWithCaution(metrics))
+      return Math.max(1, Math.floor(baseConcurrency * 0.75));
     return baseConcurrency;
   }
 
@@ -111,8 +124,10 @@ export class ExecutionLoadBalancer {
   /** Update thresholds */
   setThresholds(options: Partial<LoadBalancerOptions>): void {
     if (options.cpuThreshold !== undefined) this.options.cpuThreshold = options.cpuThreshold;
-    if (options.memoryThreshold !== undefined) this.options.memoryThreshold = options.memoryThreshold;
-    if (options.providerThreshold !== undefined) this.options.providerThreshold = options.providerThreshold;
+    if (options.memoryThreshold !== undefined)
+      this.options.memoryThreshold = options.memoryThreshold;
+    if (options.providerThreshold !== undefined)
+      this.options.providerThreshold = options.providerThreshold;
     if (options.queueThreshold !== undefined) this.options.queueThreshold = options.queueThreshold;
   }
 }

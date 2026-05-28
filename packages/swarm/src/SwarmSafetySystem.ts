@@ -99,10 +99,17 @@ export class SwarmSafetySystem {
   }
 
   /** Check for recursion (same agent being re-delegated to by same source) */
-  checkRecursion(sourceAgentId: string, targetAgentId: string, windowMs: number = 10_000): SwarmSafetyViolation | null {
+  checkRecursion(
+    sourceAgentId: string,
+    targetAgentId: string,
+    windowMs: number = 10_000,
+  ): SwarmSafetyViolation | null {
     const now = Date.now();
     const recent = this.delegationHistory.filter(
-      (d) => d.sourceAgentId === sourceAgentId && d.targetAgentId === targetAgentId && (now - d.timestamp) < windowMs,
+      (d) =>
+        d.sourceAgentId === sourceAgentId &&
+        d.targetAgentId === targetAgentId &&
+        now - d.timestamp < windowMs,
     );
 
     if (recent.length >= 3) {
@@ -129,7 +136,9 @@ export class SwarmSafetySystem {
       violations.push({
         type: 'runaway_execution',
         message: `Runaway execution: ${this.delegationHistory.length} delegations in window`,
-        currentValue: this.delegationHistory.filter((d) => d.timestamp >= Date.now() - this.runawayWindowMs).length,
+        currentValue: this.delegationHistory.filter(
+          (d) => d.timestamp >= Date.now() - this.runawayWindowMs,
+        ).length,
         maxValue: this.runawayThreshold,
         source: 'SwarmSafetySystem',
         timestamp: Date.now(),

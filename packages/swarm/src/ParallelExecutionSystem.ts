@@ -24,7 +24,12 @@ export class ParallelExecutionSystem {
   private maxConcurrency: number;
   private maxBatches: number;
   private activeBatches: Set<string> = new Set();
-  private batchHistory: Array<{ batchId: string; startedAt: number; completedAt: number; totalJobs: number }> = [];
+  private batchHistory: Array<{
+    batchId: string;
+    startedAt: number;
+    completedAt: number;
+    totalJobs: number;
+  }> = [];
   private historyLimit = 50;
 
   constructor(options: { maxConcurrency?: number; maxBatches?: number } = {}) {
@@ -38,7 +43,10 @@ export class ParallelExecutionSystem {
     options: { maxConcurrency?: number; timeoutMs?: number } = {},
   ): Promise<ParallelBatchResult> {
     const batchId = generateId();
-    const concurrency = Math.min(options.maxConcurrency ?? this.maxConcurrency, this.maxConcurrency);
+    const concurrency = Math.min(
+      options.maxConcurrency ?? this.maxConcurrency,
+      this.maxConcurrency,
+    );
 
     if (this.activeBatches.size >= this.maxBatches) {
       throw new Error(`Max parallel batches (${this.maxBatches}) already active`);
@@ -147,11 +155,19 @@ export class ParallelExecutionSystem {
     avgDurationMs: number;
   } {
     if (this.batchHistory.length === 0) {
-      return { totalBatches: 0, activeBatches: this.activeBatches.size, avgBatchSize: 0, avgDurationMs: 0 };
+      return {
+        totalBatches: 0,
+        activeBatches: this.activeBatches.size,
+        avgBatchSize: 0,
+        avgDurationMs: 0,
+      };
     }
 
-    const avgSize = this.batchHistory.reduce((s, b) => s + b.totalJobs, 0) / this.batchHistory.length;
-    const avgDuration = this.batchHistory.reduce((s, b) => s + (b.completedAt - b.startedAt), 0) / this.batchHistory.length;
+    const avgSize =
+      this.batchHistory.reduce((s, b) => s + b.totalJobs, 0) / this.batchHistory.length;
+    const avgDuration =
+      this.batchHistory.reduce((s, b) => s + (b.completedAt - b.startedAt), 0) /
+      this.batchHistory.length;
 
     return {
       totalBatches: this.batchHistory.length,

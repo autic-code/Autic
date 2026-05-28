@@ -45,13 +45,17 @@ export class PerformanceValidator {
       recommendations.push(`Cold start is high (${coldStart}ms). Consider lazy-loading modules.`);
     }
     if (configLoad > 50) {
-      recommendations.push(`Config load is slow (${configLoad}ms). Check ~/.autic/config.json size.`);
+      recommendations.push(
+        `Config load is slow (${configLoad}ms). Check ~/.autic/config.json size.`,
+      );
     }
     if (leakDetected) {
       recommendations.push('Memory leak detected. Investigate long-lived references.');
     }
     if (baselineMemory > 200) {
-      recommendations.push(`Baseline memory is high (${baselineMemory}MB). Consider reducing module imports.`);
+      recommendations.push(
+        `Baseline memory is high (${baselineMemory}MB). Consider reducing module imports.`,
+      );
     }
 
     return {
@@ -147,6 +151,6 @@ export class PerformanceValidator {
 
   private getMemoryMB(): number {
     const usage = process.memoryUsage();
-    return Math.round(usage.heapUsed / 1024 / 1024 * 10) / 10;
+    return Math.round((usage.heapUsed / 1024 / 1024) * 10) / 10;
   }
 }

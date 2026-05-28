@@ -133,7 +133,8 @@ export class LearningValidation {
   ): string {
     if (expired) return 'Entry has expired';
     if (isDuplicate) return 'Duplicate entry detected';
-    if (!isValid && confidence < 0.5) return `Confidence too low: ${(confidence * 100).toFixed(0)}%`;
+    if (!isValid && confidence < 0.5)
+      return `Confidence too low: ${(confidence * 100).toFixed(0)}%`;
     if (isValid) return 'Entry validated successfully';
     return 'Validation failed';
   }

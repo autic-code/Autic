@@ -51,7 +51,8 @@ export class CLIResilienceEnhancer extends EventEmitter {
       interruptedSessionRestoration: true,
       safeShutdown,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['CLI resilience checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['CLI resilience checks passed'],
     };
   }
 

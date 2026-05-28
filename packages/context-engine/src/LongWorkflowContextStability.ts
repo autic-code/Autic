@@ -62,10 +62,9 @@ export class LongWorkflowContextStability {
   /**
    * Summarize a batch of execution steps into compact form.
    */
-  summarizeExecutionBatch<T extends { description?: string; type?: string; status?: string; durationMs?: number }>(
-    entries: T[],
-    batchLabel: string,
-  ): void {
+  summarizeExecutionBatch<
+    T extends { description?: string; type?: string; status?: string; durationMs?: number },
+  >(entries: T[], batchLabel: string): void {
     const summaryText = this.compressor.summarizeHistory(entries);
     const now = Date.now();
 
@@ -102,7 +101,7 @@ export class LongWorkflowContextStability {
     items: T[],
   ): { saved: number; compressed: number } {
     const result = this.compressor.compressFiles(
-      items.map(i => ({
+      items.map((i) => ({
         path: i.id,
         priority: 50,
         relevanceScore: 50,
@@ -194,7 +193,12 @@ export class LongWorkflowContextStability {
   /**
    * Get compression stats.
    */
-  getStats(): { totalCompressions: number; totalSavedTokens: number; sessionSummaries: number; adaptationLevel: string } {
+  getStats(): {
+    totalCompressions: number;
+    totalSavedTokens: number;
+    sessionSummaries: number;
+    adaptationLevel: string;
+  } {
     return {
       totalCompressions: this.totalCompressions,
       totalSavedTokens: this.state.totalSavedTokens,

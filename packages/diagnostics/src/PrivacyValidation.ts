@@ -159,7 +159,13 @@ export class PrivacyValidator {
     try {
       const content = await readFile(join(process.cwd(), '.autic', 'config.json'), 'utf-8');
       const lower = content.toLowerCase();
-      if (lower.includes('api_key') || lower.includes('api-key') || lower.includes('apikey') || lower.includes('secret') || lower.includes('token')) {
+      if (
+        lower.includes('api_key') ||
+        lower.includes('api-key') ||
+        lower.includes('apikey') ||
+        lower.includes('secret') ||
+        lower.includes('token')
+      ) {
         return {
           name: 'Config file secrets',
           status: 'warn',
@@ -190,9 +196,10 @@ export class PrivacyValidator {
     return {
       name: 'Environment secrets',
       status: foundVars.length > 0 ? 'pass' : 'warn',
-      message: foundVars.length > 0
-        ? `${foundVars.length} API variable(s) found (in memory, not logged)`
-        : 'No API keys found in environment',
+      message:
+        foundVars.length > 0
+          ? `${foundVars.length} API variable(s) found (in memory, not logged)`
+          : 'No API keys found in environment',
       // Keys are loaded only in memory, never persisted to logs
     };
   }

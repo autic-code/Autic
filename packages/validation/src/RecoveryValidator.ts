@@ -67,7 +67,13 @@ export class RecoveryValidator {
 
   constructor(config: Partial<RecoveryValidationConfig> = {}) {
     this.config = {
-      scenarios: config.scenarios ?? ['interrupted_workflow', 'crash_restoration', 'queue_restoration', 'provider_fallback', 'orchestration_continuation'],
+      scenarios: config.scenarios ?? [
+        'interrupted_workflow',
+        'crash_restoration',
+        'queue_restoration',
+        'provider_fallback',
+        'orchestration_continuation',
+      ],
       snapshotAgeMs: config.snapshotAgeMs ?? 5000,
       concurrency: config.concurrency ?? 2,
     };
@@ -85,7 +91,7 @@ export class RecoveryValidator {
     for (let i = 0; i < this.config.scenarios.length; i += concurrency) {
       const batch = this.config.scenarios.slice(i, i + concurrency);
       const batchResults = await Promise.all(
-        batch.map((scenario) => this.validateScenario(scenario))
+        batch.map((scenario) => this.validateScenario(scenario)),
       );
       results.push(...batchResults);
     }
@@ -93,7 +99,8 @@ export class RecoveryValidator {
     const totalDurationMs = Date.now() - startTime;
     const passed = results.filter((r) => r.passed).length;
     const failed = results.filter((r) => !r.passed).length;
-    const avgRecoveryTimeMs = results.reduce((s, r) => s + r.recoveryTimeMs, 0) / Math.max(results.length, 1);
+    const avgRecoveryTimeMs =
+      results.reduce((s, r) => s + r.recoveryTimeMs, 0) / Math.max(results.length, 1);
     const totalDataLoss = results.some((r) => r.dataLoss);
     const autoRecoveryCount = results.filter((r) => r.automaticRecovery).length;
 
@@ -162,7 +169,9 @@ export class RecoveryValidator {
       passed: restorable,
       recoveryTimeMs: Date.now() - startTime,
       dataLoss: !restorable,
-      dataLossDescription: restorable ? undefined : 'Corrupted checkpoint — some steps may need re-execution',
+      dataLossDescription: restorable
+        ? undefined
+        : 'Corrupted checkpoint — some steps may need re-execution',
       stepsRestored: restorable ? completedSteps : Math.floor(completedSteps * 0.5),
       stepsLost: totalSteps - (restorable ? completedSteps : Math.floor(completedSteps * 0.5)),
       automaticRecovery: restorable,
@@ -181,7 +190,9 @@ export class RecoveryValidator {
       passed: restored,
       recoveryTimeMs: Date.now() - startTime,
       dataLoss: !restored,
-      dataLossDescription: restored ? undefined : 'Partial state loss after crash — in-memory data not recovered',
+      dataLossDescription: restored
+        ? undefined
+        : 'Partial state loss after crash — in-memory data not recovered',
       stepsRestored: restored ? 8 : 3,
       stepsLost: restored ? 2 : 7,
       automaticRecovery: restored,
@@ -200,7 +211,9 @@ export class RecoveryValidator {
       passed: restored,
       recoveryTimeMs: Date.now() - startTime,
       dataLoss: !restored,
-      dataLossDescription: restored ? undefined : 'Queue state lost — pending tasks need resubmission',
+      dataLossDescription: restored
+        ? undefined
+        : 'Queue state lost — pending tasks need resubmission',
       stepsRestored: restored ? 15 : 0,
       stepsLost: restored ? 3 : 18,
       automaticRecovery: restored,
@@ -225,7 +238,9 @@ export class RecoveryValidator {
     };
   }
 
-  private async simulateOrchestrationContinuation(startTime: number): Promise<RecoveryScenarioResult> {
+  private async simulateOrchestrationContinuation(
+    startTime: number,
+  ): Promise<RecoveryScenarioResult> {
     await new Promise((r) => setTimeout(r, 45));
     const issues: string[] = [];
     const totalStages = 7;
@@ -241,7 +256,9 @@ export class RecoveryValidator {
       passed: canContinue,
       recoveryTimeMs: Date.now() - startTime,
       dataLoss: !canContinue,
-      dataLossDescription: canContinue ? undefined : 'Pipeline state corruption — stage transition log unavailable',
+      dataLossDescription: canContinue
+        ? undefined
+        : 'Pipeline state corruption — stage transition log unavailable',
       stepsRestored: canContinue ? completedStages : Math.floor(completedStages * 0.3),
       stepsLost: canContinue ? totalStages - completedStages : totalStages,
       automaticRecovery: canContinue,

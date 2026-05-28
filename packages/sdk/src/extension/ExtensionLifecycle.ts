@@ -4,7 +4,11 @@
  */
 
 import { EventEmitter } from 'events';
-import type { ExtensionManifest, ExtensionLifecycleStage, ExtensionType } from './ExtensionManifest.js';
+import type {
+  ExtensionManifest,
+  ExtensionLifecycleStage,
+  ExtensionType,
+} from './ExtensionManifest.js';
 import { timestamp, generateId } from '@autic/shared';
 
 /**

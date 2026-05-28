@@ -8,7 +8,12 @@ export { Vault, getVault } from './vault.js';
 export { Sanitizer, createDefaultSanitizer } from './sanitizer.js';
 export type { SanitizeOptions } from './sanitizer.js';
 export { PermissionManager, createDefaultPermissions } from './permissions.js';
-export type { PermissionRule, PermissionCheck, PermissionLevel, ApprovalHandler } from './permissions.js';
+export type {
+  PermissionRule,
+  PermissionCheck,
+  PermissionLevel,
+  ApprovalHandler,
+} from './permissions.js';
 export { RiskClassifier } from './risk.js';
 export type { RiskAssessmentConfig } from './risk.js';
 
@@ -23,7 +28,11 @@ export { ExecutionSafetySystem } from './execution-safety.js';
 export type { ExecutionSafetyOptions } from './execution-safety.js';
 
 export { ProviderSecurityLayer } from './provider-security.js';
-export type { ProviderSecurityOptions, SanitizedPrompt, ProviderSafetyCheck } from './provider-security.js';
+export type {
+  ProviderSecurityOptions,
+  SanitizedPrompt,
+  ProviderSafetyCheck,
+} from './provider-security.js';
 
 export { PrivacyManager } from './privacy.js';
 export type { PrivacyMode } from './privacy.js';

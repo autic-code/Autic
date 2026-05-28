@@ -127,9 +127,7 @@ export class LocalLearningLayer {
   getRecentPatterns(workspaceId: string, limit = 10): PatternRecord[] {
     const profile = this.profiles.get(workspaceId);
     if (!profile) return [];
-    return [...profile.patterns]
-      .sort((a, b) => b.detectedAt - a.detectedAt)
-      .slice(0, limit);
+    return [...profile.patterns].sort((a, b) => b.detectedAt - a.detectedAt).slice(0, limit);
   }
 
   // ── Query ──

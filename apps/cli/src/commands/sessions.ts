@@ -88,9 +88,15 @@ async function listAllSessions(manager: SessionManager): Promise<void> {
 
   for (const session of sessions) {
     const date = new Date(session.updatedAt).toLocaleString();
-    const stateIcons: Record<string, string> = { active: '●', paused: '⏸', crashed: '✗', completed: '✓' };
+    const stateIcons: Record<string, string> = {
+      active: '●',
+      paused: '⏸',
+      crashed: '✗',
+      completed: '✓',
+    };
     const icon = stateIcons[session.state] || '○';
-    const stateColor = session.state === 'active' ? 'active' : session.state === 'crashed' ? 'failed' : 'idle';
+    const stateColor =
+      session.state === 'active' ? 'active' : session.state === 'crashed' ? 'failed' : 'idle';
 
     console.log(`  ${icon} ${session.name}`);
     console.log(`     ID:      ${session.id.slice(0, 16)}...`);
@@ -152,7 +158,9 @@ async function showSessionStatus(manager: SessionManager, id?: string): Promise<
   try {
     const wsMemory = new WorkspaceMemory(session.workspaceDir);
     const stats = await wsMemory.getStorageStats();
-    console.log(`  Workspace Memory: ${(stats.totalSizeBytes / 1024).toFixed(1)} KB across ${stats.totalFiles} files\n`);
+    console.log(
+      `  Workspace Memory: ${(stats.totalSizeBytes / 1024).toFixed(1)} KB across ${stats.totalFiles} files\n`,
+    );
   } catch {
     // Workspace memory not available yet
   }
@@ -257,10 +265,14 @@ async function showContextOptimization(manager: SessionManager, id?: string): Pr
     // Show optimization if we selected files for the task
     const { files, result } = await optimizer.selectFiles('', { maxTokens: 32_000 });
     if (result.filesSelected > 0) {
-      console.log(`\n  Selected Files:  ${result.filesSelected} / ${result.filesTotal} (${result.reductionPercentage} reduction)\n`);
+      console.log(
+        `\n  Selected Files:  ${result.filesSelected} / ${result.filesTotal} (${result.reductionPercentage} reduction)\n`,
+      );
 
       for (const file of files.slice(0, 8)) {
-        console.log(`     ${file.path} (${file.relevanceScore}% relevance, ${(file.tokenCount / 1000).toFixed(1)}K tokens)`);
+        console.log(
+          `     ${file.path} (${file.relevanceScore}% relevance, ${(file.tokenCount / 1000).toFixed(1)}K tokens)`,
+        );
       }
       if (files.length > 8) {
         console.log(`     ... and ${files.length - 8} more files`);
@@ -268,6 +280,8 @@ async function showContextOptimization(manager: SessionManager, id?: string): Pr
     }
     console.log('');
   } catch (error) {
-    console.log(`  ✗ Context optimization error: ${error instanceof Error ? error.message : 'unknown'}\n`);
+    console.log(
+      `  ✗ Context optimization error: ${error instanceof Error ? error.message : 'unknown'}\n`,
+    );
   }
 }

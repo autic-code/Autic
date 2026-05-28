@@ -62,7 +62,8 @@ export class Queue<T = unknown, R = unknown> extends EventEmitter {
    * Queue state will be saved/loaded from the specified directory.
    */
   async enablePersistence(path?: string): Promise<void> {
-    const dir = path || this.persistPath || join(homedir(), '.autic', 'queues', `queue-${generateId()}`);
+    const dir =
+      path || this.persistPath || join(homedir(), '.autic', 'queues', `queue-${generateId()}`);
     const persistDir = join(dir, 'persist');
     await mkdir(persistDir, { recursive: true });
     this.persistPath = dir;
@@ -275,7 +276,11 @@ export class Queue<T = unknown, R = unknown> extends EventEmitter {
         if (!file.endsWith('.json')) continue;
         try {
           const data = await readJSON<Record<string, unknown>>(join(persistDir, file));
-          if (data && typeof data === 'object' && (data as Record<string, unknown>).status === 'pending') {
+          if (
+            data &&
+            typeof data === 'object' &&
+            (data as Record<string, unknown>).status === 'pending'
+          ) {
             const d = data as Record<string, unknown>;
             const task: QueueTask<T> = {
               id: String(d.id || ''),

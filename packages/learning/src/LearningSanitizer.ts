@@ -17,18 +17,18 @@ import type { LearningEntry, SanitizedLearningEntry } from '@autic/shared';
 
 // Patterns for sensitive data detection
 const SECRET_PATTERNS = [
-  /\b(?:[A-Za-z0-9+/]{40,})\b/g,                         // Potential API keys / tokens
-  /\b(?:sk-[A-Za-z0-9]{20,})\b/g,                         // OpenAI-style keys
-  /\b(?:pk-[A-Za-z0-9]{20,})\b/g,                         // Public keys
-  /\b(?:[A-Za-z0-9+/=]{32,})\b/g,                         // Base64-encoded secrets
-  /\b(?:ghp_|gho_|ghu_|ghs_|ghr_)[A-Za-z0-9_]{36,}\b/g,  // GitHub tokens
-  /\b(?:xox[bpsa]-)[A-Za-z0-9-]{10,}\b/g,                // Slack tokens
+  /\b(?:[A-Za-z0-9+/]{40,})\b/g, // Potential API keys / tokens
+  /\b(?:sk-[A-Za-z0-9]{20,})\b/g, // OpenAI-style keys
+  /\b(?:pk-[A-Za-z0-9]{20,})\b/g, // Public keys
+  /\b(?:[A-Za-z0-9+/=]{32,})\b/g, // Base64-encoded secrets
+  /\b(?:ghp_|gho_|ghu_|ghs_|ghr_)[A-Za-z0-9_]{36,}\b/g, // GitHub tokens
+  /\b(?:xox[bpsa]-)[A-Za-z0-9-]{10,}\b/g, // Slack tokens
 ];
 
 const PATH_PATTERNS = [
-  /\/(?:home|Users|usr|opt|var|tmp)\/[A-Za-z0-9_.-]+/g,   // Unix/macOS paths
-  /\b(?:[A-Za-z]:\\[A-Za-z0-9_\\-]+)\b/g,                // Windows paths
-  /\b(?:~\/[A-Za-z0-9_./-]+)\b/g,                         // Home directory paths
+  /\/(?:home|Users|usr|opt|var|tmp)\/[A-Za-z0-9_.-]+/g, // Unix/macOS paths
+  /\b(?:[A-Za-z]:\\[A-Za-z0-9_\\-]+)\b/g, // Windows paths
+  /\b(?:~\/[A-Za-z0-9_./-]+)\b/g, // Home directory paths
 ];
 
 const REPO_PATTERNS = [
@@ -37,8 +37,8 @@ const REPO_PATTERNS = [
 ];
 
 const IDENTIFIER_PATTERNS = [
-  /\b[A-Z][a-z]+[A-Z][a-z]+(?:Inc|Corp|Ltd|LLC|LLP)?\b/g,  // Company names (PascalCase)
-  /\b[A-Z]{2,}(?:-[A-Z]{2,})+\b/g,                          // Acronyms like AWS-S3
+  /\b[A-Z][a-z]+[A-Z][a-z]+(?:Inc|Corp|Ltd|LLC|LLP)?\b/g, // Company names (PascalCase)
+  /\b[A-Z]{2,}(?:-[A-Z]{2,})+\b/g, // Acronyms like AWS-S3
 ];
 
 export class LearningSanitizer {
@@ -110,7 +110,10 @@ export class LearningSanitizer {
     }
 
     // Remove email addresses
-    cleaned = cleaned.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[REDACTED_EMAIL]');
+    cleaned = cleaned.replace(
+      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
+      '[REDACTED_EMAIL]',
+    );
 
     // Remove IP addresses
     cleaned = cleaned.replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, '[REDACTED_IP]');

@@ -338,9 +338,10 @@ export class ObservabilityEnhancer {
           successfulRequests: primary.successfulRequests ?? 0,
           failedRequests: primary.failedRequests ?? 0,
           avgLatencyMs: primary.avgLatencyMs ?? 0,
-          errorRate: primary.totalRequests && primary.totalRequests > 0
-            ? (primary.failedRequests ?? 0) / primary.totalRequests
-            : 0,
+          errorRate:
+            primary.totalRequests && primary.totalRequests > 0
+              ? (primary.failedRequests ?? 0) / primary.totalRequests
+              : 0,
           modelsAvailable: primary.modelCount ?? 0,
         };
       }
@@ -416,16 +417,18 @@ export class ObservabilityEnhancer {
     const heapUsedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
     const heapTotalMB = Math.round(memUsage.heapTotal / 1024 / 1024);
 
-    const memoryHealth = heapUsedMB / heapTotalMB > 0.85
-      ? 'critical' as const
-      : heapUsedMB / heapTotalMB > 0.7
-        ? 'warning' as const
-        : 'healthy' as const;
+    const memoryHealth =
+      heapUsedMB / heapTotalMB > 0.85
+        ? ('critical' as const)
+        : heapUsedMB / heapTotalMB > 0.7
+          ? ('warning' as const)
+          : ('healthy' as const);
 
     const healthyHeapRatio = heapUsedMB / heapTotalMB < 0.6;
 
     return {
-      overall: memoryHealth === 'critical' ? 'unhealthy' : healthyHeapRatio ? 'healthy' : 'degraded',
+      overall:
+        memoryHealth === 'critical' ? 'unhealthy' : healthyHeapRatio ? 'healthy' : 'degraded',
       memory: memoryHealth,
       cpuLoad: 0,
       uptimeMs: process.uptime() * 1000,

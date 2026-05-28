@@ -26,10 +26,22 @@ export interface ValidationOptions {
 
 /** Suspicious patterns that warrant validation warnings */
 const SUSPICIOUS_PATTERNS = [
-  { pattern: /rm\s+-rf\s+\S+\s*$/i, risk: 'high' as const, description: 'Recursive delete targeting specific path' },
-  { pattern: /chmod\s+777/i, risk: 'high' as const, description: 'Setting world-writable permissions' },
+  {
+    pattern: /rm\s+-rf\s+\S+\s*$/i,
+    risk: 'high' as const,
+    description: 'Recursive delete targeting specific path',
+  },
+  {
+    pattern: /chmod\s+777/i,
+    risk: 'high' as const,
+    description: 'Setting world-writable permissions',
+  },
   { pattern: /chown\s+-R/i, risk: 'high' as const, description: 'Recursive ownership change' },
-  { pattern: />(?:\s*\/\w+){2,}/i, risk: 'medium' as const, description: 'Redirecting to system path' },
+  {
+    pattern: />(?:\s*\/\w+){2,}/i,
+    risk: 'medium' as const,
+    description: 'Redirecting to system path',
+  },
   { pattern: /\|\s*sudo/i, risk: 'high' as const, description: 'Piped escalation to sudo' },
   { pattern: /eval\s*\(/i, risk: 'high' as const, description: 'Dynamic code evaluation' },
   { pattern: /exec\s*\(/i, risk: 'high' as const, description: 'Command execution from string' },
@@ -58,7 +70,12 @@ export class SecurityValidator {
    */
   async validateWorkflow(plan: {
     goal: string;
-    steps: Array<{ description: string; type: string; toolName?: string; toolArgs?: Record<string, unknown> }>;
+    steps: Array<{
+      description: string;
+      type: string;
+      toolName?: string;
+      toolArgs?: Record<string, unknown>;
+    }>;
   }): Promise<SecurityValidation> {
     const checks: SecurityValidationCheck[] = [];
 

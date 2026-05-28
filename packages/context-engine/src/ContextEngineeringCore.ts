@@ -50,10 +50,7 @@ export class ContextEngineeringCore {
   private safety: ContextSafetySystem;
   private running = false;
 
-  constructor(
-    rootDir?: string,
-    config: ContextEngineeringConfig = {},
-  ) {
+  constructor(rootDir?: string, config: ContextEngineeringConfig = {}) {
     this.config = {
       maxFilesPerAssembly: config.maxFilesPerAssembly || 15,
       maxTokensPerAssembly: config.maxTokensPerAssembly || 48_000,
@@ -111,7 +108,10 @@ export class ContextEngineeringCore {
           message: `Safety blocked: ${safetyResult.violation?.message}`,
           warning: safetyResult.violation?.message,
         });
-        return this.createEmptyResult(startTime, safetyResult.violation?.message || 'Safety check failed');
+        return this.createEmptyResult(
+          startTime,
+          safetyResult.violation?.message || 'Safety check failed',
+        );
       }
     }
 
@@ -180,9 +180,8 @@ export class ContextEngineeringCore {
     // 8. Assemble result
     const fileTokens = finalFiles.reduce((s, f) => s + f.tokenCount, 0);
     const totalTokens = fileTokens + memoryTokens + budget.systemPromptTokens;
-    const compressionRatio = selectedFiles.length > 0
-      ? (1 - finalFiles.length / selectedFiles.length)
-      : 0;
+    const compressionRatio =
+      selectedFiles.length > 0 ? 1 - finalFiles.length / selectedFiles.length : 0;
 
     const result: ContextAssemblyResult = {
       requestId: generateId(),
@@ -205,7 +204,11 @@ export class ContextEngineeringCore {
     // 10. Cache result
     if (this.config.enableCaching) {
       const cacheKey = this.buildCacheKey(request);
-      this.cache.set(cacheKey, result, finalFiles.map(f => f.path));
+      this.cache.set(
+        cacheKey,
+        result,
+        finalFiles.map((f) => f.path),
+      );
     }
 
     // 11. Log observability
@@ -228,10 +231,7 @@ export class ContextEngineeringCore {
    */
   async estimateBudget(request: ContextAssemblyRequest): Promise<TokenBudget> {
     const maxTokens = request.maxTokens || this.config.maxTokensPerAssembly;
-    return this.tokenBudget.estimateBudget(
-      maxTokens,
-      request.goal,
-    );
+    return this.tokenBudget.estimateBudget(maxTokens, request.goal);
   }
 
   /**

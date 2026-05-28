@@ -14,7 +14,17 @@ export { Watchdog } from './watchdog/index.js';
 export type { WatchdogOptions, WatchdogEvents } from './watchdog/index.js';
 
 // Task orchestration
-export { canTransition, assertTransition, transitionTask, isTerminal, isActive, isFailed, isPaused, canRetry, canCancel } from './tasks/TaskState.js';
+export {
+  canTransition,
+  assertTransition,
+  transitionTask,
+  isTerminal,
+  isActive,
+  isFailed,
+  isPaused,
+  canRetry,
+  canCancel,
+} from './tasks/TaskState.js';
 export { TaskOrchestrator } from './tasks/TaskOrchestrator.js';
 export type { TaskOrchestratorOptions, TaskOrchestratorEvents } from './tasks/TaskOrchestrator.js';
 
@@ -36,7 +46,10 @@ export type { EventListener } from './events/RuntimeEvents.js';
 
 // Stability modules
 export { AdvancedWatchdog } from './stability/AdvancedWatchdog.js';
-export type { AdvancedWatchdogOptions, AdvancedWatchdogEvents } from './stability/AdvancedWatchdog.js';
+export type {
+  AdvancedWatchdogOptions,
+  AdvancedWatchdogEvents,
+} from './stability/AdvancedWatchdog.js';
 export { MemoryOptimizer } from './stability/MemoryOptimizer.js';
 export type { MemoryOptimizerOptions, MemoryOptimizerEvents } from './stability/MemoryOptimizer.js';
 export { ResourceManager } from './stability/ResourceManager.js';
@@ -44,18 +57,33 @@ export type { ResourceManagerOptions, ResourceManagerEvents } from './stability/
 export { LoopProtection } from './stability/LoopProtection.js';
 export type { LoopProtectionOptions, LoopProtectionEvents } from './stability/LoopProtection.js';
 export { BackgroundScheduler } from './stability/BackgroundScheduler.js';
-export type { BackgroundSchedulerOptions, BackgroundSchedulerEvents } from './stability/BackgroundScheduler.js';
+export type {
+  BackgroundSchedulerOptions,
+  BackgroundSchedulerEvents,
+} from './stability/BackgroundScheduler.js';
 export { GracefulShutdown } from './stability/GracefulShutdown.js';
-export type { GracefulShutdownOptions, GracefulShutdownEvents } from './stability/GracefulShutdown.js';
+export type {
+  GracefulShutdownOptions,
+  GracefulShutdownEvents,
+} from './stability/GracefulShutdown.js';
 export { Telemetry } from './stability/Telemetry.js';
 export type { TelemetryOptions, TelemetryEvents } from './stability/Telemetry.js';
 export { ProcessIsolation } from './stability/ProcessIsolation.js';
-export type { ProcessIsolationOptions, ProcessIsolationEvents } from './stability/ProcessIsolation.js';
+export type {
+  ProcessIsolationOptions,
+  ProcessIsolationEvents,
+} from './stability/ProcessIsolation.js';
 
 // Advanced queue control
 export { AdvancedQueueController } from './queue/AdvancedQueueController.js';
-export type { AdvancedQueueControllerOptions, AdvancedQueueControllerEvents } from './queue/AdvancedQueueController.js';
+export type {
+  AdvancedQueueControllerOptions,
+  AdvancedQueueControllerEvents,
+} from './queue/AdvancedQueueController.js';
 
 // Enhanced recovery
 export { EnhancedRecoveryManager } from './recovery/EnhancedRecoveryManager.js';
-export type { EnhancedRecoveryOptions, EnhancedRecoveryEvents } from './recovery/EnhancedRecoveryManager.js';
+export type {
+  EnhancedRecoveryOptions,
+  EnhancedRecoveryEvents,
+} from './recovery/EnhancedRecoveryManager.js';

@@ -48,10 +48,7 @@ export class PrivacyManager {
   private securityEvents: SecurityEventSystem;
   private allowedLocalProviders = new Set(['ollama']);
 
-  constructor(
-    initialMode: PrivacyMode = 'normal',
-    securityEvents?: SecurityEventSystem,
-  ) {
+  constructor(initialMode: PrivacyMode = 'normal', securityEvents?: SecurityEventSystem) {
     this.currentMode = initialMode;
     this.config = { ...PRIVACY_CONFIGS[initialMode] };
     this.securityEvents = securityEvents || new SecurityEventSystem();

@@ -59,7 +59,10 @@ export class MemoryOptimizer extends EventEmitter {
       try {
         this.runMaintenance();
       } catch (err) {
-        this.emit('error', `Maintenance error: ${err instanceof Error ? err.message : String(err)}`);
+        this.emit(
+          'error',
+          `Maintenance error: ${err instanceof Error ? err.message : String(err)}`,
+        );
       }
     }, this.options.pruneIntervalMs);
     if (this.timer && typeof this.timer === 'object' && 'unref' in this.timer) {
@@ -127,9 +130,8 @@ export class MemoryOptimizer extends EventEmitter {
 
     // Calculate growth rate
     const elapsedHours = (Date.now() - this.lastCheckTime) / (1000 * 60 * 60);
-    const growthRateMBPerHour = elapsedHours > 0
-      ? (heapUsedMB - this.lastMemoryUsage) / elapsedHours
-      : 0;
+    const growthRateMBPerHour =
+      elapsedHours > 0 ? (heapUsedMB - this.lastMemoryUsage) / elapsedHours : 0;
 
     this.lastCheckTime = Date.now();
     this.lastMemoryUsage = heapUsedMB;
@@ -187,13 +189,9 @@ export class MemoryOptimizer extends EventEmitter {
 
   // --- Context Pruning ---
 
-  pruneStaleContexts(
-    contexts: Array<{ id: string; lastActivity: number }>,
-  ): string[] {
+  pruneStaleContexts(contexts: Array<{ id: string; lastActivity: number }>): string[] {
     const now = Date.now();
-    const stale = contexts.filter(
-      (ctx) => now - ctx.lastActivity > this.options.contextMaxAgeMs,
-    );
+    const stale = contexts.filter((ctx) => now - ctx.lastActivity > this.options.contextMaxAgeMs);
 
     if (stale.length > 0) {
       this.emit('pruned', 'contexts', 0, stale.length);
@@ -260,7 +258,11 @@ export class MemoryOptimizer extends EventEmitter {
     const heapPercent = (memUsage.heapUsedMB / memUsage.heapTotalMB) * 100;
 
     if (heapPercent > this.options.heapThresholdPercent) {
-      this.emit('highMemoryWarning', memUsage.heapUsedMB, memUsage.heapTotalMB * (this.options.heapThresholdPercent / 100));
+      this.emit(
+        'highMemoryWarning',
+        memUsage.heapUsedMB,
+        memUsage.heapTotalMB * (this.options.heapThresholdPercent / 100),
+      );
 
       // Aggressive cleanup when memory is high
       this.evictStaleCache();

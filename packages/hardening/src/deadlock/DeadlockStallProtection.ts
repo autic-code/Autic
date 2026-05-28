@@ -77,11 +77,11 @@ export class DeadlockStallProtector extends EventEmitter {
     this.dependencies.push({ from, to, createdAt: Date.now() });
     // Clean old dependencies
     const cutoff = Date.now() - this.options.deadlockThresholdMs;
-    this.dependencies = this.dependencies.filter(d => d.createdAt > cutoff);
+    this.dependencies = this.dependencies.filter((d) => d.createdAt > cutoff);
   }
 
   removeDependencies(taskId: string): void {
-    this.dependencies = this.dependencies.filter(d => d.from !== taskId && d.to !== taskId);
+    this.dependencies = this.dependencies.filter((d) => d.from !== taskId && d.to !== taskId);
   }
 
   registerStage(pipelineId: string, stage: string): void {
@@ -147,7 +147,9 @@ export class DeadlockStallProtector extends EventEmitter {
             detected: true,
             cycle: [...cycle, neighbor],
             involvedTasks: [...cycle],
-            blockedDurationMs: Date.now() - (this.dependencies.find(d => d.from === node)?.createdAt || Date.now()),
+            blockedDurationMs:
+              Date.now() -
+              (this.dependencies.find((d) => d.from === node)?.createdAt || Date.now()),
             timestamp: Date.now(),
             autoResolved: false,
           });
@@ -185,7 +187,9 @@ export class DeadlockStallProtector extends EventEmitter {
           stalledDurationMs: idleDuration,
           lastActivity: stage.lastActivity,
           autoResolved: false,
-          resolution: this.options.autoResolve ? 'Auto-resolving stalled pipeline stage' : undefined,
+          resolution: this.options.autoResolve
+            ? 'Auto-resolving stalled pipeline stage'
+            : undefined,
         });
       }
     }
@@ -212,10 +216,10 @@ export class DeadlockStallProtector extends EventEmitter {
         report.resolution = 'Auto-resolved: broke circular dependency chain';
         // Remove the oldest dependency in the cycle to break it
         for (const taskId of report.involvedTasks) {
-          const deps = this.dependencies.filter(d => d.from === taskId || d.to === taskId);
+          const deps = this.dependencies.filter((d) => d.from === taskId || d.to === taskId);
           if (deps.length > 0) {
-            const oldest = deps.reduce((a, b) => a.createdAt < b.createdAt ? a : b);
-            this.dependencies = this.dependencies.filter(d => d !== oldest);
+            const oldest = deps.reduce((a, b) => (a.createdAt < b.createdAt ? a : b));
+            this.dependencies = this.dependencies.filter((d) => d !== oldest);
           }
         }
       }

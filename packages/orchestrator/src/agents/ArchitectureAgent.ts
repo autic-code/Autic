@@ -13,15 +13,23 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  ArchitectureOutput, 
-  ResearchOutput, 
-  TaskContract, 
+import type {
+  ArchitectureOutput,
+  ResearchOutput,
+  TaskContract,
   OrchestrationStage,
 } from '@autic/shared';
-import { createContract, fulfillContract, rejectContract, getContractOutput } from '../contracts.js';
+import {
+  createContract,
+  fulfillContract,
+  rejectContract,
+  getContractOutput,
+} from '../contracts.js';
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class ArchitectureAgent {
   /**
@@ -89,7 +97,10 @@ export class ArchitectureAgent {
 
       // 4. Check dependency boundary (look for package coupling)
       try {
-        const packageJsonResult = await runTool('read_file', { path: 'package.json', maxLength: 3000 });
+        const packageJsonResult = await runTool('read_file', {
+          path: 'package.json',
+          maxLength: 3000,
+        });
         if (packageJsonResult.success && typeof packageJsonResult.data === 'string') {
           try {
             const pkg = JSON.parse(packageJsonResult.data);
@@ -98,11 +109,11 @@ export class ArchitectureAgent {
 
             validations.push({
               check: 'dependency-count',
-              passed: (depCount + devDepCount) < 50,
+              passed: depCount + devDepCount < 50,
               message: `${depCount} dependencies, ${devDepCount} devDependencies`,
             });
 
-            if ((depCount + devDepCount) >= 50) {
+            if (depCount + devDepCount >= 50) {
               recommendations.push('Large dependency footprint — review for unused dependencies');
             }
           } catch {
@@ -127,10 +138,7 @@ export class ArchitectureAgent {
 
       return fulfillContract(contract, output as unknown as Record<string, unknown>);
     } catch (error) {
-      return rejectContract(
-        contract,
-        error instanceof Error ? error.message : String(error),
-      );
+      return rejectContract(contract, error instanceof Error ? error.message : String(error));
     }
   }
 }

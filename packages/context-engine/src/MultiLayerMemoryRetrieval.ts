@@ -90,7 +90,12 @@ export class MultiLayerMemoryRetrieval {
   /**
    * Store a memory entry.
    */
-  store(layer: 'short_term' | 'mid_term' | 'long_term', key: string, value: string, tags: string[] = []): void {
+  store(
+    layer: 'short_term' | 'mid_term' | 'long_term',
+    key: string,
+    value: string,
+    tags: string[] = [],
+  ): void {
     const entry: MockMemoryStore = { key, value, tags, layer };
 
     switch (layer) {
@@ -141,9 +146,8 @@ export class MultiLayerMemoryRetrieval {
     return {
       totalRetrievals: this.totalRetrievals,
       totalHits: this.totalHits,
-      hitRate: this.totalRetrievals > 0
-        ? Math.round((this.totalHits / this.totalRetrievals) * 100)
-        : 0,
+      hitRate:
+        this.totalRetrievals > 0 ? Math.round((this.totalHits / this.totalRetrievals) * 100) : 0,
     };
   }
 
@@ -152,7 +156,9 @@ export class MultiLayerMemoryRetrieval {
   private calculateRelevance(entry: MockMemoryStore, goalLower: string): number {
     let score = 0;
     const keyLower = entry.key.toLowerCase();
-    const valueLower = (typeof entry.value === 'string' ? entry.value : JSON.stringify(entry.value)).toLowerCase();
+    const valueLower = (
+      typeof entry.value === 'string' ? entry.value : JSON.stringify(entry.value)
+    ).toLowerCase();
 
     // Key match
     if (keyLower.includes(goalLower)) score += 0.4;
@@ -163,7 +169,7 @@ export class MultiLayerMemoryRetrieval {
     }
 
     // Content match
-    const goalWords = goalLower.split(/\s+/).filter(w => w.length > 3);
+    const goalWords = goalLower.split(/\s+/).filter((w) => w.length > 3);
     for (const w of goalWords) {
       if (valueLower.includes(w)) score += 0.1;
     }
@@ -171,13 +177,19 @@ export class MultiLayerMemoryRetrieval {
     return Math.min(score, 1);
   }
 
-  private toRetrievalItem(entry: MockMemoryStore, source: MemoryRetrievalItem['source'], relevance: number): MemoryRetrievalItem {
+  private toRetrievalItem(
+    entry: MockMemoryStore,
+    source: MemoryRetrievalItem['source'],
+    relevance: number,
+  ): MemoryRetrievalItem {
     return {
       source,
       key: entry.key,
       value: entry.value,
       relevance: Math.round(relevance * 100),
-      tokenCost: Math.ceil((typeof entry.value === 'string' ? entry.value : JSON.stringify(entry.value)).length / 3),
+      tokenCost: Math.ceil(
+        (typeof entry.value === 'string' ? entry.value : JSON.stringify(entry.value)).length / 3,
+      ),
       tags: entry.tags,
       retrievedAt: timestamp(),
     };

@@ -43,10 +43,7 @@ export {
   FinalReviewAgent,
 } from './agents/index.js';
 
-export type {
-  ResearchAgentOptions,
-  PlanningAgentOptions,
-} from './agents/index.js';
+export type { ResearchAgentOptions, PlanningAgentOptions } from './agents/index.js';
 
 export { createDefaultPipeline } from './agents/index.js';
 

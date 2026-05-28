@@ -98,19 +98,19 @@ export async function governanceCommand(action?: string): Promise<void> {
       // Trust metadata
       console.log(`  ${colorText('▸ Trust Metadata', 'bold')}`);
       const trusts = await governor.auditTrustMetadata();
-      const trustedCount = trusts.filter(t => t.trusted).length;
+      const trustedCount = trusts.filter((t) => t.trusted).length;
       console.log(`    ${trustedCount}/${trusts.length} extensions trusted\n`);
 
       // Permissions
       console.log(`  ${colorText('▸ Permission Audit', 'bold')}`);
       const perms = await governor.auditPermissions();
-      const safeCount = perms.filter(p => p.safe).length;
+      const safeCount = perms.filter((p) => p.safe).length;
       console.log(`    ${safeCount}/${perms.length} permission sets safe\n`);
 
       // Compatibility
       console.log(`  ${colorText('▸ Compatibility Scores', 'bold')}`);
       const scores = await governor.scoreCompatibility();
-      const compatCount = scores.filter(s => s.compatible).length;
+      const compatCount = scores.filter((s) => s.compatible).length;
       console.log(`    ${compatCount}/${scores.length} compatible\n`);
 
       // Unsafe extensions
@@ -121,12 +121,14 @@ export async function governanceCommand(action?: string): Promise<void> {
       // Isolation
       console.log(`  ${colorText('▸ Runtime Isolation', 'bold')}`);
       const isolation = await governor.validateIsolation();
-      const passCount = isolation.filter(i => i.passed).length;
+      const passCount = isolation.filter((i) => i.passed).length;
       console.log(`    ${passCount}/${isolation.length} checks passed\n`);
 
       console.log(divider());
-      const allSafe = threats.length === 0 && isolation.every(i => i.passed);
-      const verdict = allSafe ? colorText('GOVERNANCE PASSED', 'success') : colorText('ISSUES FOUND', 'warning');
+      const allSafe = threats.length === 0 && isolation.every((i) => i.passed);
+      const verdict = allSafe
+        ? colorText('GOVERNANCE PASSED', 'success')
+        : colorText('ISSUES FOUND', 'warning');
       console.log(`  ${colorText('Verdict:', 'bold')} ${verdict}`);
       break;
     }

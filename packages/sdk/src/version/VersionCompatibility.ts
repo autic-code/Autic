@@ -158,9 +158,7 @@ export class VersionCompatibilityChecker {
       };
     }
 
-    messages.push(
-      `Warning: API version ${requiredVersion} not explicitly declared`,
-    );
+    messages.push(`Warning: API version ${requiredVersion} not explicitly declared`);
     return {
       compatible: true,
       messages,
@@ -172,10 +170,7 @@ export class VersionCompatibilityChecker {
   /**
    * Check plugin compatibility
    */
-  checkPluginCompatibility(
-    pluginVersion: string,
-    apiVersion: string,
-  ): CompatibilityCheckResult {
+  checkPluginCompatibility(pluginVersion: string, apiVersion: string): CompatibilityCheckResult {
     const messages: string[] = [];
 
     if (!pluginVersion || !apiVersion) {
@@ -203,9 +198,7 @@ export class VersionCompatibilityChecker {
       };
     }
 
-    messages.push(
-      `Plugin ${pluginVersion} compatible with API ${apiVersion}`,
-    );
+    messages.push(`Plugin ${pluginVersion} compatible with API ${apiVersion}`);
     return {
       compatible: true,
       messages,

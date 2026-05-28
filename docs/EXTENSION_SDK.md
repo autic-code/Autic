@@ -73,46 +73,46 @@ autic ecosystem compat
 
 ### Runtime Hooks (`RuntimeHooks`)
 
-| Event | Description | Context |
-|-------|-------------|---------|
-| `INIT` | Runtime initialization | `sessionId`, `config` |
-| `DESTROY` | Runtime shutdown | `sessionId` |
-| `ERROR` | Runtime error | `error`, `sessionId` |
+| Event     | Description            | Context               |
+| --------- | ---------------------- | --------------------- |
+| `INIT`    | Runtime initialization | `sessionId`, `config` |
+| `DESTROY` | Runtime shutdown       | `sessionId`           |
+| `ERROR`   | Runtime error          | `error`, `sessionId`  |
 
 ### Provider Hooks (`ProviderHooks`)
 
-| Event | Description | Context |
-|-------|-------------|---------|
-| `BEFORE_REQUEST` | Before provider request | `provider`, `model`, `prompt` |
-| `AFTER_REQUEST` | After provider response | `provider`, `model`, `response`, `duration` |
-| `ON_ERROR` | Provider error | `provider`, `error` |
+| Event            | Description             | Context                                     |
+| ---------------- | ----------------------- | ------------------------------------------- |
+| `BEFORE_REQUEST` | Before provider request | `provider`, `model`, `prompt`               |
+| `AFTER_REQUEST`  | After provider response | `provider`, `model`, `response`, `duration` |
+| `ON_ERROR`       | Provider error          | `provider`, `error`                         |
 
 ### Workflow Hooks (`WorkflowHooks`)
 
-| Event | Description | Context |
-|-------|-------------|---------|
-| `BEFORE_STEP` | Before workflow step | `workflowId`, `step`, `goal` |
-| `AFTER_STEP` | After workflow step | `workflowId`, `step`, `result` |
-| `ON_COMPLETE` | Workflow completed | `workflowId`, `result` |
-| `ON_ERROR` | Workflow error | `workflowId`, `error` |
+| Event         | Description          | Context                        |
+| ------------- | -------------------- | ------------------------------ |
+| `BEFORE_STEP` | Before workflow step | `workflowId`, `step`, `goal`   |
+| `AFTER_STEP`  | After workflow step  | `workflowId`, `step`, `result` |
+| `ON_COMPLETE` | Workflow completed   | `workflowId`, `result`         |
+| `ON_ERROR`    | Workflow error       | `workflowId`, `error`          |
 
 ### Orchestration Hooks (`OrchestrationHooks`)
 
-| Event | Description | Context |
-|-------|-------------|---------|
-| `BEFORE_PIPELINE` | Before pipeline execution | `pipelineId`, `goal` |
-| `AFTER_PIPELINE` | After pipeline execution | `pipelineId`, `result` |
-| `ON_STAGE_START` | Pipeline stage started | `pipelineId`, `stage` |
-| `ON_STAGE_COMPLETE` | Pipeline stage completed | `pipelineId`, `stage`, `result` |
+| Event               | Description               | Context                         |
+| ------------------- | ------------------------- | ------------------------------- |
+| `BEFORE_PIPELINE`   | Before pipeline execution | `pipelineId`, `goal`            |
+| `AFTER_PIPELINE`    | After pipeline execution  | `pipelineId`, `result`          |
+| `ON_STAGE_START`    | Pipeline stage started    | `pipelineId`, `stage`           |
+| `ON_STAGE_COMPLETE` | Pipeline stage completed  | `pipelineId`, `stage`, `result` |
 
 ### Context Hooks (`ContextHooks`)
 
-| Event | Description | Context |
-|-------|-------------|---------|
-| `BEFORE_BUILD` | Before context assembly | `sessionId`, `messages` |
-| `AFTER_BUILD` | After context assembly | `sessionId`, `context` |
-| `BEFORE_OPTIMIZE` | Before token optimization | `sessionId`, `context` |
-| `AFTER_OPTIMIZE` | After token optimization | `sessionId`, `optimizedContext` |
+| Event             | Description               | Context                         |
+| ----------------- | ------------------------- | ------------------------------- |
+| `BEFORE_BUILD`    | Before context assembly   | `sessionId`, `messages`         |
+| `AFTER_BUILD`     | After context assembly    | `sessionId`, `context`          |
+| `BEFORE_OPTIMIZE` | Before token optimization | `sessionId`, `context`          |
+| `AFTER_OPTIMIZE`  | After token optimization  | `sessionId`, `optimizedContext` |
 
 ## Plugin Sandbox
 
@@ -122,12 +122,12 @@ Extensions run in a sandboxed environment with resource limits:
 import { PluginSandbox } from '@autic/sdk';
 
 const sandbox = new PluginSandbox({
-  maxMemory: 64 * 1024 * 1024,      // 64 MB
-  maxCpuTime: 5000,                   // 5 seconds
-  maxFileSize: 1024 * 1024,          // 1 MB
+  maxMemory: 64 * 1024 * 1024, // 64 MB
+  maxCpuTime: 5000, // 5 seconds
+  maxFileSize: 1024 * 1024, // 1 MB
   allowedPaths: ['/tmp/autic/ext/'], // Restricted paths
-  networkAccess: false,               // No network by default
-  maxChildProcesses: 0,               // No child processes
+  networkAccess: false, // No network by default
+  maxChildProcesses: 0, // No child processes
 });
 
 const result = await sandbox.execute(async () => {

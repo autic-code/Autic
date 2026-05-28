@@ -30,7 +30,12 @@ export interface RegressionTestResult {
   passedChecks: number;
   failedChecks: number;
   durationMs: number;
-  regressions: Array<{ check: string; previous: string; current: string; impact: 'low' | 'medium' | 'high' }>;
+  regressions: Array<{
+    check: string;
+    previous: string;
+    current: string;
+    impact: 'low' | 'medium' | 'high';
+  }>;
 }
 
 export interface RegressionReport {
@@ -72,7 +77,13 @@ export class RegressionPreventer {
    */
   async runAllSuites(): Promise<RegressionReport> {
     const results: RegressionTestResult[] = [];
-    const suites: RegressionTestSuite[] = ['architecture', 'orchestration', 'provider_compatibility', 'memory_system', 'security'];
+    const suites: RegressionTestSuite[] = [
+      'architecture',
+      'orchestration',
+      'provider_compatibility',
+      'memory_system',
+      'security',
+    ];
 
     for (const suite of suites) {
       results.push(await this.runSuite(suite));
@@ -84,7 +95,10 @@ export class RegressionPreventer {
     const passedChecks = results.reduce((s, r) => s + r.passedChecks, 0);
     const failedChecks = results.reduce((s, r) => s + r.failedChecks, 0);
     const totalRegressions = results.reduce((s, r) => s + r.regressions.length, 0);
-    const criticalRegressions = results.reduce((s, r) => s + r.regressions.filter((reg) => reg.impact === 'high').length, 0);
+    const criticalRegressions = results.reduce(
+      (s, r) => s + r.regressions.filter((reg) => reg.impact === 'high').length,
+      0,
+    );
 
     return {
       timestamp: Date.now(),
@@ -114,19 +128,19 @@ export class RegressionPreventer {
 
     switch (suite) {
       case 'architecture':
-        checks.push(...await this.checkArchitectureRegressions());
+        checks.push(...(await this.checkArchitectureRegressions()));
         break;
       case 'orchestration':
-        checks.push(...await this.checkOrchestrationRegressions());
+        checks.push(...(await this.checkOrchestrationRegressions()));
         break;
       case 'provider_compatibility':
-        checks.push(...await this.checkProviderCompatibilityRegressions());
+        checks.push(...(await this.checkProviderCompatibilityRegressions()));
         break;
       case 'memory_system':
-        checks.push(...await this.checkMemorySystemRegressions());
+        checks.push(...(await this.checkMemorySystemRegressions()));
         break;
       case 'security':
-        checks.push(...await this.checkSecurityRegressions());
+        checks.push(...(await this.checkSecurityRegressions()));
         break;
     }
 
@@ -165,7 +179,9 @@ export class RegressionPreventer {
   /**
    * Check architecture regression — module boundaries, dependency rules
    */
-  async checkArchitecture(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async checkArchitecture(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const results = await this.checkArchitectureRegressions();
     return results.map((r) => ({
       name: r.name,
@@ -178,17 +194,23 @@ export class RegressionPreventer {
   private async checkArchitectureRegressions(): Promise<VerificationCheck[]> {
     return [
       {
-        type: 'custom', name: 'module-boundaries', passed: true,
+        type: 'custom',
+        name: 'module-boundaries',
+        passed: true,
         output: 'Module boundary check: all packages respect dependency direction',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'circular-dependencies', passed: true,
+        type: 'custom',
+        name: 'circular-dependencies',
+        passed: true,
         output: 'Circular dependency check: no cycles detected',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'export-consistency', passed: true,
+        type: 'custom',
+        name: 'export-consistency',
+        passed: true,
         output: 'Export consistency: all barrel exports match source exports',
         durationMs: 5,
       },
@@ -198,7 +220,9 @@ export class RegressionPreventer {
   /**
    * Check orchestration regression — pipeline stage integrity
    */
-  async checkOrchestration(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async checkOrchestration(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const results = await this.checkOrchestrationRegressions();
     return results.map((r) => ({
       name: r.name,
@@ -211,17 +235,24 @@ export class RegressionPreventer {
   private async checkOrchestrationRegressions(): Promise<VerificationCheck[]> {
     return [
       {
-        type: 'custom', name: 'pipeline-stage-order', passed: true,
-        output: 'Pipeline stage ordering: research → plan → architect → engineer → verify → repair → review',
+        type: 'custom',
+        name: 'pipeline-stage-order',
+        passed: true,
+        output:
+          'Pipeline stage ordering: research → plan → architect → engineer → verify → repair → review',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'contract-compatibility', passed: true,
+        type: 'custom',
+        name: 'contract-compatibility',
+        passed: true,
         output: 'Contract compatibility: all stage contracts match expected interfaces',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'orchestration-timeouts', passed: true,
+        type: 'custom',
+        name: 'orchestration-timeouts',
+        passed: true,
         output: 'Timeout configuration: all pipeline stages have appropriate timeouts',
         durationMs: 5,
       },
@@ -231,7 +262,9 @@ export class RegressionPreventer {
   /**
    * Check provider compatibility regression
    */
-  async checkProviderCompatibility(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async checkProviderCompatibility(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const results = await this.checkProviderCompatibilityRegressions();
     return results.map((r) => ({
       name: r.name,
@@ -244,17 +277,23 @@ export class RegressionPreventer {
   private async checkProviderCompatibilityRegressions(): Promise<VerificationCheck[]> {
     return [
       {
-        type: 'custom', name: 'provider-interface', passed: true,
+        type: 'custom',
+        name: 'provider-interface',
+        passed: true,
         output: 'Provider interface compliance: all providers implement required contract',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'streaming-compatibility', passed: true,
+        type: 'custom',
+        name: 'streaming-compatibility',
+        passed: true,
         output: 'Streaming compatibility: all streaming providers handle backpressure',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'error-consistency', passed: true,
+        type: 'custom',
+        name: 'error-consistency',
+        passed: true,
         output: 'Error type consistency: provider errors mapped to standard types',
         durationMs: 5,
       },
@@ -264,7 +303,9 @@ export class RegressionPreventer {
   /**
    * Check memory system regression
    */
-  async checkMemorySystem(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async checkMemorySystem(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const results = await this.checkMemorySystemRegressions();
     return results.map((r) => ({
       name: r.name,
@@ -277,22 +318,30 @@ export class RegressionPreventer {
   private async checkMemorySystemRegressions(): Promise<VerificationCheck[]> {
     return [
       {
-        type: 'custom', name: 'storage-persistence', passed: true,
+        type: 'custom',
+        name: 'storage-persistence',
+        passed: true,
         output: 'Storage persistence: all layers persist and retrieve correctly',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'retrieval-integrity', passed: true,
+        type: 'custom',
+        name: 'retrieval-integrity',
+        passed: true,
         output: 'Retrieval integrity: stored values match retrieved values',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'ttl-enforcement', passed: true,
+        type: 'custom',
+        name: 'ttl-enforcement',
+        passed: true,
         output: 'TTL enforcement: expired entries are properly evicted',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'cross-layer-consistency', passed: true,
+        type: 'custom',
+        name: 'cross-layer-consistency',
+        passed: true,
         output: 'Cross-layer consistency: short/mid/long term layers are coherent',
         durationMs: 5,
       },
@@ -302,7 +351,9 @@ export class RegressionPreventer {
   /**
    * Check security regressions
    */
-  async checkSecurity(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async checkSecurity(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const results = await this.checkSecurityRegressions();
     return results.map((r) => ({
       name: r.name,
@@ -315,17 +366,23 @@ export class RegressionPreventer {
   private async checkSecurityRegressions(): Promise<VerificationCheck[]> {
     return [
       {
-        type: 'custom', name: 'permission-boundaries', passed: true,
+        type: 'custom',
+        name: 'permission-boundaries',
+        passed: true,
         output: 'Permission boundaries: all extensions respect their permission scope',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'sanitization-coverage', passed: true,
+        type: 'custom',
+        name: 'sanitization-coverage',
+        passed: true,
         output: 'Sanitization coverage: all output paths include sanitization',
         durationMs: 5,
       },
       {
-        type: 'custom', name: 'vault-isolation', passed: true,
+        type: 'custom',
+        name: 'vault-isolation',
+        passed: true,
         output: 'Vault isolation: encrypted storage separate from application state',
         durationMs: 5,
       },
@@ -335,13 +392,17 @@ export class RegressionPreventer {
   private generateRecommendations(results: RegressionTestResult[]): string[] {
     const recs: string[] = [];
     const failed = results.filter((r) => !r.passed);
-    const criticalRegs = results.flatMap((r) => r.regressions.filter((reg) => reg.impact === 'high'));
+    const criticalRegs = results.flatMap((r) =>
+      r.regressions.filter((reg) => reg.impact === 'high'),
+    );
 
     if (failed.length > 0) {
       recs.push(`${failed.length} regression suite(s) failed — review and fix before proceeding`);
     }
     if (criticalRegs.length > 0) {
-      recs.push(`${criticalRegs.length} critical regression(s) detected — immediate attention required`);
+      recs.push(
+        `${criticalRegs.length} critical regression(s) detected — immediate attention required`,
+      );
     }
     recs.push('Run regression tests as part of pre-release validation pipeline');
     return recs;

@@ -78,7 +78,9 @@ async function showStatus(): Promise<void> {
   console.log(heading('Global Intelligence'));
   console.log(`  ${divider()}`);
   console.log(`  ${colorText('Entries:', 'muted')} 0`);
-  console.log(`  ${colorText('Sync:', 'muted')} ${colorText('Disabled', 'dim')} — use API to enable`);
+  console.log(
+    `  ${colorText('Sync:', 'muted')} ${colorText('Disabled', 'dim')} — use API to enable`,
+  );
   console.log('');
 
   // Show experience stats
@@ -99,7 +101,9 @@ async function showStatus(): Promise<void> {
   // Show controls
   console.log(heading('Controls'));
   console.log(`  ${divider()}`);
-  console.log(`  ${colorText('autic learning inspect', 'primary')}  — View recent learning activity`);
+  console.log(
+    `  ${colorText('autic learning inspect', 'primary')}  — View recent learning activity`,
+  );
   console.log(`  ${colorText('autic learning clear', 'primary')}   — Clear all learning data`);
   console.log(`  ${colorText('autic learning disable', 'primary')} — Disable learning`);
   console.log(`  ${colorText('autic learning export', 'primary')}  — Export sanitized patterns`);
@@ -118,7 +122,9 @@ async function showRecentActivity(): Promise<void> {
 async function clearLearning(): Promise<void> {
   console.log('');
   console.log(`  ${colorText('!', 'warning')} Are you sure? This will clear all learning data.`);
-  console.log(`  Run with ${colorText('--force', 'primary')} to confirm: autic learning clear --force`);
+  console.log(
+    `  Run with ${colorText('--force', 'primary')} to confirm: autic learning clear --force`,
+  );
   console.log('');
 }
 
@@ -127,8 +133,12 @@ function showHelp(): void {
   console.log(heading('Engineering Learning System — Commands'));
   console.log(`  ${divider()}`);
   console.log(`  ${colorText('autic learning', 'primary')}              — Show learning status`);
-  console.log(`  ${colorText('autic learning status', 'primary')}       — Show detailed learning status`);
-  console.log(`  ${colorText('autic learning inspect', 'primary')}      — View recent learning activity`);
+  console.log(
+    `  ${colorText('autic learning status', 'primary')}       — Show detailed learning status`,
+  );
+  console.log(
+    `  ${colorText('autic learning inspect', 'primary')}      — View recent learning activity`,
+  );
   console.log(`  ${colorText('autic learning clear', 'primary')}        — Clear all learning data`);
   console.log(`  ${colorText('autic learning disable', 'primary')}      — Disable learning system`);
   console.log(`  ${colorText('autic learning enable', 'primary')}       — Enable learning system`);

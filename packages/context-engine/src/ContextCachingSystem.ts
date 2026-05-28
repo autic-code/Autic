@@ -39,7 +39,11 @@ export class ContextCachingSystem {
   startCleanup(): void {
     if (this.cleanupTimer) return;
     this.cleanupTimer = setInterval(() => this.runCleanup(), 60_000);
-    if (this.cleanupTimer && typeof this.cleanupTimer === 'object' && 'unref' in this.cleanupTimer) {
+    if (
+      this.cleanupTimer &&
+      typeof this.cleanupTimer === 'object' &&
+      'unref' in this.cleanupTimer
+    ) {
       this.cleanupTimer.unref();
     }
   }
@@ -126,7 +130,13 @@ export class ContextCachingSystem {
   /**
    * Get cache stats.
    */
-  getStats(): { size: number; hits: number; misses: number; invalidations: number; hitRate: number } {
+  getStats(): {
+    size: number;
+    hits: number;
+    misses: number;
+    invalidations: number;
+    hitRate: number;
+  } {
     const totalOps = this.totalHits + this.totalMisses;
     return {
       size: this.cache.size,

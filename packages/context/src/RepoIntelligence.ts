@@ -25,7 +25,8 @@ const FRAMEWORK_DETECTORS: FrameworkDetector[] = [
     name: 'Next.js',
     confidence: 0.95,
     indicators: ['next.config', 'next-env.d.ts', 'pages/', 'app/'],
-    check: (files, configs) => files.some((f) => f.includes('next.config')) ||
+    check: (files, configs) =>
+      files.some((f) => f.includes('next.config')) ||
       configs['next-env.d.ts'] !== undefined ||
       files.some((f) => f === 'app/layout.tsx' || f === 'app/layout.jsx'),
   },
@@ -33,55 +34,66 @@ const FRAMEWORK_DETECTORS: FrameworkDetector[] = [
     name: 'Express',
     confidence: 0.8,
     indicators: ['express', 'app.listen', 'router.'],
-    check: (files, configs) => configs['express'] !== undefined ||
-      files.some((f) => f.includes('app.ts') || f.includes('server.ts') || f.includes('index.ts') && f.includes('express')),
+    check: (files, configs) =>
+      configs['express'] !== undefined ||
+      files.some(
+        (f) =>
+          f.includes('app.ts') ||
+          f.includes('server.ts') ||
+          (f.includes('index.ts') && f.includes('express')),
+      ),
   },
   {
     name: 'React',
     confidence: 0.9,
     indicators: ['react', 'jsx', 'tsx', 'components/'],
-    check: (files, configs) => configs['react'] !== undefined ||
-      files.some((f) => f.endsWith('.tsx') || f.endsWith('.jsx')),
+    check: (files, configs) =>
+      configs['react'] !== undefined || files.some((f) => f.endsWith('.tsx') || f.endsWith('.jsx')),
   },
   {
     name: 'Vue',
     confidence: 0.9,
     indicators: ['vue', '.vue'],
-    check: (files, configs) => configs['vue'] !== undefined ||
-      files.some((f) => f.endsWith('.vue')),
+    check: (files, configs) =>
+      configs['vue'] !== undefined || files.some((f) => f.endsWith('.vue')),
   },
   {
     name: 'Svelte',
     confidence: 0.9,
     indicators: ['svelte', '.svelte'],
-    check: (files, configs) => configs['svelte'] !== undefined ||
-      files.some((f) => f.endsWith('.svelte')),
+    check: (files, configs) =>
+      configs['svelte'] !== undefined || files.some((f) => f.endsWith('.svelte')),
   },
   {
     name: 'TypeScript',
     confidence: 0.95,
     indicators: ['tsconfig.json', '.ts', '.tsx'],
-    check: (files, configs) => configs['tsconfig'] !== undefined ||
-      files.some((f) => f.endsWith('.ts')),
+    check: (files, configs) =>
+      configs['tsconfig'] !== undefined || files.some((f) => f.endsWith('.ts')),
   },
   {
     name: 'Python/Django',
     confidence: 0.85,
     indicators: ['manage.py', 'wsgi.py', 'settings.py', 'urls.py'],
-    check: (files, _configs) => files.some((f) => f.endsWith('manage.py') || f.endsWith('wsgi.py') || f.endsWith('settings.py')),
+    check: (files, _configs) =>
+      files.some(
+        (f) => f.endsWith('manage.py') || f.endsWith('wsgi.py') || f.endsWith('settings.py'),
+      ),
   },
   {
     name: 'Python/Flask',
     confidence: 0.8,
     indicators: ['flask', 'app.run'],
-    check: (files, configs) => configs['flask'] !== undefined ||
+    check: (files, configs) =>
+      configs['flask'] !== undefined ||
       files.some((f) => f.endsWith('app.py') && f.includes('flask')),
   },
   {
     name: 'Supabase',
     confidence: 0.8,
     indicators: ['supabase', 'supabase-js', 'supabaseClient'],
-    check: (files, configs) => configs['@supabase'] !== undefined ||
+    check: (files, configs) =>
+      configs['@supabase'] !== undefined ||
       configs['supabase'] !== undefined ||
       files.some((f) => f.includes('supabase')),
   },
@@ -89,7 +101,8 @@ const FRAMEWORK_DETECTORS: FrameworkDetector[] = [
     name: 'Prisma',
     confidence: 0.9,
     indicators: ['prisma/schema.prisma', '@prisma/client'],
-    check: (files, configs) => configs['@prisma/client'] !== undefined ||
+    check: (files, configs) =>
+      configs['@prisma/client'] !== undefined ||
       files.some((f) => f.includes('prisma/schema.prisma')),
   },
 ];
@@ -114,12 +127,14 @@ export class RepoIntelligence {
   /**
    * Scan the project and generate repo intelligence.
    */
-  async scan(options: {
-    maxDepth?: number;
-    maxFiles?: number;
-    includeDirs?: string[];
-    force?: boolean;
-  } = {}): Promise<RepoSummary> {
+  async scan(
+    options: {
+      maxDepth?: number;
+      maxFiles?: number;
+      includeDirs?: string[];
+      force?: boolean;
+    } = {},
+  ): Promise<RepoSummary> {
     const now = Date.now();
     if (!options.force && this.cachedFiles && now - this.lastScanAt < this.scanCooldownMs) {
       // Return cached if within cooldown
@@ -129,7 +144,14 @@ export class RepoIntelligence {
 
     const maxDepth = options.maxDepth || 8;
     const maxFiles = options.maxFiles || 500;
-    const includeDirs = options.includeDirs || ['src', 'lib', 'app', 'packages', 'components', 'pages'];
+    const includeDirs = options.includeDirs || [
+      'src',
+      'lib',
+      'app',
+      'packages',
+      'components',
+      'pages',
+    ];
 
     const files: string[] = [];
     const dirs: string[] = [];
@@ -201,10 +223,20 @@ export class RepoIntelligence {
 
     // Include source entry points
     const entryFiles = [
-      'src/index.ts', 'src/index.js', 'src/main.ts', 'src/main.js',
-      'src/app.ts', 'src/app.jsx', 'src/server.ts', 'index.ts', 'index.js',
-      'app/layout.tsx', 'app/layout.jsx', 'pages/index.tsx',
-      'src/App.tsx', 'src/App.jsx',
+      'src/index.ts',
+      'src/index.js',
+      'src/main.ts',
+      'src/main.js',
+      'src/app.ts',
+      'src/app.jsx',
+      'src/server.ts',
+      'index.ts',
+      'index.js',
+      'app/layout.tsx',
+      'app/layout.jsx',
+      'pages/index.tsx',
+      'src/App.tsx',
+      'src/App.jsx',
     ];
     for (const ef of entryFiles) {
       if (files.length >= limit) break;
@@ -223,15 +255,10 @@ export class RepoIntelligence {
     return this.extractDependenciesFromDisk();
   }
 
-
-
   /**
    * Detect primary programming language from file extensions and configs.
    */
-  private detectLanguage(
-    extensions: Set<string>,
-    configs: Record<string, string>,
-  ): string {
+  private detectLanguage(extensions: Set<string>, configs: Record<string, string>): string {
     if (configs['tsconfig'] !== undefined) return 'TypeScript';
     if (extensions.has('.ts') || extensions.has('.tsx')) return 'TypeScript';
     if (extensions.has('.py')) return 'Python';
@@ -267,15 +294,29 @@ export class RepoIntelligence {
         if (files.length >= options.maxFiles) return;
 
         // Skip hidden, node_modules, dist, .git
-        if (entry.name.startsWith('.') || entry.name === 'node_modules' ||
-            entry.name === 'dist' || entry.name === '.next' || entry.name === 'build') continue;
+        if (
+          entry.name.startsWith('.') ||
+          entry.name === 'node_modules' ||
+          entry.name === 'dist' ||
+          entry.name === '.next' ||
+          entry.name === 'build'
+        )
+          continue;
 
         const fullPath = join(dir, entry.name);
         const relPath = relative(this.rootDir, fullPath);
 
         if (entry.isDirectory()) {
           dirs.push(relPath);
-          await this.walkDirectory(fullPath, files, dirs, extensions, _languages, options, currentDepth + 1);
+          await this.walkDirectory(
+            fullPath,
+            files,
+            dirs,
+            extensions,
+            _languages,
+            options,
+            currentDepth + 1,
+          );
         } else if (entry.isFile()) {
           files.push(relPath);
           const ext = extname(entry.name).toLowerCase();
@@ -283,12 +324,32 @@ export class RepoIntelligence {
 
           // Map extensions to languages
           const langMap: Record<string, string> = {
-            '.ts': 'TypeScript', '.tsx': 'TypeScript', '.js': 'JavaScript', '.jsx': 'JavaScript',
-            '.py': 'Python', '.go': 'Go', '.rs': 'Rust', '.java': 'Java', '.rb': 'Ruby',
-            '.php': 'PHP', '.cs': 'C#', '.swift': 'Swift', '.kt': 'Kotlin', '.kts': 'Kotlin',
-            '.scala': 'Scala', '.vue': 'Vue', '.svelte': 'Svelte', '.css': 'CSS',
-            '.scss': 'SCSS', '.less': 'Less', '.html': 'HTML', '.json': 'JSON',
-            '.yaml': 'YAML', '.yml': 'YAML', '.toml': 'TOML', '.md': 'Markdown',
+            '.ts': 'TypeScript',
+            '.tsx': 'TypeScript',
+            '.js': 'JavaScript',
+            '.jsx': 'JavaScript',
+            '.py': 'Python',
+            '.go': 'Go',
+            '.rs': 'Rust',
+            '.java': 'Java',
+            '.rb': 'Ruby',
+            '.php': 'PHP',
+            '.cs': 'C#',
+            '.swift': 'Swift',
+            '.kt': 'Kotlin',
+            '.kts': 'Kotlin',
+            '.scala': 'Scala',
+            '.vue': 'Vue',
+            '.svelte': 'Svelte',
+            '.css': 'CSS',
+            '.scss': 'SCSS',
+            '.less': 'Less',
+            '.html': 'HTML',
+            '.json': 'JSON',
+            '.yaml': 'YAML',
+            '.yml': 'YAML',
+            '.toml': 'TOML',
+            '.md': 'Markdown',
           };
           const lang = langMap[ext];
           if (lang) _languages.add(lang);
@@ -331,8 +392,15 @@ export class RepoIntelligence {
 
     // Check for other config files
     const configFiles = [
-      'composer.json', 'Cargo.toml', 'go.mod', 'Gemfile', 'requirements.txt',
-      'build.gradle', 'pom.xml', 'project.clj', 'mix.exs',
+      'composer.json',
+      'Cargo.toml',
+      'go.mod',
+      'Gemfile',
+      'requirements.txt',
+      'build.gradle',
+      'pom.xml',
+      'project.clj',
+      'mix.exs',
     ];
     for (const cf of configFiles) {
       if (existsSync(join(this.rootDir, cf))) {
@@ -361,8 +429,6 @@ export class RepoIntelligence {
 
     return detected;
   }
-
-
 
   /**
    * Extract dependencies from disk.
@@ -397,15 +463,29 @@ export class RepoIntelligence {
    */
   private getConfigFiles(): string[] {
     return [
-      'package.json', 'tsconfig.json', '.env', '.env.example',
-      'next.config.js', 'next.config.ts', 'next.config.mjs',
-      'vite.config.ts', 'vite.config.js', 'webpack.config.js',
-      'tailwind.config.ts', 'tailwind.config.js', 'postcss.config.js',
-      'docker-compose.yml', 'Dockerfile', '.gitignore',
-      'pnpm-workspace.yaml', 'lerna.json', 'nx.json',
-      'turbo.json', 'biome.json', '.prettierrc', '.eslintrc.js',
+      'package.json',
+      'tsconfig.json',
+      '.env',
+      '.env.example',
+      'next.config.js',
+      'next.config.ts',
+      'next.config.mjs',
+      'vite.config.ts',
+      'vite.config.js',
+      'webpack.config.js',
+      'tailwind.config.ts',
+      'tailwind.config.js',
+      'postcss.config.js',
+      'docker-compose.yml',
+      'Dockerfile',
+      '.gitignore',
+      'pnpm-workspace.yaml',
+      'lerna.json',
+      'nx.json',
+      'turbo.json',
+      'biome.json',
+      '.prettierrc',
+      '.eslintrc.js',
     ];
   }
 }
-
-

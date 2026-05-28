@@ -240,7 +240,13 @@ export class ProcessIsolation extends EventEmitter {
           value: proc.memoryMB,
           limit: this.options.maxProcessMemoryMB,
         });
-        this.emit('boundaryViolation', pid, 'memory', proc.memoryMB, this.options.maxProcessMemoryMB);
+        this.emit(
+          'boundaryViolation',
+          pid,
+          'memory',
+          proc.memoryMB,
+          this.options.maxProcessMemoryMB,
+        );
       }
     }
 

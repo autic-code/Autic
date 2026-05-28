@@ -38,10 +38,16 @@ function buildToolExecutor() {
       return { success: false, data: undefined, error: `Tool handler not found: ${tool.handler}` };
     }
     try {
-      const result = await (handler as (args: unknown) => Promise<{ success: boolean; data?: unknown; error?: string }>)(args);
+      const result = await (
+        handler as (args: unknown) => Promise<{ success: boolean; data?: unknown; error?: string }>
+      )(args);
       return { success: result.success, data: result.data, error: result.error };
     } catch (err) {
-      return { success: false, data: undefined, error: err instanceof Error ? err.message : String(err) };
+      return {
+        success: false,
+        data: undefined,
+        error: err instanceof Error ? err.message : String(err),
+      };
     }
   };
 }
@@ -94,7 +100,9 @@ export async function orchestrateCommand(
     console.log('    autic orchestrate \"Fix TypeScript errors\"   Engineering pipeline');
     console.log('');
     console.log('  Pipelines:');
-    console.log('    full-development    Research → Planning → Architecture → Engineering → Verification → Repair → Final Review');
+    console.log(
+      '    full-development    Research → Planning → Architecture → Engineering → Verification → Repair → Final Review',
+    );
     console.log('    analysis-only       Research → Planning → Architecture (read-only)');
     console.log('    engineering-only    Engineering → Verification → Repair → Final Review');
     console.log('');
@@ -132,9 +140,10 @@ export async function orchestrateCommand(
       runTool: toolExec,
     });
 
-    console.log(result.success
-      ? `  ${colorText('✓ Stage completed', 'success')}`
-      : `  ${colorText(`✗ Stage failed: ${result.error}`, 'error')}`
+    console.log(
+      result.success
+        ? `  ${colorText('✓ Stage completed', 'success')}`
+        : `  ${colorText(`✗ Stage failed: ${result.error}`, 'error')}`,
     );
     return;
   }
@@ -167,9 +176,12 @@ export async function orchestrateCommand(
 
       if (options.verbose) {
         const label = STAGE_LABELS[stage] || stage;
-        const icon = existing.status === 'running' ? '⟳' : existing.status === 'completed' ? '✓' : '✗';
+        const icon =
+          existing.status === 'running' ? '⟳' : existing.status === 'completed' ? '✓' : '✗';
         const ts = new Date(event.timestamp).toLocaleTimeString();
-        console.log(`  [${ts}] ${icon} ${label}: ${event.type}${existing.error ? ` — ${existing.error}` : ''}`);
+        console.log(
+          `  [${ts}] ${icon} ${label}: ${event.type}${existing.error ? ` — ${existing.error}` : ''}`,
+        );
       }
     }
 
@@ -228,13 +240,16 @@ export async function orchestrateCommand(
     for (const result of results) {
       const label = STAGE_LABELS[result.stage] || result.stage;
       const icon = result.success ? colorText('✓', 'success') : colorText('✗', 'error');
-      const duration = result.durationMs > 0
-        ? result.durationMs < 1000
-          ? `${result.durationMs}ms`
-          : `${(result.durationMs / 1000).toFixed(1)}s`
-        : '';
+      const duration =
+        result.durationMs > 0
+          ? result.durationMs < 1000
+            ? `${result.durationMs}ms`
+            : `${(result.durationMs / 1000).toFixed(1)}s`
+          : '';
       const error = result.error ? ` — ${colorText(result.error.slice(0, 100), 'error')}` : '';
-      console.log(`    ${icon} ${label}${duration ? ` ${colorText(`(${duration})`, 'dim')}` : ''}${error}`);
+      console.log(
+        `    ${icon} ${label}${duration ? ` ${colorText(`(${duration})`, 'dim')}` : ''}${error}`,
+      );
     }
     console.log('');
 
@@ -243,7 +258,11 @@ export async function orchestrateCommand(
     const failedCount = results.filter((r) => !r.success).length;
 
     console.log(colorText('─'.repeat(48), 'dim'));
-    console.log(pipelineSummary(pipelineDisplay).map((l) => `  ${l}`).join('\n'));
+    console.log(
+      pipelineSummary(pipelineDisplay)
+        .map((l) => `  ${l}`)
+        .join('\n'),
+    );
     console.log('');
 
     if (options.verbose) {
@@ -261,7 +280,9 @@ export async function orchestrateCommand(
 
     process.exit(state.status === 'completed' ? 0 : 1);
   } catch (error) {
-    console.error(`\n  ${colorText('✗', 'error')} Pipeline execution error: ${error instanceof Error ? error.message : String(error)}`);
+    console.error(
+      `\n  ${colorText('✗', 'error')} Pipeline execution error: ${error instanceof Error ? error.message : String(error)}`,
+    );
     process.exit(1);
   }
 }

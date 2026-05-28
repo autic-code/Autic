@@ -72,7 +72,11 @@ export class ErrorDiagnosticsEnhancer {
       recentErrors,
       providerErrors,
       orchestrationErrors,
-      recommendations: this.generateRecommendations(recentErrors, providerErrors, orchestrationErrors),
+      recommendations: this.generateRecommendations(
+        recentErrors,
+        providerErrors,
+        orchestrationErrors,
+      ),
     };
   }
 
@@ -85,14 +89,22 @@ export class ErrorDiagnosticsEnhancer {
   }
 
   private getRecentErrors(): ErrorDiagnosticsReport['recentErrors'] {
-    const errorMap = new Map<string, { count: number; firstSeen: number; lastSeen: number; suggestion?: string }>();
+    const errorMap = new Map<
+      string,
+      { count: number; firstSeen: number; lastSeen: number; suggestion?: string }
+    >();
     const now = Date.now();
     const windowMs = 5 * 60 * 1000; // Last 5 minutes
 
     for (const entry of this.errorHistory) {
       if (now - entry.timestamp > windowMs) continue;
       const key = entry.message.slice(0, 100);
-      const existing = errorMap.get(key) || { count: 0, firstSeen: entry.timestamp, lastSeen: entry.timestamp, suggestion: entry.suggestion };
+      const existing = errorMap.get(key) || {
+        count: 0,
+        firstSeen: entry.timestamp,
+        lastSeen: entry.timestamp,
+        suggestion: entry.suggestion,
+      };
       existing.count++;
       existing.lastSeen = Math.max(existing.lastSeen, entry.timestamp);
       existing.firstSeen = Math.min(existing.firstSeen, entry.timestamp);
@@ -126,7 +138,13 @@ export class ErrorDiagnosticsEnhancer {
     const windowMs = 15 * 60 * 1000;
 
     // Known non-provider sources to exclude
-    const nonProviderSources = new Set(['runtime', 'orchestration', 'filesystem', 'security', 'config']);
+    const nonProviderSources = new Set([
+      'runtime',
+      'orchestration',
+      'filesystem',
+      'security',
+      'config',
+    ]);
 
     for (const entry of this.errorHistory) {
       if (nonProviderSources.has(entry.source) || now - entry.timestamp > windowMs) continue;
@@ -160,7 +178,7 @@ export class ErrorDiagnosticsEnhancer {
     if (recentErrors.length > 5) {
       recommendations.push('High error rate detected — consider reducing workload');
     }
-    if (providerErrors.some(p => p.errorCount > 3)) {
+    if (providerErrors.some((p) => p.errorCount > 3)) {
       recommendations.push('Multiple provider failures — check provider configuration');
     }
     recommendations.push('Run `autic doctor` for comprehensive diagnostics');

@@ -2,10 +2,7 @@
  * Extension module — manifests, lifecycle, loader, and registry
  */
 
-export {
-  createManifest,
-  validateManifest,
-} from './ExtensionManifest.js';
+export { createManifest, validateManifest } from './ExtensionManifest.js';
 
 export type {
   ExtensionVisibility,
@@ -27,10 +24,7 @@ export type {
 
 export { ExtensionLoader } from './ExtensionLoader.js';
 
-export type {
-  ExtensionLoaderConfig,
-  ExtensionLoadResult,
-} from './ExtensionLoader.js';
+export type { ExtensionLoaderConfig, ExtensionLoadResult } from './ExtensionLoader.js';
 
 export { ExtensionRegistry } from './ExtensionRegistry.js';
 

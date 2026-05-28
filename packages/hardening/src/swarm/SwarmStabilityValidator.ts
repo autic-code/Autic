@@ -53,7 +53,8 @@ export class SwarmStabilityValidator {
       orchestrationIsolationValid,
       recoveryLogicValid,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['All swarm stability checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['All swarm stability checks passed'],
     };
   }
 
@@ -110,7 +111,10 @@ export class SwarmStabilityValidator {
       orchestrationIsolationValid: config.partitions >= 2 || config.totalAgents <= 5,
       recoveryLogicValid: true,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['Swarm configuration within safe parameters'],
+      recommendations:
+        recommendations.length > 0
+          ? recommendations
+          : ['Swarm configuration within safe parameters'],
     };
   }
 }

@@ -57,10 +57,14 @@ export function spinnerLine(
   style: SpinnerStyle = 'dots',
 ): string {
   const frame = getSpinnerFrame(frameIndex, style, status);
-  const labelColor = status === 'loading' ? theme.colors.text
-    : status === 'success' ? theme.colors.success
-    : status === 'error' ? theme.colors.error
-    : theme.colors.textDim;
+  const labelColor =
+    status === 'loading'
+      ? theme.colors.text
+      : status === 'success'
+        ? theme.colors.success
+        : status === 'error'
+          ? theme.colors.error
+          : theme.colors.textDim;
 
   return `  ${frame} ${labelColor}${label}`;
 }
@@ -73,15 +77,17 @@ export function completionStatus(
   status: 'success' | 'error' | 'warning' | 'skipped' = 'success',
   detail?: string,
 ): string {
-  const icon = status === 'success' ? '✓'
-    : status === 'error' ? '✗'
-    : status === 'warning' ? '⚠'
-    : '○';
+  const icon =
+    status === 'success' ? '✓' : status === 'error' ? '✗' : status === 'warning' ? '⚠' : '○';
 
-  const color = status === 'success' ? theme.colors.success
-    : status === 'error' ? theme.colors.error
-    : status === 'warning' ? theme.colors.warning
-    : theme.colors.textMuted;
+  const color =
+    status === 'success'
+      ? theme.colors.success
+      : status === 'error'
+        ? theme.colors.error
+        : status === 'warning'
+          ? theme.colors.warning
+          : theme.colors.textMuted;
 
   const detailStr = detail ? ` ${theme.colors.textDim}— ${detail}` : '';
 
@@ -102,10 +108,14 @@ export function animatedProgressBar(
   const filled = Math.round(progress * width);
   const empty = width - filled;
 
-  const color = percent >= 100 ? theme.colors.success
-    : percent > 66 ? theme.colors.primary
-    : percent > 33 ? theme.colors.info
-    : theme.colors.textDim;
+  const color =
+    percent >= 100
+      ? theme.colors.success
+      : percent > 66
+        ? theme.colors.primary
+        : percent > 33
+          ? theme.colors.info
+          : theme.colors.textDim;
 
   const filledBar = color + '█'.repeat(filled);
   const emptyBar = theme.colors.textDim + '░'.repeat(empty);
@@ -137,7 +147,8 @@ export function dotProgress(
     .slice(0, maxLabels)
     .map((item) => item.label);
 
-  const labelStr = labels.length > 0 ? ` ${theme.colors.textDim}${labels.join(', ')}${theme.colors.text}` : '';
+  const labelStr =
+    labels.length > 0 ? ` ${theme.colors.textDim}${labels.join(', ')}${theme.colors.text}` : '';
 
   return `  ${dotStr}${labelStr}`;
 }
@@ -152,17 +163,20 @@ export function startupHeader(
 ): string[] {
   const lines: string[] = [];
 
-  const statusBadge = status === 'ready'
-    ? ` ${theme.colors.success}● Ready${theme.colors.text}`
-    : status === 'loading'
-      ? ` ${theme.colors.warning}● Loading${theme.colors.text}`
-      : ` ${theme.colors.error}● Error${theme.colors.text}`;
+  const statusBadge =
+    status === 'ready'
+      ? ` ${theme.colors.success}● Ready${theme.colors.text}`
+      : status === 'loading'
+        ? ` ${theme.colors.warning}● Loading${theme.colors.text}`
+        : ` ${theme.colors.error}● Error${theme.colors.text}`;
 
   // Top border
   lines.push(`  ${theme.colors.primary}${'═'.repeat(40)}${theme.colors.text}`);
 
   // Title
-  lines.push(`  ${theme.colors.primary}${name}${theme.colors.text} ${theme.colors.textDim}v${version}${theme.colors.text}${statusBadge}`);
+  lines.push(
+    `  ${theme.colors.primary}${name}${theme.colors.text} ${theme.colors.textDim}v${version}${theme.colors.text}${statusBadge}`,
+  );
 
   // Bottom border
   lines.push(`  ${theme.colors.primary}${'═'.repeat(40)}${theme.colors.text}`);
@@ -184,10 +198,7 @@ export function startupFlow(
     if (step.status === 'loading') {
       lines.push(spinnerLine(step.label, step.frameIndex || 0, 'loading'));
     } else {
-      lines.push(completionStatus(
-        step.label,
-        step.status as 'success' | 'error' | 'warning',
-      ));
+      lines.push(completionStatus(step.label, step.status as 'success' | 'error' | 'warning'));
     }
   }
 
@@ -198,25 +209,42 @@ export function startupFlow(
  * Render provider status indicators in a compact row.
  */
 export function providerStatusRow(
-  providers: Array<{ name: string; status: 'connected' | 'disconnected' | 'error' | 'unknown'; latencyMs?: number; modelCount?: number }>,
+  providers: Array<{
+    name: string;
+    status: 'connected' | 'disconnected' | 'error' | 'unknown';
+    latencyMs?: number;
+    modelCount?: number;
+  }>,
 ): string[] {
   const lines: string[] = [];
 
   lines.push(`  ${theme.colors.textDim}Providers:${theme.colors.text}`);
 
   for (const provider of providers) {
-    const icon = provider.status === 'connected' ? '●'
-      : provider.status === 'disconnected' ? '○'
-      : provider.status === 'error' ? '✗'
-      : '?';
+    const icon =
+      provider.status === 'connected'
+        ? '●'
+        : provider.status === 'disconnected'
+          ? '○'
+          : provider.status === 'error'
+            ? '✗'
+            : '?';
 
-    const color = provider.status === 'connected' ? theme.colors.success
-      : provider.status === 'disconnected' ? theme.colors.textMuted
-      : provider.status === 'error' ? theme.colors.error
-      : theme.colors.textDim;
+    const color =
+      provider.status === 'connected'
+        ? theme.colors.success
+        : provider.status === 'disconnected'
+          ? theme.colors.textMuted
+          : provider.status === 'error'
+            ? theme.colors.error
+            : theme.colors.textDim;
 
-    const latency = provider.latencyMs ? ` ${theme.colors.textDim}${provider.latencyMs}ms${theme.colors.text}` : '';
-    const models = provider.modelCount ? ` ${theme.colors.textDim}${provider.modelCount} models${theme.colors.text}` : '';
+    const latency = provider.latencyMs
+      ? ` ${theme.colors.textDim}${provider.latencyMs}ms${theme.colors.text}`
+      : '';
+    const models = provider.modelCount
+      ? ` ${theme.colors.textDim}${provider.modelCount} models${theme.colors.text}`
+      : '';
 
     lines.push(`    ${color}${icon} ${provider.name}${latency}${models}`);
   }
@@ -237,23 +265,22 @@ export function queueStatusLine(
 
   if (running > 0) parts.push(`${theme.colors.warning}${running} running${theme.colors.text}`);
   if (pending > 0) parts.push(`${theme.colors.textDim}${pending} pending${theme.colors.text}`);
-  if (completed > 0) parts.push(`${theme.colors.success}${completed} completed${theme.colors.text}`);
+  if (completed > 0)
+    parts.push(`${theme.colors.success}${completed} completed${theme.colors.text}`);
   if (failed > 0) parts.push(`${theme.colors.error}${failed} failed${theme.colors.text}`);
 
-  return parts.length > 0 ? `  ${parts.join('  ')}` : `  ${theme.colors.textDim}Queue: idle${theme.colors.text}`;
+  return parts.length > 0
+    ? `  ${parts.join('  ')}`
+    : `  ${theme.colors.textDim}Queue: idle${theme.colors.text}`;
 }
 
 /**
  * Render a memory usage indicator.
  */
-export function memoryIndicator(
-  usedMb: number,
-  totalMb: number,
-): string {
+export function memoryIndicator(usedMb: number, totalMb: number): string {
   const percent = totalMb > 0 ? Math.round((usedMb / totalMb) * 100) : 0;
-  const color = percent > 80 ? theme.colors.error
-    : percent > 60 ? theme.colors.warning
-    : theme.colors.primary;
+  const color =
+    percent > 80 ? theme.colors.error : percent > 60 ? theme.colors.warning : theme.colors.primary;
   const barLen = Math.round((percent / 100) * 10);
   const bar = color + '▇'.repeat(barLen) + theme.colors.textDim + '▇'.repeat(10 - barLen);
 

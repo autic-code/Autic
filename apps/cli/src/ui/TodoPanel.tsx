@@ -29,13 +29,7 @@ export function TodoPanel({ title, items }: TodoPanelProps) {
       {items.map((item, index) => (
         <Box key={index} marginLeft={2}>
           <Text>
-            {item.active
-              ? '●'
-              : item.completed
-                ? '✓'
-                : item.error
-                  ? '✗'
-                  : '○'}{' '}
+            {item.active ? '●' : item.completed ? '✓' : item.error ? '✗' : '○'}{' '}
             <Text
               color={
                 item.active

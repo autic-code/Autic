@@ -148,18 +148,16 @@ export class TelemetryCollector {
   /**
    * Record a provider metric (NO API keys, NO endpoints)
    */
-  recordProviderMetric(metric: {
-    providerId: string;
-    success: boolean;
-    latencyMs: number;
-  }): void {
+  recordProviderMetric(metric: { providerId: string; success: boolean; latencyMs: number }): void {
     if (!this.config.enabled) return;
     const existing = this.providerMetrics.get(metric.providerId);
     if (existing) {
       existing.totalRequests++;
       if (metric.success) existing.successfulRequests++;
       else existing.failedRequests++;
-      existing.avgLatencyMs = (existing.avgLatencyMs * (existing.totalRequests - 1) + metric.latencyMs) / existing.totalRequests;
+      existing.avgLatencyMs =
+        (existing.avgLatencyMs * (existing.totalRequests - 1) + metric.latencyMs) /
+        existing.totalRequests;
       existing.p95LatencyMs = Math.max(existing.p95LatencyMs, metric.latencyMs);
     } else {
       this.providerMetrics.set(metric.providerId, {
@@ -189,8 +187,10 @@ export class TelemetryCollector {
       existing.totalRuns++;
       if (stat.success) existing.successfulRuns++;
       else existing.failedRuns++;
-      existing.avgDurationMs = (existing.avgDurationMs * (existing.totalRuns - 1) + stat.durationMs) / existing.totalRuns;
-      existing.avgSteps = (existing.avgSteps * (existing.totalRuns - 1) + stat.steps) / existing.totalRuns;
+      existing.avgDurationMs =
+        (existing.avgDurationMs * (existing.totalRuns - 1) + stat.durationMs) / existing.totalRuns;
+      existing.avgSteps =
+        (existing.avgSteps * (existing.totalRuns - 1) + stat.steps) / existing.totalRuns;
     } else {
       this.workflowStats.set(stat.type, {
         type: stat.type,
@@ -249,7 +249,11 @@ export class TelemetryCollector {
   getStatus(): { enabled: boolean; dataPoints: number; dataSize: string; privacyMode: string } {
     return {
       enabled: this.config.enabled,
-      dataPoints: this.dataPoints.length + this.crashes.size + this.providerMetrics.size + this.workflowStats.size,
+      dataPoints:
+        this.dataPoints.length +
+        this.crashes.size +
+        this.providerMetrics.size +
+        this.workflowStats.size,
       dataSize: `${((this.dataPoints.length * 100) / 1024).toFixed(1)}KB`,
       privacyMode: this.config.anonymizeData ? 'anonymized' : 'standard',
     };
@@ -268,7 +272,12 @@ export class TelemetryCollector {
   /**
    * Get telemetry configuration
    */
-  getConfig(): { enabled: boolean; privacyMode: string; retentionDays: number; anonymizedOnly: boolean } {
+  getConfig(): {
+    enabled: boolean;
+    privacyMode: string;
+    retentionDays: number;
+    anonymizedOnly: boolean;
+  } {
     return {
       enabled: this.config.enabled,
       privacyMode: this.config.anonymizeData ? 'anonymized' : 'standard',
@@ -293,12 +302,21 @@ export class TelemetryCollector {
       sessions: report.dataPoints.filter((d) => d.metric === 'session').length,
       workflows: report.workflowStats.reduce((s, w) => s + w.totalRuns, 0),
       providers: report.providerMetrics.map((p) => p.providerId),
-      avgWorkflowDuration: report.workflowStats.length > 0
-        ? Math.round(report.workflowStats.reduce((s, w) => s + w.avgDurationMs, 0) / report.workflowStats.length)
-        : 0,
-      errorRate: report.providerMetrics.length > 0
-        ? report.providerMetrics.reduce((s, p) => s + p.failedRequests, 0) / Math.max(report.providerMetrics.reduce((s, p) => s + p.totalRequests, 0), 1)
-        : 0,
+      avgWorkflowDuration:
+        report.workflowStats.length > 0
+          ? Math.round(
+              report.workflowStats.reduce((s, w) => s + w.avgDurationMs, 0) /
+                report.workflowStats.length,
+            )
+          : 0,
+      errorRate:
+        report.providerMetrics.length > 0
+          ? report.providerMetrics.reduce((s, p) => s + p.failedRequests, 0) /
+            Math.max(
+              report.providerMetrics.reduce((s, p) => s + p.totalRequests, 0),
+              1,
+            )
+          : 0,
       crashCategories: report.crashes.map((c) => `${c.type} (${c.count}x)`),
     };
   }

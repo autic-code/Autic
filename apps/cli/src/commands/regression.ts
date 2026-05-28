@@ -29,7 +29,9 @@ export async function regressionCommand(action?: string): Promise<void> {
       break;
     }
     case 'provider': {
-      console.log(`  ${colorText('Running provider compatibility regression checks...', 'primary')}\n`);
+      console.log(
+        `  ${colorText('Running provider compatibility regression checks...', 'primary')}\n`,
+      );
       const results = await preventer.checkProviderCompatibility();
       printRegressionResults(results);
       break;
@@ -64,8 +66,8 @@ export async function regressionCommand(action?: string): Promise<void> {
       for (const check of checks) {
         console.log(`  ${colorText('⟳', 'primary')} ${check.name}...`);
         const results = await check.fn();
-        const passed = results.filter(r => r.passed).length;
-        const failed = results.filter(r => !r.passed).length;
+        const passed = results.filter((r) => r.passed).length;
+        const failed = results.filter((r) => !r.passed).length;
         totalPassed += passed;
         totalFailed += failed;
         const icon = failed === 0 ? colorText('✓', 'success') : colorText('✗', 'error');
@@ -75,15 +77,21 @@ export async function regressionCommand(action?: string): Promise<void> {
       console.log(divider());
       console.log(`  ${colorText('Summary', 'bold')}`);
       console.log(`  Total passed: ${colorText(totalPassed.toString(), 'success')}`);
-      console.log(`  Total failed: ${colorText(totalFailed.toString(), totalFailed > 0 ? 'error' : 'success')}`);
+      console.log(
+        `  Total failed: ${colorText(totalFailed.toString(), totalFailed > 0 ? 'error' : 'success')}`,
+      );
       const healthy = totalFailed === 0;
-      console.log(`  Status: ${healthy ? colorText('HEALTHY — No regressions detected', 'success') : colorText('REGRESSIONS DETECTED', 'error')}`);
+      console.log(
+        `  Status: ${healthy ? colorText('HEALTHY — No regressions detected', 'success') : colorText('REGRESSIONS DETECTED', 'error')}`,
+      );
       break;
     }
   }
 }
 
-function printRegressionResults(results: Array<{ name: string; passed: boolean; detail?: string; severity?: string }>): void {
+function printRegressionResults(
+  results: Array<{ name: string; passed: boolean; detail?: string; severity?: string }>,
+): void {
   for (const r of results) {
     const icon = r.passed ? colorText('✓', 'success') : colorText('✗', 'error');
     console.log(`  ${icon} ${r.name}`);

@@ -201,10 +201,7 @@ export class PluginSandbox extends EventEmitter {
   /**
    * Execute a function with timeout
    */
-  private async executeWithTimeout<T>(
-    fn: () => Promise<T> | T,
-    timeoutMs: number,
-  ): Promise<T> {
+  private async executeWithTimeout<T>(fn: () => Promise<T> | T, timeoutMs: number): Promise<T> {
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => reject(new Error(`Execution timed out after ${timeoutMs}ms`)), timeoutMs);
     });

@@ -98,8 +98,11 @@ const STAGE_LABELS: Record<string, string> = {
  * Render the pipeline header with name, goal, and overall status.
  */
 export function pipelineHeader(display: PipelineDisplay): string {
-  const statusColor = STATUS_INDICATORS[display.status] || `${theme.icon.dot} ${theme.colors.textMuted}`;
-  const duration = display.totalDurationMs ? ` ${theme.colors.textDim}${formatDuration(display.totalDurationMs)}` : '';
+  const statusColor =
+    STATUS_INDICATORS[display.status] || `${theme.icon.dot} ${theme.colors.textMuted}`;
+  const duration = display.totalDurationMs
+    ? ` ${theme.colors.textDim}${formatDuration(display.totalDurationMs)}`
+    : '';
 
   return `${statusColor}${display.pipelineName}${theme.colors.text} ${theme.colors.textDim}— ${display.status}${duration}${theme.colors.text}\n  ${theme.colors.textDim}Goal:${theme.colors.text} ${display.goal.slice(0, 80)}`;
 }
@@ -112,9 +115,15 @@ export function stageLine(stage: PipelineStageDisplay, isCurrent: boolean): stri
   const color = STAGE_COLORS[stage.status];
   const label = STAGE_LABELS[stage.stage] || stage.stage;
   const indicator = isCurrent && stage.status === 'running' ? ` ${theme.icon.arrow}` : '';
-  const duration = stage.durationMs ? ` ${theme.colors.textDim}(${formatDuration(stage.durationMs)})${theme.colors.text}` : '';
-  const error = stage.error ? ` ${theme.colors.error}${stage.error.slice(0, 60)}${theme.colors.text}` : '';
-  const agent = stage.agentId ? ` ${theme.colors.textDim}via ${stage.agentId}${theme.colors.text}` : '';
+  const duration = stage.durationMs
+    ? ` ${theme.colors.textDim}(${formatDuration(stage.durationMs)})${theme.colors.text}`
+    : '';
+  const error = stage.error
+    ? ` ${theme.colors.error}${stage.error.slice(0, 60)}${theme.colors.text}`
+    : '';
+  const agent = stage.agentId
+    ? ` ${theme.colors.textDim}via ${stage.agentId}${theme.colors.text}`
+    : '';
 
   return `  ${icon} ${color}${label}${indicator}${agent}${duration}${error}`;
 }
@@ -147,7 +156,8 @@ export function renderPipeline(display: PipelineDisplay): string[] {
  * Render a compact one-line pipeline status (for summary views).
  */
 export function compactPipelineLine(display: PipelineDisplay): string {
-  const statusColor = STATUS_INDICATORS[display.status] || `${theme.icon.dot} ${theme.colors.textMuted}`;
+  const statusColor =
+    STATUS_INDICATORS[display.status] || `${theme.icon.dot} ${theme.colors.textMuted}`;
   const completedCount = display.stages.filter((s) => s.status === 'completed').length;
   const failedCount = display.stages.filter((s) => s.status === 'failed').length;
   const totalCount = display.stages.length;
@@ -168,7 +178,9 @@ export function renderTransitions(
   for (const t of transitions.slice(-10)) {
     const fromLabel = STAGE_LABELS[t.from] || t.from;
     const toLabel = STAGE_LABELS[t.to] || t.to;
-    lines.push(`    ${theme.icon.arrow} ${fromLabel} → ${toLabel}${t.reason !== 'advance' ? ` (${t.reason})` : ''}${theme.colors.text}`);
+    lines.push(
+      `    ${theme.icon.arrow} ${fromLabel} → ${toLabel}${t.reason !== 'advance' ? ` (${t.reason})` : ''}${theme.colors.text}`,
+    );
   }
 
   return lines;
@@ -184,7 +196,9 @@ export function pipelineSummary(display: PipelineDisplay): string[] {
   const statusColor = display.status === 'completed' ? theme.colors.success : theme.colors.error;
   const duration = display.totalDurationMs ? formatDuration(display.totalDurationMs) : '';
 
-  lines.push(`${statusIcon} ${statusColor}${display.pipelineName}${theme.colors.textDim} — ${display.status}${theme.colors.text}`);
+  lines.push(
+    `${statusIcon} ${statusColor}${display.pipelineName}${theme.colors.textDim} — ${display.status}${theme.colors.text}`,
+  );
 
   if (duration) {
     lines.push(`  ${theme.colors.textDim}Duration:${theme.colors.text} ${duration}`);
@@ -196,7 +210,9 @@ export function pipelineSummary(display: PipelineDisplay): string[] {
 
   const completedStages = display.stages.filter((s) => s.status === 'completed').length;
   const failedStages = display.stages.filter((s) => s.status === 'failed').length;
-  lines.push(`  ${theme.colors.textDim}Stages:${theme.colors.text} ${completedStages} completed, ${failedStages} failed, ${display.stages.length} total`);
+  lines.push(
+    `  ${theme.colors.textDim}Stages:${theme.colors.text} ${completedStages} completed, ${failedStages} failed, ${display.stages.length} total`,
+  );
 
   return lines;
 }

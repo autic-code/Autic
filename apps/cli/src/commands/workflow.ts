@@ -7,11 +7,7 @@
  * Displays real-time TODO progress with structured UI.
  */
 
-import {
-  ExecutionCoordinator,
-  ExecutionMemory,
-  ContextSelector,
-} from '@autic/workflow';
+import { ExecutionCoordinator, ExecutionMemory, ContextSelector } from '@autic/workflow';
 import { ToolRegistry, registerBuiltinTools } from '@autic/tools';
 import * as toolHandlers from '@autic/tools';
 import {
@@ -148,11 +144,16 @@ export async function workflowCommand(
     const displayItems: TodoItem[] = result.steps.map((step) => ({
       id: step.id,
       description: step.description,
-      status: step.status === 'success' ? 'success'
-        : step.status === 'failed' ? 'failed'
-        : step.status === 'skipped' ? 'skipped'
-        : step.status === 'running' ? 'running'
-        : 'pending',
+      status:
+        step.status === 'success'
+          ? 'success'
+          : step.status === 'failed'
+            ? 'failed'
+            : step.status === 'skipped'
+              ? 'skipped'
+              : step.status === 'running'
+                ? 'running'
+                : 'pending',
       type: step.type,
       durationMs: step.durationMs,
       error: step.error,
@@ -163,24 +164,22 @@ export async function workflowCommand(
 
     // Render TODO board
     console.log('');
-    console.log(renderTodoList(displayItems, {
-      title: goal.slice(0, 60),
-      completed,
-      total: displayItems.length,
-      statusText: result.status === 'completed'
-        ? 'All steps completed'
-        : result.status === 'failed'
-          ? `Failed: ${result.error?.slice(0, 80) || 'Unknown error'}`
-          : `Status: ${result.status}`,
-    }));
+    console.log(
+      renderTodoList(displayItems, {
+        title: goal.slice(0, 60),
+        completed,
+        total: displayItems.length,
+        statusText:
+          result.status === 'completed'
+            ? 'All steps completed'
+            : result.status === 'failed'
+              ? `Failed: ${result.error?.slice(0, 80) || 'Unknown error'}`
+              : `Status: ${result.status}`,
+      }),
+    );
 
     // Execution summary
-    console.log(executionSummary(
-      durationMs,
-      completed,
-      failed,
-      result.totalRetries,
-    ));
+    console.log(executionSummary(durationMs, completed, failed, result.totalRetries));
 
     // Detailed event log in verbose mode
     if (options.verbose) {
@@ -201,7 +200,9 @@ export async function workflowCommand(
 
     process.exit(result.status === 'completed' ? 0 : 1);
   } catch (error) {
-    console.error(`\n  ${colorText('✗', 'error')} Workflow execution error: ${error instanceof Error ? error.message : String(error)}`);
+    console.error(
+      `\n  ${colorText('✗', 'error')} Workflow execution error: ${error instanceof Error ? error.message : String(error)}`,
+    );
     process.exit(1);
   }
 }

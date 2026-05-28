@@ -126,6 +126,7 @@ export class SkillRegistry {
     if (!skill.description) throw new Error('Skill missing required field: description');
     if (!skill.type) throw new Error('Skill missing required field: type');
     if (!Array.isArray(skill.capabilities)) throw new Error('Skill capabilities must be an array');
-    if (!Array.isArray(skill.toolPermissions)) throw new Error('Skill toolPermissions must be an array');
+    if (!Array.isArray(skill.toolPermissions))
+      throw new Error('Skill toolPermissions must be an array');
   }
 }

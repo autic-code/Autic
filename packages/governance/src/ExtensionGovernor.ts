@@ -148,9 +148,11 @@ export class ExtensionGovernor {
         });
       }
 
-      if (profile.permissions.some((p) => p.name === 'filesystem:write' || p.name === 'network:all')) {
-        const hasBroadPermissions = profile.permissions.filter((p) =>
-          p.name === 'filesystem:write' || p.name === 'network:all'
+      if (
+        profile.permissions.some((p) => p.name === 'filesystem:write' || p.name === 'network:all')
+      ) {
+        const hasBroadPermissions = profile.permissions.filter(
+          (p) => p.name === 'filesystem:write' || p.name === 'network:all',
         ).length;
         if (hasBroadPermissions > 1 && profile.trustLevel !== 'verified') {
           unsafeExtensions.push({
@@ -180,14 +182,17 @@ export class ExtensionGovernor {
     for (const [, entries] of this.audits) {
       for (const entry of entries) {
         // Recalculate risk based on actual usage
-        const riskLevel = entry.usageCount > 100 ? 'low' : entry.usageCount > 20 ? 'medium' : 'high';
+        const riskLevel =
+          entry.usageCount > 100 ? 'low' : entry.usageCount > 20 ? 'medium' : 'high';
         permissionAudits.push({ ...entry, riskLevel });
       }
     }
 
     const totalExtensions = this.profiles.size;
     const verified = [...this.profiles.values()].filter((p) => p.trustLevel === 'verified').length;
-    const untrusted = [...this.profiles.values()].filter((p) => p.trustLevel === 'untrusted').length;
+    const untrusted = [...this.profiles.values()].filter(
+      (p) => p.trustLevel === 'untrusted',
+    ).length;
 
     return {
       timestamp: Date.now(),
@@ -229,7 +234,15 @@ export class ExtensionGovernor {
   /**
    * Audit extension trust metadata
    */
-  async auditTrustMetadata(): Promise<Array<{ name: string; trusted: boolean; trustScore: number; publisher?: string; issues: string[] }>> {
+  async auditTrustMetadata(): Promise<
+    Array<{
+      name: string;
+      trusted: boolean;
+      trustScore: number;
+      publisher?: string;
+      issues: string[];
+    }>
+  > {
     const report = await this.generateReport();
     return report.extensionProfiles.map((p) => ({
       name: p.name,
@@ -245,13 +258,23 @@ export class ExtensionGovernor {
   /**
    * Audit extension permissions
    */
-  async auditPermissions(): Promise<Array<{ extension: string; safe: boolean; requestedPermissions: string[]; overprivileged: boolean; recommendations: string[] }>> {
+  async auditPermissions(): Promise<
+    Array<{
+      extension: string;
+      safe: boolean;
+      requestedPermissions: string[];
+      overprivileged: boolean;
+      recommendations: string[];
+    }>
+  > {
     const report = await this.generateReport();
     return report.extensionProfiles.map((p) => ({
       extension: p.name,
       safe: p.trustLevel !== 'untrusted',
       requestedPermissions: p.permissions.map((perm) => perm.name),
-      overprivileged: p.permissions.some((perm) => perm.name === 'filesystem:write' || perm.name === 'network:all'),
+      overprivileged: p.permissions.some(
+        (perm) => perm.name === 'filesystem:write' || perm.name === 'network:all',
+      ),
       recommendations: [],
     }));
   }
@@ -259,7 +282,9 @@ export class ExtensionGovernor {
   /**
    * Score extension compatibility
    */
-  async scoreCompatibility(): Promise<Array<{ name: string; compatible: boolean; score: number; issues: string[] }>> {
+  async scoreCompatibility(): Promise<
+    Array<{ name: string; compatible: boolean; score: number; issues: string[] }>
+  > {
     const report = await this.generateReport();
     return report.compatibilityScores.map((s) => ({
       name: s.extensionId,
@@ -272,7 +297,9 @@ export class ExtensionGovernor {
   /**
    * Detect unsafe extensions
    */
-  async detectUnsafeExtensions(): Promise<Array<{ name: string; reason: string; severity: string }>> {
+  async detectUnsafeExtensions(): Promise<
+    Array<{ name: string; reason: string; severity: string }>
+  > {
     const report = await this.generateReport();
     return report.unsafeExtensions.map((u) => ({
       name: u.extensionId,

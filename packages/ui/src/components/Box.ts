@@ -13,14 +13,8 @@ export interface BoxOptions {
 }
 
 export function createBox(options: BoxOptions = {}): string {
-  const {
-    title,
-    border = true,
-    padding = 1,
-    width = 80,
-    color = theme.colors.primary,
-  } = options;    // Calculate content area — width is used for border sizing
-    const horizontalBorder = theme.icon.divider.repeat(width - 2);
+  const { title, border = true, padding = 1, width = 80, color = theme.colors.primary } = options; // Calculate content area — width is used for border sizing
+  const horizontalBorder = theme.icon.divider.repeat(width - 2);
   const paddingLine = `│${' '.repeat(width - 2)}│`;
 
   const lines: string[] = [];

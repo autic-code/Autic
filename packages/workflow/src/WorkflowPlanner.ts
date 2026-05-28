@@ -32,7 +32,12 @@ const DEFAULT_TEMPLATES: TaskTemplate[] = [
     pattern: /build|compile|make/i,
     steps: [
       { description: 'Analyze project structure', type: 'analyze', dependencies: [] },
-      { description: 'Run build command', type: 'tool_call', toolName: 'run_terminal', dependencies: [0] },
+      {
+        description: 'Run build command',
+        type: 'tool_call',
+        toolName: 'run_terminal',
+        dependencies: [0],
+      },
       { description: 'Verify build output', type: 'verify', dependencies: [1] },
     ],
   },
@@ -41,7 +46,12 @@ const DEFAULT_TEMPLATES: TaskTemplate[] = [
     pattern: /test|run test/i,
     steps: [
       { description: 'Analyze test configuration', type: 'analyze', dependencies: [] },
-      { description: 'Run test suite', type: 'tool_call', toolName: 'run_terminal', dependencies: [0] },
+      {
+        description: 'Run test suite',
+        type: 'tool_call',
+        toolName: 'run_terminal',
+        dependencies: [0],
+      },
       { description: 'Parse test results', type: 'verify', dependencies: [1] },
     ],
   },
@@ -50,7 +60,12 @@ const DEFAULT_TEMPLATES: TaskTemplate[] = [
     pattern: /fix|repair|resolve/i,
     steps: [
       { description: 'Analyze issue', type: 'analyze', dependencies: [] },
-      { description: 'Read relevant files', type: 'tool_call', toolName: 'read_file', dependencies: [0] },
+      {
+        description: 'Read relevant files',
+        type: 'tool_call',
+        toolName: 'read_file',
+        dependencies: [0],
+      },
       { description: 'Apply fix', type: 'tool_call', toolName: 'write_file', dependencies: [1] },
       { description: 'Verify fix', type: 'verify', dependencies: [2] },
     ],
@@ -60,7 +75,12 @@ const DEFAULT_TEMPLATES: TaskTemplate[] = [
     pattern: /install|setup|configure/i,
     steps: [
       { description: 'Analyze project requirements', type: 'analyze', dependencies: [] },
-      { description: 'Install dependencies', type: 'tool_call', toolName: 'run_terminal', dependencies: [0] },
+      {
+        description: 'Install dependencies',
+        type: 'tool_call',
+        toolName: 'run_terminal',
+        dependencies: [0],
+      },
       { description: 'Verify installation', type: 'verify', dependencies: [1] },
     ],
   },
@@ -69,8 +89,18 @@ const DEFAULT_TEMPLATES: TaskTemplate[] = [
     pattern: /analyze|audit|inspect|review/i,
     steps: [
       { description: 'Scan repository structure', type: 'analyze', dependencies: [] },
-      { description: 'Read key files', type: 'tool_call', toolName: 'read_file', dependencies: [0] },
-      { description: 'Search for patterns', type: 'tool_call', toolName: 'search_files', dependencies: [1] },
+      {
+        description: 'Read key files',
+        type: 'tool_call',
+        toolName: 'read_file',
+        dependencies: [0],
+      },
+      {
+        description: 'Search for patterns',
+        type: 'tool_call',
+        toolName: 'search_files',
+        dependencies: [1],
+      },
       { description: 'Generate analysis', type: 'analyze', dependencies: [2] },
     ],
   },
@@ -94,11 +124,7 @@ export class WorkflowPlanner {
    * Plan a workflow from a high-level goal string.
    * Matches against known templates and generates an ordered step list.
    */
-  plan(params: {
-    sessionId: string;
-    goal: string;
-    maxSteps?: number;
-  }): WorkflowPlan {
+  plan(params: { sessionId: string; goal: string; maxSteps?: number }): WorkflowPlan {
     const { sessionId, goal } = params;
     const maxSteps = params.maxSteps || this.options.maxSteps || 20;
     const maxRetries = this.options.defaultMaxRetries || 2;
@@ -170,7 +196,15 @@ export class WorkflowPlanner {
     try {
       const rootFiles = await listFiles('.');
       const configFiles = rootFiles.filter((f) =>
-        ['package.json', 'tsconfig.json', 'Cargo.toml', 'Gemfile', 'requirements.txt', 'Makefile', 'Dockerfile'].includes(f),
+        [
+          'package.json',
+          'tsconfig.json',
+          'Cargo.toml',
+          'Gemfile',
+          'requirements.txt',
+          'Makefile',
+          'Dockerfile',
+        ].includes(f),
       );
 
       const steps: WorkflowStep[] = [];
@@ -183,13 +217,25 @@ export class WorkflowPlanner {
 
       // Read config files
       for (const cfg of configFiles) {
-        const readStep = this.makeStep(`Read ${cfg}`, 'tool_call', [stepIds[0]], maxRetries, 'read_file', { path: cfg });
+        const readStep = this.makeStep(
+          `Read ${cfg}`,
+          'tool_call',
+          [stepIds[0]],
+          maxRetries,
+          'read_file',
+          { path: cfg },
+        );
         steps.push(readStep);
         stepIds.push(readStep.id);
       }
 
       // Generate plan based on goal
-      const planStep = this.makeStep('Generate execution plan', 'plan', stepIds.slice(1), maxRetries);
+      const planStep = this.makeStep(
+        'Generate execution plan',
+        'plan',
+        stepIds.slice(1),
+        maxRetries,
+      );
       steps.push(planStep);
       stepIds.push(planStep.id);
 
@@ -202,7 +248,12 @@ export class WorkflowPlanner {
       }
 
       // Final verification
-      const verifyStep = this.makeStep('Verify overall result', 'verify', stepIds.slice(-3), maxRetries);
+      const verifyStep = this.makeStep(
+        'Verify overall result',
+        'verify',
+        stepIds.slice(-3),
+        maxRetries,
+      );
       steps.push(verifyStep);
 
       return {
@@ -254,7 +305,13 @@ export class WorkflowPlanner {
     ];
 
     for (const p of defaultPlan) {
-      const step = this.makeStep(p.desc, p.type, ids.length > 0 ? [ids[ids.length - 1]] : [], maxRetries, p.tool);
+      const step = this.makeStep(
+        p.desc,
+        p.type,
+        ids.length > 0 ? [ids[ids.length - 1]] : [],
+        maxRetries,
+        p.tool,
+      );
       steps.push(step);
       ids.push(step.id);
     }

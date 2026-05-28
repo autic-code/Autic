@@ -26,12 +26,18 @@ export async function runCommand(
   watchdog.start();
 
   if (!script) {
-    console.log(`\n  ${heading('Task Execution Engine')} ${colorText('— run commands and scripts', 'dim')}`);
+    console.log(
+      `\n  ${heading('Task Execution Engine')} ${colorText('— run commands and scripts', 'dim')}`,
+    );
     console.log(`  ${divider(48)}\n`);
     console.log(`  ${colorText('Usage:', 'primary')}\n`);
-    console.log(`    ${colorText('autic run <shell-command>', 'bold')}         Execute a shell command`);
+    console.log(
+      `    ${colorText('autic run <shell-command>', 'bold')}         Execute a shell command`,
+    );
     console.log(`    ${colorText('autic run <script-path>', 'bold')}           Run a script file`);
-    console.log(`    ${colorText('autic run --model <model> <task>', 'bold')}  Run with AI model\n`);
+    console.log(
+      `    ${colorText('autic run --model <model> <task>', 'bold')}  Run with AI model\n`,
+    );
     console.log(`  ${colorText('Examples:', 'dim')}\n`);
     console.log(`    ${colorText('autic run build', 'primary')}`);
     console.log(`    ${colorText('autic run "npm test" --timeout 30000', 'primary')}`);
@@ -61,7 +67,9 @@ export async function runCommand(
   });
 
   orchestrator.transitionTo(task.id, 'queued');
-  process.stdout.write(`  ${colorText('⟳', 'primary')} ${colorText('Task:', 'dim')} ${task.id.slice(0, 12)}...\n`);
+  process.stdout.write(
+    `  ${colorText('⟳', 'primary')} ${colorText('Task:', 'dim')} ${task.id.slice(0, 12)}...\n`,
+  );
 
   // Execute via terminal engine
   orchestrator.transitionTo(task.id, 'running');
@@ -84,15 +92,21 @@ export async function runCommand(
     console.log('');
     if (result.exitCode === 0) {
       orchestrator.transitionTo(task.id, 'completed');
-      console.log(`  ${colorText('✓', 'success')} ${colorText('Completed', 'success')} ${colorText(`(${(result.durationMs / 1000).toFixed(1)}s)`, 'dim')}`);
+      console.log(
+        `  ${colorText('✓', 'success')} ${colorText('Completed', 'success')} ${colorText(`(${(result.durationMs / 1000).toFixed(1)}s)`, 'dim')}`,
+      );
     } else {
       orchestrator.transitionTo(task.id, 'failed');
-      console.log(`  ${colorText('✗', 'error')} ${colorText('Failed', 'error')} ${colorText(`exit code ${result.exitCode} (${(result.durationMs / 1000).toFixed(1)}s)`, 'dim')}`);
+      console.log(
+        `  ${colorText('✗', 'error')} ${colorText('Failed', 'error')} ${colorText(`exit code ${result.exitCode} (${(result.durationMs / 1000).toFixed(1)}s)`, 'dim')}`,
+      );
     }
     console.log(`  ${divider(48)}\n`);
   } catch (error) {
     orchestrator.transitionTo(task.id, 'failed');
-    console.error(`  ${colorText('✗', 'error')} ${colorText('Execution error:', 'error')} ${error instanceof Error ? error.message : String(error)}`);
+    console.error(
+      `  ${colorText('✗', 'error')} ${colorText('Execution error:', 'error')} ${error instanceof Error ? error.message : String(error)}`,
+    );
     console.log(`  ${divider(48)}\n`);
   }
 

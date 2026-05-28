@@ -86,7 +86,10 @@ export class RateLimiter {
     }
 
     // Check TPM
-    if (estimatedTokens > 0 && state.tokensThisMinute + estimatedTokens > state.maxTokensPerMinute) {
+    if (
+      estimatedTokens > 0 &&
+      state.tokensThisMinute + estimatedTokens > state.maxTokensPerMinute
+    ) {
       return false;
     }
 
@@ -157,7 +160,11 @@ export class RateLimiter {
   /**
    * Get rate-limit utilization as a percentage (0-100).
    */
-  getUtilization(providerId: string): { rpmUtilization: number; tpmUtilization: number; concurrencyUtilization: number } {
+  getUtilization(providerId: string): {
+    rpmUtilization: number;
+    tpmUtilization: number;
+    concurrencyUtilization: number;
+  } {
     const state = this.getState(providerId);
 
     return {

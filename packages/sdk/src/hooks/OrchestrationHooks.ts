@@ -52,9 +52,7 @@ export interface OrchestrationHookContext {
 /**
  * Orchestration hook handler
  */
-export type OrchestrationHookHandler = (
-  context: OrchestrationHookContext,
-) => void | Promise<void>;
+export type OrchestrationHookHandler = (context: OrchestrationHookContext) => void | Promise<void>;
 
 /**
  * Orchestration Hooks — managed hook system for orchestration lifecycle

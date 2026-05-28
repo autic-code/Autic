@@ -23,8 +23,17 @@ export interface PipelineRegistryOptions {
 const DEFAULT_FULL_PIPELINE: PipelineDefinition = {
   id: 'full-development',
   name: 'Full Development Pipeline',
-  description: 'Research → Plan → Architecture → Engineering → Verification → Repair → Final Review',
-  stages: ['research', 'planning', 'architecture', 'engineering', 'verification', 'repair', 'final_review'],
+  description:
+    'Research → Plan → Architecture → Engineering → Verification → Repair → Final Review',
+  stages: [
+    'research',
+    'planning',
+    'architecture',
+    'engineering',
+    'verification',
+    'repair',
+    'final_review',
+  ],
   timeoutMs: 600_000,
   maxDelegations: 50,
   safetyProfile: 'balanced',

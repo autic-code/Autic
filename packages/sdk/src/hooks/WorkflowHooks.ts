@@ -82,10 +82,7 @@ export class WorkflowHooks {
   /**
    * Emit a workflow event
    */
-  emit(
-    event: WorkflowHookEvent,
-    context: Omit<WorkflowHookContext, 'event' | 'timestamp'>,
-  ): void {
+  emit(event: WorkflowHookEvent, context: Omit<WorkflowHookContext, 'event' | 'timestamp'>): void {
     const fullContext: WorkflowHookContext = {
       ...context,
       event,

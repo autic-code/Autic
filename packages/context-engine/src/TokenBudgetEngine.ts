@@ -31,8 +31,8 @@ const PROVIDER_CONTEXT_WINDOWS: Record<string, number> = {
 
 // Safety margin percentages per provider type
 const SAFETY_MARGINS: Record<string, number> = {
-  openrouter: 0.8,  // Use 80% of context window
-  ollama: 0.7,      // Use 70% for local models
+  openrouter: 0.8, // Use 80% of context window
+  ollama: 0.7, // Use 70% for local models
   openai: 0.8,
   anthropic: 0.85,
   custom: 0.75,
@@ -86,24 +86,51 @@ export class TokenBudgetEngine {
   /**
    * Estimate a token budget without full assembly.
    */
-  async estimateBudget(
-    maxTokens: number,
-    _goal: string,
-  ): Promise<TokenBudget> {
+  async estimateBudget(maxTokens: number, _goal: string): Promise<TokenBudget> {
     const safetyMargin = 0.8;
     const totalTokens = Math.min(maxTokens, 128_000 * safetyMargin);
 
     const breakdown: TokenBudgetBreakdown[] = [
-      { category: 'system_prompt', tokens: Math.round(totalTokens * 0.08), percentage: 8, maxTokens: Math.round(totalTokens * 0.1) },
-      { category: 'files', tokens: Math.round(totalTokens * 0.5), percentage: 50, maxTokens: Math.round(totalTokens * 0.65) },
-      { category: 'conversation_history', tokens: Math.round(totalTokens * 0.15), percentage: 15, maxTokens: Math.round(totalTokens * 0.2) },
-      { category: 'learning_memory', tokens: Math.round(totalTokens * 0.07), percentage: 7, maxTokens: Math.round(totalTokens * 0.1) },
-      { category: 'execution_context', tokens: Math.round(totalTokens * 0.05), percentage: 5, maxTokens: Math.round(totalTokens * 0.08) },
-      { category: 'available', tokens: Math.round(totalTokens * 0.15), percentage: 15, maxTokens: Math.round(totalTokens * 1) },
+      {
+        category: 'system_prompt',
+        tokens: Math.round(totalTokens * 0.08),
+        percentage: 8,
+        maxTokens: Math.round(totalTokens * 0.1),
+      },
+      {
+        category: 'files',
+        tokens: Math.round(totalTokens * 0.5),
+        percentage: 50,
+        maxTokens: Math.round(totalTokens * 0.65),
+      },
+      {
+        category: 'conversation_history',
+        tokens: Math.round(totalTokens * 0.15),
+        percentage: 15,
+        maxTokens: Math.round(totalTokens * 0.2),
+      },
+      {
+        category: 'learning_memory',
+        tokens: Math.round(totalTokens * 0.07),
+        percentage: 7,
+        maxTokens: Math.round(totalTokens * 0.1),
+      },
+      {
+        category: 'execution_context',
+        tokens: Math.round(totalTokens * 0.05),
+        percentage: 5,
+        maxTokens: Math.round(totalTokens * 0.08),
+      },
+      {
+        category: 'available',
+        tokens: Math.round(totalTokens * 0.15),
+        percentage: 15,
+        maxTokens: Math.round(totalTokens * 1),
+      },
     ];
 
     const usedTokens = breakdown
-      .filter(b => b.category !== 'available')
+      .filter((b) => b.category !== 'available')
       .reduce((s, b) => s + b.tokens, 0);
 
     return {

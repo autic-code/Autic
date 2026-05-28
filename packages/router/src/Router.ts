@@ -10,7 +10,13 @@
  * - Rate-limit awareness (via RateLimiter)
  */
 
-import type { ChatRequest, ChatResponse, ModelInfo, RoutingConfig, RoutingStrategy } from '@autic/shared';
+import type {
+  ChatRequest,
+  ChatResponse,
+  ModelInfo,
+  RoutingConfig,
+  RoutingStrategy,
+} from '@autic/shared';
 import type { LLMProvider, ProviderRegistry, RateLimiter } from '@autic/providers';
 
 export interface RoutingRule {
@@ -149,7 +155,10 @@ export class Router {
       let score = 0;
 
       // Direct model match = highest score
-      const direct = this.rules.find((r) => r.providerId === id && (modelId.startsWith(r.pattern) || modelId.includes(r.pattern)));
+      const direct = this.rules.find(
+        (r) =>
+          r.providerId === id && (modelId.startsWith(r.pattern) || modelId.includes(r.pattern)),
+      );
       if (direct) {
         score = direct.priority;
       }
@@ -206,7 +215,10 @@ export class Router {
   /**
    * Chat with automatic fallback on failure.
    */
-  async chatWithFallback(request: ChatRequest, config?: Partial<RoutingConfig>): Promise<ChatResponse> {
+  async chatWithFallback(
+    request: ChatRequest,
+    config?: Partial<RoutingConfig>,
+  ): Promise<ChatResponse> {
     const routingConfig = { ...this.defaultConfig, ...config };
     const maxRetries = routingConfig.maxRetries || 2;
 
@@ -268,9 +280,7 @@ export class Router {
 
   // === Health Checks ===
 
-  async healthCheckAll(): Promise<
-    Array<{ providerId: string; status: string; error?: string }>
-  > {
+  async healthCheckAll(): Promise<Array<{ providerId: string; status: string; error?: string }>> {
     const results: Array<{ providerId: string; status: string; error?: string }> = [];
     for (const provider of this.providers.values()) {
       try {
@@ -304,14 +314,17 @@ export class Router {
 
   private executeWithTracking(provider: LLMProvider, request: ChatRequest): Promise<ChatResponse> {
     const start = Date.now();
-    return provider.chat(request).then((response) => {
-      const latency = Date.now() - start;
-      this.recordSuccess(provider.id, latency);
-      return response;
-    }).catch((error) => {
-      this.recordFailure(provider.id);
-      throw error;
-    });
+    return provider
+      .chat(request)
+      .then((response) => {
+        const latency = Date.now() - start;
+        this.recordSuccess(provider.id, latency);
+        return response;
+      })
+      .catch((error) => {
+        this.recordFailure(provider.id);
+        throw error;
+      });
   }
 
   private recordSuccess(providerId: string, latencyMs: number): void {

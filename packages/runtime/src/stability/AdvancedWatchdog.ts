@@ -28,7 +28,12 @@ export interface AdvancedWatchdogEvents {
   toolStalled: (info: { toolName: string; taskId: string; durationMs: number }) => void;
   heartbeatMissed: (info: { component: string; componentId: string; missedBeats: number }) => void;
   orchestrationTimeout: (info: { stage: string; pipelineId: string; timeoutMs: number }) => void;
-  livenessChanged: (info: { component: string; componentId: string; from: string; to: string }) => void;
+  livenessChanged: (info: {
+    component: string;
+    componentId: string;
+    from: string;
+    to: string;
+  }) => void;
 }
 
 interface ToolTracker {
@@ -50,7 +55,10 @@ export class AdvancedWatchdog extends Watchdog {
   private toolTracker: Map<string, ToolTracker> = new Map();
   private heartbeats: Map<string, HeartbeatMetrics> = new Map();
   private dependencyGraph: DependencyEdge[] = [];
-  private stageTimers: Map<string, { stage: string; pipelineId: string; startedAt: number; timeoutMs: number }> = new Map();
+  private stageTimers: Map<
+    string,
+    { stage: string; pipelineId: string; startedAt: number; timeoutMs: number }
+  > = new Map();
 
   constructor(options: AdvancedWatchdogOptions = {}) {
     super(options);
@@ -127,7 +135,12 @@ export class AdvancedWatchdog extends Watchdog {
         this.emit('livenessChanged', { component, componentId, from: prevStatus, to: 'alive' });
       }
     } else {
-      this.registerHeartbeat(component, componentId, this.advOptions.workflowHeartbeatIntervalMs, metadata);
+      this.registerHeartbeat(
+        component,
+        componentId,
+        this.advOptions.workflowHeartbeatIntervalMs,
+        metadata,
+      );
     }
   }
 
@@ -155,9 +168,7 @@ export class AdvancedWatchdog extends Watchdog {
   }
 
   clearDependencies(taskId: string): void {
-    this.dependencyGraph = this.dependencyGraph.filter(
-      (e) => e.from !== taskId && e.to !== taskId,
-    );
+    this.dependencyGraph = this.dependencyGraph.filter((e) => e.from !== taskId && e.to !== taskId);
   }
 
   detectDeadlocks(): Array<{ tasks: string[]; cycle: string[] }> {

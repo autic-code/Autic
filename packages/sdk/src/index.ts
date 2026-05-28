@@ -70,10 +70,7 @@ export type {
 } from './hooks/index.js';
 
 // Permission management
-export {
-  PermissionManager,
-  PERMISSION_SCOPES,
-} from './permissions/index.js';
+export { PermissionManager, PERMISSION_SCOPES } from './permissions/index.js';
 
 export type {
   PermissionCheck,
@@ -84,16 +81,9 @@ export type {
 // Version compatibility
 export { VersionCompatibilityChecker } from './version/index.js';
 
-export type {
-  CompatibilityCheckResult,
-  CompatibilityCheckConfig,
-} from './version/index.js';
+export type { CompatibilityCheckResult, CompatibilityCheckConfig } from './version/index.js';
 
 // Ecosystem discovery
 export { EcosystemDiscovery } from './discovery/index.js';
 
-export type {
-  DiscoveryConfig,
-  DiscoveredExtension,
-  DiscoveryResult,
-} from './discovery/index.js';
+export type { DiscoveryConfig, DiscoveredExtension, DiscoveryResult } from './discovery/index.js';

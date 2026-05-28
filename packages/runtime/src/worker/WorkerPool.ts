@@ -52,7 +52,11 @@ export class WorkerPool extends EventEmitter {
 
     // Start idle check
     this.idleCheckTimer = setInterval(() => this.checkIdle(), 30_000);
-    if (this.idleCheckTimer && typeof this.idleCheckTimer === 'object' && 'unref' in this.idleCheckTimer) {
+    if (
+      this.idleCheckTimer &&
+      typeof this.idleCheckTimer === 'object' &&
+      'unref' in this.idleCheckTimer
+    ) {
       this.idleCheckTimer.unref();
     }
   }
@@ -68,7 +72,12 @@ export class WorkerPool extends EventEmitter {
     });
   }
 
-  getStats(): { activeWorkers: number; idleWorkers: number; queuedTasks: number; totalWorkers: number } {
+  getStats(): {
+    activeWorkers: number;
+    idleWorkers: number;
+    queuedTasks: number;
+    totalWorkers: number;
+  } {
     return {
       activeWorkers: this.workers.filter((w) => w.busy).length,
       idleWorkers: this.workers.filter((w) => !w.busy).length,

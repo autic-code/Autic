@@ -30,10 +30,7 @@ export class TerminalEngine extends EventEmitter {
    * Execute a shell command with safety controls.
    * Returns structured output with timing, exit code, and streams.
    */
-  async execute(
-    options: TerminalOptions,
-    taskId?: string,
-  ): Promise<TerminalResult> {
+  async execute(options: TerminalOptions, taskId?: string): Promise<TerminalResult> {
     const startTime = Date.now();
     const timeoutMs = options.timeoutMs || this.defaultTimeoutMs;
 
@@ -45,9 +42,7 @@ export class TerminalEngine extends EventEmitter {
 
       const child = spawn(options.command, options.args, {
         cwd: options.cwd || process.cwd(),
-        env: options.env
-          ? { ...process.env, ...options.env }
-          : process.env,
+        env: options.env ? { ...process.env, ...options.env } : process.env,
         stdio: ['pipe', 'pipe', 'pipe'],
         shell: true,
       });

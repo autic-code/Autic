@@ -71,10 +71,7 @@ export class RiskClassifier {
   private rules: Array<{ pattern: string; level: RiskLevel }>;
   private permissionManager: PermissionManager;
 
-  constructor(
-    config: RiskAssessmentConfig = {},
-    permissionManager?: PermissionManager,
-  ) {
+  constructor(config: RiskAssessmentConfig = {}, permissionManager?: PermissionManager) {
     this.rules = [...DEFAULT_RISK_RULES, ...(config.overrides || [])];
     this.permissionManager = permissionManager || new PermissionManager();
   }
@@ -83,7 +80,10 @@ export class RiskClassifier {
    * Classify the risk level of an action.
    * Returns the assessed risk level and any matching rule.
    */
-  classify(action: string, resource: string): {
+  classify(
+    action: string,
+    resource: string,
+  ): {
     level: RiskLevel;
     score: number;
     reasons: string[];

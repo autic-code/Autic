@@ -121,8 +121,8 @@ export class ModelRegistry {
    * Get all models matching a capability.
    */
   getModelsWithCapability(capability: ModelCapability['type']): ModelRegistryEntry[] {
-    return Array.from(this.models.values()).filter(
-      (entry) => entry.model.capabilities.some((c) => c.type === capability),
+    return Array.from(this.models.values()).filter((entry) =>
+      entry.model.capabilities.some((c) => c.type === capability),
     );
   }
 
@@ -229,12 +229,23 @@ export class ModelRegistry {
     const all = this.getAllModels();
 
     return {
-      fast: all.filter((e) =>
-        e.model.id.includes('mini') || e.model.id.includes('haiku') || e.model.id.includes('flash'),
-      ).slice(0, 3),
-      capable: all.filter((e) =>
-        e.model.id.includes('gpt-4o') || e.model.id.includes('sonnet') || e.model.id.includes('opus') || e.model.id.includes('claude-3.5'),
-      ).slice(0, 3),
+      fast: all
+        .filter(
+          (e) =>
+            e.model.id.includes('mini') ||
+            e.model.id.includes('haiku') ||
+            e.model.id.includes('flash'),
+        )
+        .slice(0, 3),
+      capable: all
+        .filter(
+          (e) =>
+            e.model.id.includes('gpt-4o') ||
+            e.model.id.includes('sonnet') ||
+            e.model.id.includes('opus') ||
+            e.model.id.includes('claude-3.5'),
+        )
+        .slice(0, 3),
       local: all.filter((e) => e.isLocal).slice(0, 3),
     };
   }

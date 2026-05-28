@@ -5,7 +5,6 @@
 
 import { EventEmitter } from 'events';
 
-
 /**
  * Template metadata
  */
@@ -136,10 +135,7 @@ export class TemplateRegistry extends EventEmitter {
   /**
    * Scaffold a project from a template
    */
-  async scaffold(
-    templateId: string,
-    options: ScaffoldOptions,
-  ): Promise<ScaffoldResult> {
+  async scaffold(templateId: string, options: ScaffoldOptions): Promise<ScaffoldResult> {
     const template = this.templates.get(templateId);
     if (!template) {
       return {

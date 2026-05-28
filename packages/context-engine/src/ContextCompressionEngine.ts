@@ -34,10 +34,7 @@ export class ContextCompressionEngine {
   /**
    * Compress a list of files — applies summarization to large files.
    */
-  compressFiles(
-    files: FileContext[],
-    options: CompressionOptions = {},
-  ): FileContext[] {
+  compressFiles(files: FileContext[], options: CompressionOptions = {}): FileContext[] {
     const maxTokens = options.maxTokens || 48_000;
 
     const compressed: FileContext[] = [];
@@ -98,15 +95,17 @@ export class ContextCompressionEngine {
   /**
    * Summarize a list of execution history entries into compact form.
    */
-  summarizeHistory<T extends { description?: string; type?: string; status?: string; durationMs?: number }>(
-    entries: T[],
-  ): string {
+  summarizeHistory<
+    T extends { description?: string; type?: string; status?: string; durationMs?: number },
+  >(entries: T[]): string {
     if (entries.length === 0) return '';
 
     const total = entries.length;
-    const completed = entries.filter(e => e.status === 'completed' || e.status === 'success').length;
-    const failed = entries.filter(e => e.status === 'failed').length;
-    const types = [...new Set(entries.map(e => e.type).filter(Boolean))];
+    const completed = entries.filter(
+      (e) => e.status === 'completed' || e.status === 'success',
+    ).length;
+    const failed = entries.filter((e) => e.status === 'failed').length;
+    const types = [...new Set(entries.map((e) => e.type).filter(Boolean))];
     const totalDuration = entries.reduce((s, e) => s + (e.durationMs || 0), 0);
 
     const parts: string[] = [
@@ -125,7 +124,7 @@ export class ContextCompressionEngine {
    */
   deduplicateFiles(files: FileContext[]): FileContext[] {
     const seen = new Set<string>();
-    return files.filter(f => {
+    return files.filter((f) => {
       if (seen.has(f.path)) return false;
       seen.add(f.path);
       return true;
@@ -146,7 +145,12 @@ export class ContextCompressionEngine {
     }
     for (const line of lines) {
       if (keyLines.length >= 10) break;
-      if (line.startsWith('#') || line.startsWith('//') || line.startsWith('/*') || line.startsWith('*')) {
+      if (
+        line.startsWith('#') ||
+        line.startsWith('//') ||
+        line.startsWith('/*') ||
+        line.startsWith('*')
+      ) {
         keyLines.push(line);
       }
     }

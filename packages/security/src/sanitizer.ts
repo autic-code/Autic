@@ -4,7 +4,7 @@
  */
 
 const SENSITIVE_PATTERNS: RegExp[] = [
-  /sk-[a-zA-Z0-9]{20,}/g,                // OpenAI-style keys
+  /sk-[a-zA-Z0-9]{20,}/g, // OpenAI-style keys
   /(?:api[_-]?key|apikey|secret|token|password)\s*[:=]\s*['"]?[a-zA-Z0-9_\-]{16,}/gi,
   /Bearer\s+[a-zA-Z0-9_\-./+=]{20,}/g,
   /Authorization:\s*(?:Bearer|Basic)\s+[a-zA-Z0-9_\-./+=]{16,}/g,
@@ -67,9 +67,7 @@ export class Sanitizer {
   sanitizeHeaders(headers: Record<string, string>): Record<string, string> {
     const sanitized: Record<string, string> = {};
     for (const [key, value] of Object.entries(headers)) {
-      sanitized[key] = SENSITIVE_HEADERS.includes(key.toLowerCase())
-        ? this.maskWith
-        : value;
+      sanitized[key] = SENSITIVE_HEADERS.includes(key.toLowerCase()) ? this.maskWith : value;
     }
     return sanitized;
   }

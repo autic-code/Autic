@@ -555,7 +555,12 @@ export type ProviderErrorCode =
   | 'network_error';
 
 /** Routing strategies */
-export type RoutingStrategy = 'priority' | 'fallback' | 'round_robin' | 'lowest_latency' | 'preferred';
+export type RoutingStrategy =
+  | 'priority'
+  | 'fallback'
+  | 'round_robin'
+  | 'lowest_latency'
+  | 'preferred';
 
 export interface RoutingConfig {
   strategy: RoutingStrategy;
@@ -650,7 +655,14 @@ export type WorkflowStepStatus =
 export interface WorkflowState {
   planId: string;
   goal: string;
-  status: 'planning' | 'executing' | 'verifying' | 'repairing' | 'completed' | 'failed' | 'cancelled';
+  status:
+    | 'planning'
+    | 'executing'
+    | 'verifying'
+    | 'repairing'
+    | 'completed'
+    | 'failed'
+    | 'cancelled';
   currentStepIndex: number;
   steps: WorkflowStep[];
   startedAt: number;
@@ -744,7 +756,7 @@ export type ExecutionEventType =
   | 'workflow:failed'
   | 'workflow:cancelled'
   | 'workflow:paused'
-  | 'workflow:resumed'
+  | 'workflow:resumed';
 
 /** === Phase 6 — Security + Permission + Secret Protection Types === */
 
@@ -831,7 +843,12 @@ export interface SecurityValidation {
 }
 
 export interface SecurityValidationCheck {
-  type: 'unsafe_workflow' | 'permission_escalation' | 'provider_trust' | 'suspicious_pattern' | 'custom';
+  type:
+    | 'unsafe_workflow'
+    | 'permission_escalation'
+    | 'provider_trust'
+    | 'suspicious_pattern'
+    | 'custom';
   name: string;
   passed: boolean;
   message: string;
@@ -873,7 +890,13 @@ export type OrchestrationStage =
   | 'cancelled';
 
 /** Execution status of a pipeline or stage */
-export type OrchestrationStatus = 'idle' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
+export type OrchestrationStatus =
+  | 'idle'
+  | 'running'
+  | 'paused'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
 
 /** Pipeline definition — ordered stages for a role-based workflow */
 export interface PipelineDefinition {
@@ -1130,7 +1153,14 @@ export interface TelemetryMetrics {
 
 /** Graceful shutdown state */
 export interface ShutdownState {
-  phase: 'idle' | 'preparing' | 'saving' | 'stopping_workers' | 'persisting_queue' | 'cleaning_subprocesses' | 'complete';
+  phase:
+    | 'idle'
+    | 'preparing'
+    | 'saving'
+    | 'stopping_workers'
+    | 'persisting_queue'
+    | 'cleaning_subprocesses'
+    | 'complete';
   startedAt: number;
   completedAt?: number;
   saveErrors: string[];
@@ -1278,12 +1308,7 @@ export interface SkillValidation {
 /** === Phase 10 — Engineering Learning + Operational Intelligence Types === */
 
 /** Learning storage categories */
-export type LearningCategory =
-  | 'error'
-  | 'fix'
-  | 'pattern'
-  | 'optimization'
-  | 'verification';
+export type LearningCategory = 'error' | 'fix' | 'pattern' | 'optimization' | 'verification';
 
 /** Learning entry — structured record in the learning system */
 export interface LearningEntry {
@@ -1394,7 +1419,12 @@ export interface PreBuildContext {
 /** Operational optimization record */
 export interface OperationalOptimization {
   id: string;
-  type: 'provider_selection' | 'queue_strategy' | 'retry_pattern' | 'execution_pattern' | 'workflow_efficiency';
+  type:
+    | 'provider_selection'
+    | 'queue_strategy'
+    | 'retry_pattern'
+    | 'execution_pattern'
+    | 'workflow_efficiency';
   description: string;
   successCount: number;
   failureCount: number;
@@ -1524,7 +1554,15 @@ export interface DelegationContract {
 export interface ExecutionPartition {
   id: string;
   name: string;
-  domain: 'frontend' | 'backend' | 'infrastructure' | 'data' | 'security' | 'testing' | 'documentation' | 'general';
+  domain:
+    | 'frontend'
+    | 'backend'
+    | 'infrastructure'
+    | 'data'
+    | 'security'
+    | 'testing'
+    | 'documentation'
+    | 'general';
   agents: string[];
   concurrency: number;
   activeJobs: number;
@@ -1724,7 +1762,13 @@ export interface TokenBudget {
 }
 
 export interface TokenBudgetBreakdown {
-  category: 'files' | 'system_prompt' | 'conversation_history' | 'learning_memory' | 'execution_context' | 'available';
+  category:
+    | 'files'
+    | 'system_prompt'
+    | 'conversation_history'
+    | 'learning_memory'
+    | 'execution_context'
+    | 'available';
   tokens: number;
   percentage: number;
   maxTokens: number;

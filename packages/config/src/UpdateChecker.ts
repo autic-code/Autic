@@ -139,7 +139,8 @@ export class UpdateChecker {
     };
 
     const version = data.version || CURRENT_VERSION;
-    const isPrerelease = version.includes('-') || version.includes('alpha') || version.includes('beta');
+    const isPrerelease =
+      version.includes('-') || version.includes('alpha') || version.includes('beta');
 
     return { version, isPrerelease };
   }

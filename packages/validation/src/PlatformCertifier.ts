@@ -68,12 +68,12 @@ export class PlatformCertifier {
    */
   async certify(): Promise<CertificationReport> {
     const checks: CertificationCheck[] = [
-      ...await this.checkLocalFirst(),
-      ...await this.checkBYOK(),
-      ...await this.checkOfflineSafe(),
-      ...await this.checkOrchestrationStability(),
-      ...await this.checkSecurityBoundaries(),
-      ...await this.checkEcosystemSafety(),
+      ...(await this.checkLocalFirst()),
+      ...(await this.checkBYOK()),
+      ...(await this.checkOfflineSafe()),
+      ...(await this.checkOrchestrationStability()),
+      ...(await this.checkSecurityBoundaries()),
+      ...(await this.checkEcosystemSafety()),
     ];
 
     const passed = checks.filter((c) => c.passed).length;
@@ -95,7 +95,9 @@ export class PlatformCertifier {
   /**
    * Public wrapper — validate local-first integrity
    */
-  async validateLocalFirst(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateLocalFirst(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const checks = await this.checkLocalFirst();
     return checks.map((c) => ({
       name: c.name,
@@ -108,7 +110,9 @@ export class PlatformCertifier {
   /**
    * Public wrapper — validate BYOK guarantees
    */
-  async validateBYOK(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateBYOK(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const checks = await this.checkBYOK();
     return checks.map((c) => ({
       name: c.name,
@@ -121,7 +125,9 @@ export class PlatformCertifier {
   /**
    * Public wrapper — validate offline-safe workflows
    */
-  async validateOfflineSafe(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateOfflineSafe(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const checks = await this.checkOfflineSafe();
     return checks.map((c) => ({
       name: c.name,
@@ -134,7 +140,9 @@ export class PlatformCertifier {
   /**
    * Public wrapper — validate orchestration stability
    */
-  async validateOrchestrationStability(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateOrchestrationStability(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const checks = await this.checkOrchestrationStability();
     return checks.map((c) => ({
       name: c.name,
@@ -147,7 +155,9 @@ export class PlatformCertifier {
   /**
    * Public wrapper — validate security boundaries
    */
-  async validateSecurityBoundaries(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateSecurityBoundaries(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const checks = await this.checkSecurityBoundaries();
     return checks.map((c) => ({
       name: c.name,
@@ -160,7 +170,9 @@ export class PlatformCertifier {
   /**
    * Public wrapper — validate ecosystem safety
    */
-  async validateEcosystemSafety(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateEcosystemSafety(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const checks = await this.checkEcosystemSafety();
     return checks.map((c) => ({
       name: c.name,

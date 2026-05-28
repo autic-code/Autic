@@ -36,18 +36,35 @@ export class SecureContextGenerator {
 
   /** File extensions to exclude from context */
   private readonly EXCLUDED_EXTENSIONS = new Set([
-    '.env', '.env.local', '.env.production', '.env.development',
-    '.key', '.pem', '.crt', '.cert', '.keystore',
-    '.gitconfig', '.netrc', '.npmrc', '.yarnrc',
+    '.env',
+    '.env.local',
+    '.env.production',
+    '.env.development',
+    '.key',
+    '.pem',
+    '.crt',
+    '.cert',
+    '.keystore',
+    '.gitconfig',
+    '.netrc',
+    '.npmrc',
+    '.yarnrc',
   ]);
 
   /** File names to exclude from context */
   private readonly EXCLUDED_FILES = new Set([
-    '.env', '.env.local', '.env.example',
-    'id_rsa', 'id_ed25519', 'known_hosts',
-    '.git-credentials', '.dockerconfigjson',
-    'credentials.json', 'service-account.json',
-    '.npmrc', '.yarnrc',
+    '.env',
+    '.env.local',
+    '.env.example',
+    'id_rsa',
+    'id_ed25519',
+    'known_hosts',
+    '.git-credentials',
+    '.dockerconfigjson',
+    'credentials.json',
+    'service-account.json',
+    '.npmrc',
+    '.yarnrc',
   ]);
 
   /** File patterns to always strip from context */

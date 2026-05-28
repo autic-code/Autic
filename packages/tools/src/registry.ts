@@ -25,7 +25,9 @@ export class ToolRegistry {
   }
 
   findByCapability(capability: string): ToolDefinition[] {
-    return this.list().filter((t) => t.description.toLowerCase().includes(capability.toLowerCase()));
+    return this.list().filter((t) =>
+      t.description.toLowerCase().includes(capability.toLowerCase()),
+    );
   }
 
   count(): number {

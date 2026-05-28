@@ -52,7 +52,8 @@ export class CrashRecoveryHardener {
       failedAgentRecovery,
       safeResumability,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['All crash recovery checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['All crash recovery checks passed'],
     };
   }
 
@@ -76,9 +77,19 @@ export class CrashRecoveryHardener {
     return true;
   }
 
-  async recoverWorkflow(
-    snapshot: { taskId: string; state: string; completedSteps: unknown[]; pendingSteps: unknown[]; currentStepIndex: number; timestamp: number },
-  ): Promise<{ recovered: boolean; restoredSteps: number; pendingSteps: number; issues: string[] }> {
+  async recoverWorkflow(snapshot: {
+    taskId: string;
+    state: string;
+    completedSteps: unknown[];
+    pendingSteps: unknown[];
+    currentStepIndex: number;
+    timestamp: number;
+  }): Promise<{
+    recovered: boolean;
+    restoredSteps: number;
+    pendingSteps: number;
+    issues: string[];
+  }> {
     const issues: string[] = [];
 
     // Validate snapshot freshness

@@ -68,11 +68,13 @@ export async function chaosCommand(action?: string): Promise<void> {
       for (const scenario of scenarios) {
         console.log(`  ${colorText('⟳', 'primary')} Running ${scenario.name}...`);
         const results = await scenario.fn();
-        const passed = results.filter(r => r.passed).length;
-        const failed = results.filter(r => !r.passed).length;
+        const passed = results.filter((r) => r.passed).length;
+        const failed = results.filter((r) => !r.passed).length;
         totalPassed += passed;
         totalFailed += failed;
-        console.log(`  ${colorText('✓', 'success')} ${scenario.name}: ${passed} passed, ${failed} failed\n`);
+        console.log(
+          `  ${colorText('✓', 'success')} ${scenario.name}: ${passed} passed, ${failed} failed\n`,
+        );
       }
 
       console.log(divider());
@@ -84,12 +86,17 @@ export async function chaosCommand(action?: string): Promise<void> {
   }
 }
 
-function printScenarioResults(label: string, results: Array<{ name: string; passed: boolean; error?: string }>): void {
-  const passed = results.filter(r => r.passed);
-  const failed = results.filter(r => !r.passed);
+function printScenarioResults(
+  label: string,
+  results: Array<{ name: string; passed: boolean; error?: string }>,
+): void {
+  const passed = results.filter((r) => r.passed);
+  const failed = results.filter((r) => !r.passed);
 
   console.log(`  ${colorText(label, 'bold')}`);
-  console.log(`  Passed: ${colorText(passed.length.toString(), 'success')}  Failed: ${colorText(failed.length.toString(), 'error')}`);
+  console.log(
+    `  Passed: ${colorText(passed.length.toString(), 'success')}  Failed: ${colorText(failed.length.toString(), 'error')}`,
+  );
 
   for (const result of results) {
     const icon = result.passed ? colorText('✓', 'success') : colorText('✗', 'error');

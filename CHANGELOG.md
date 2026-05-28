@@ -5,6 +5,7 @@ All notable changes to Autic will be documented in this file.
 ## [0.1.0] — 2026-05-28
 
 ### Added
+
 - Initial release — CLI-native autonomous AI engineering runtime
 - 27 internal packages + CLI application
 - Provider orchestration: OpenRouter, OpenAI, Anthropic, Ollama
@@ -23,6 +24,7 @@ All notable changes to Autic will be documented in this file.
 - Comprehensive documentation: architecture, subsystem contracts, troubleshooting
 
 ### Architecture
+
 - Monorepo with pnpm workspaces — 27 packages + 1 CLI app
 - Strict TypeScript with ES modules throughout
 - Deterministic orchestration — no AGI abstractions

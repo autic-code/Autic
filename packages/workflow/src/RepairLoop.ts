@@ -75,9 +75,10 @@ export class RepairLoop {
         classification,
         attempts: 0,
         durationMs: Date.now() - startTime,
-        finalError: this.totalRetries >= (this.options.maxTotalRetries || 10)
-          ? 'Maximum total retries exceeded'
-          : `Non-retryable failure: ${classification.description}`,
+        finalError:
+          this.totalRetries >= (this.options.maxTotalRetries || 10)
+            ? 'Maximum total retries exceeded'
+            : `Non-retryable failure: ${classification.description}`,
       };
     }
 

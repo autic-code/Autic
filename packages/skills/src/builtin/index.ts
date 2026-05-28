@@ -23,7 +23,11 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
       { toolId: 'write_file', allowed: true },
       { toolId: 'search_files', allowed: true },
       { toolId: 'list_files', allowed: true },
-      { toolId: 'run_terminal', allowed: true, resourcePattern: 'npm test|pnpm test|tsc|build|lint' },
+      {
+        toolId: 'run_terminal',
+        allowed: true,
+        resourcePattern: 'npm test|pnpm test|tsc|build|lint',
+      },
     ],
     maxExecutionDepth: 10,
     timeoutMs: 300_000,
@@ -35,7 +39,8 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
     id: 'repo-analyzer',
     name: 'Repository Analyzer',
     version: '1.0.0',
-    description: 'Analyze repository structure, dependencies, and architecture. Read-only by default.',
+    description:
+      'Analyze repository structure, dependencies, and architecture. Read-only by default.',
     type: 'executable',
     capabilities: ['read-only', 'repo-analysis', 'dependency-analysis', 'architecture-detection'],
     preferredModel: 'claude-3-haiku',
@@ -56,7 +61,8 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
     id: 'typescript-engineer',
     name: 'TypeScript Engineer',
     version: '1.0.0',
-    description: 'TypeScript-specific engineering: types, generics, refactoring, and strict-mode fixes',
+    description:
+      'TypeScript-specific engineering: types, generics, refactoring, and strict-mode fixes',
     type: 'executable',
     capabilities: ['code-generation', 'typescript', 'type-fixing', 'refactoring', 'code-fixing'],
     preferredModel: 'claude-3.5-sonnet',
@@ -66,11 +72,24 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
       { toolId: 'write_file', allowed: true },
       { toolId: 'search_files', allowed: true },
       { toolId: 'list_files', allowed: true },
-      { toolId: 'run_terminal', allowed: true, resourcePattern: 'tsc|pnpm build|npm run build|npx tsc' },
+      {
+        toolId: 'run_terminal',
+        allowed: true,
+        resourcePattern: 'tsc|pnpm build|npm run build|npx tsc',
+      },
     ],
     maxExecutionDepth: 15,
     timeoutMs: 300_000,
-    workflowPipeline: ['analyze', 'tool_call', 'plan', 'tool_call', 'verify', 'repair', 'verify', 'complete'],
+    workflowPipeline: [
+      'analyze',
+      'tool_call',
+      'plan',
+      'tool_call',
+      'verify',
+      'repair',
+      'verify',
+      'complete',
+    ],
   },
 
   // ---- debugging-specialist ----
@@ -91,7 +110,16 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
     ],
     maxExecutionDepth: 10,
     timeoutMs: 300_000,
-    workflowPipeline: ['analyze', 'tool_call', 'tool_call', 'plan', 'tool_call', 'verify', 'repair', 'verify'],
+    workflowPipeline: [
+      'analyze',
+      'tool_call',
+      'tool_call',
+      'plan',
+      'tool_call',
+      'verify',
+      'repair',
+      'verify',
+    ],
   },
 
   // ---- startup-builder ----
@@ -99,7 +127,8 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
     id: 'startup-builder',
     name: 'Startup Builder',
     version: '1.0.0',
-    description: 'Full project scaffolding: analyze requirements, scaffold structure, configure, verify',
+    description:
+      'Full project scaffolding: analyze requirements, scaffold structure, configure, verify',
     type: 'executable',
     capabilities: ['code-generation', 'scaffolding', 'project-setup', 'architecture-design'],
     preferredModel: 'claude-3.5-sonnet',
@@ -109,11 +138,24 @@ const BUILTIN_SKILLS: SkillDefinition[] = [
       { toolId: 'write_file', allowed: true },
       { toolId: 'list_files', allowed: true },
       { toolId: 'search_files', allowed: true },
-      { toolId: 'run_terminal', allowed: true, resourcePattern: 'pnpm|npm|npx|mkdir|git init|tsc|build' },
+      {
+        toolId: 'run_terminal',
+        allowed: true,
+        resourcePattern: 'pnpm|npm|npx|mkdir|git init|tsc|build',
+      },
     ],
     maxExecutionDepth: 20,
     timeoutMs: 600_000,
-    workflowPipeline: ['analyze', 'tool_call', 'plan', 'tool_call', 'tool_call', 'tool_call', 'verify', 'complete'],
+    workflowPipeline: [
+      'analyze',
+      'tool_call',
+      'plan',
+      'tool_call',
+      'tool_call',
+      'tool_call',
+      'verify',
+      'complete',
+    ],
   },
 ];
 
@@ -137,9 +179,7 @@ export function registerBuiltinSkills(
         capabilities: skill.capabilities,
         maxDepth: skill.maxExecutionDepth || 10,
         timeoutMs: skill.timeoutMs || 300_000,
-        allowedTools: skill.toolPermissions
-          .filter((p) => p.allowed)
-          .map((p) => p.toolId),
+        allowedTools: skill.toolPermissions.filter((p) => p.allowed).map((p) => p.toolId),
         preferredModel: skill.preferredModel,
         preferredProvider: skill.preferredProvider,
         defaultPipeline: skill.workflowPipeline,

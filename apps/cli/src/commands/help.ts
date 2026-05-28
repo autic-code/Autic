@@ -42,7 +42,10 @@ const COMMAND_GROUPS: HelpSection[] = [
       { cmd: 'providers', desc: 'List, add, remove, and check providers' },
       { cmd: 'providers add', desc: 'Add a provider (openrouter, ollama)' },
       { cmd: 'providers check', desc: 'Test provider connectivity and key validation' },
-      { cmd: 'providers setup', desc: 'Guided onboarding with API verification and model discovery' },
+      {
+        cmd: 'providers setup',
+        desc: 'Guided onboarding with API verification and model discovery',
+      },
       { cmd: 'models', desc: 'Search, list, and install models' },
     ],
   },

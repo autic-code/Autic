@@ -18,7 +18,7 @@ export async function listFilesTool(args: ListFilesArgs): Promise<ToolResult> {
     const entries = await readdir(args.path, { withFileTypes: true });
     const files = entries.map((e) => ({
       name: e.name,
-      type: e.isDirectory() ? 'directory' as const : 'file' as const,
+      type: e.isDirectory() ? ('directory' as const) : ('file' as const),
     }));
     return {
       success: true,

@@ -64,10 +64,7 @@ import {
 
 const program = new Command();
 
-program
-  .name(CLI_NAME)
-  .version(CLI_VERSION)
-  .description(CLI_DESCRIPTION);
+program.name(CLI_NAME).version(CLI_VERSION).description(CLI_DESCRIPTION);
 
 // autic init
 program
@@ -199,7 +196,9 @@ program
 // autic orchestrate
 program
   .command('orchestrate')
-  .description('Run the full R&D pipeline system (Research → Plan → Architect → Engineer → Verify → Repair → Final Review)')
+  .description(
+    'Run the full R&D pipeline system (Research → Plan → Architect → Engineer → Verify → Repair → Final Review)',
+  )
   .argument('[goal]', 'High-level goal for the pipeline')
   .option('--pipeline <id>', 'Pipeline to use (full-development, analysis-only, engineering-only)')
   .option('--stage <name>', 'Execute a single pipeline stage')
@@ -212,7 +211,10 @@ program
 program
   .command('stability')
   .description('Monitor runtime health, performance, and stability')
-  .argument('[action]', 'Action: status (default), health, resources, metrics, loops, processes, or cleanup')
+  .argument(
+    '[action]',
+    'Action: status (default), health, resources, metrics, loops, processes, or cleanup',
+  )
   .action(async (action) => {
     await stabilityCommand(action);
   });
@@ -230,7 +232,10 @@ program
 program
   .command('swarm')
   .description('Controlled multi-agent swarm orchestration and coordination')
-  .argument('[action]', 'Action: status (default), inspect, pipelines, safety, start, stop, pause, or resume')
+  .argument(
+    '[action]',
+    'Action: status (default), inspect, pipelines, safety, start, stop, pause, or resume',
+  )
   .action(async (action) => {
     await swarmCommand(action);
   });
@@ -311,7 +316,9 @@ program
 // autic audit (#1) — Full Runtime Audit
 program
   .command('audit')
-  .description('Run comprehensive runtime audit — health, orchestration, queue, provider, memory, and safety checks')
+  .description(
+    'Run comprehensive runtime audit — health, orchestration, queue, provider, memory, and safety checks',
+  )
   .argument('[action]', 'Action: run (default) or health')
   .action(async (action) => {
     await auditCommand(action);
@@ -320,7 +327,9 @@ program
 // autic stress (#2) — Long-Workflow Stress Testing
 program
   .command('stress')
-  .description('Run long-workflow stress tests — multi-hour simulation, queue saturation, provider outages')
+  .description(
+    'Run long-workflow stress tests — multi-hour simulation, queue saturation, provider outages',
+  )
   .argument('[action]', 'Action: run (default)')
   .action(async (action) => {
     await stressCommand(action);
@@ -329,7 +338,9 @@ program
 // autic protect (#3, #5, #6, #11) — Provider Hardening + Safety
 program
   .command('protect')
-  .description('Manage provider hardening, execution safety, security posture, and deadlock/stall protection')
+  .description(
+    'Manage provider hardening, execution safety, security posture, and deadlock/stall protection',
+  )
   .argument('[action]', 'Action: providers (default), safety, security, or stall')
   .action(async (action) => {
     await protectCommand(action);
@@ -338,7 +349,9 @@ program
 // autic memory (#4) — Memory Leak Detection
 program
   .command('memory')
-  .description('Detect memory leaks — worker leak detection, orphan tracking, suspicious growth analysis')
+  .description(
+    'Detect memory leaks — worker leak detection, orphan tracking, suspicious growth analysis',
+  )
   .argument('[action]', 'Action: check (default) or start (continuous monitoring)')
   .action(async (action) => {
     await memoryCommand(action);
@@ -393,7 +406,9 @@ program
 // autic recovery (#9) — Crash Recovery Hardening
 program
   .command('recovery')
-  .description('Validate crash recovery capabilities — interrupted workflows, corrupted sessions, queue restoration')
+  .description(
+    'Validate crash recovery capabilities — interrupted workflows, corrupted sessions, queue restoration',
+  )
   .argument('[action]', 'Action: check (default)')
   .action(async (action) => {
     await recoveryCommand(action);
@@ -407,7 +422,10 @@ program
 program
   .command('docs')
   .description('Generate command documentation, provider guides, and troubleshooting docs')
-  .argument('[action]', 'Action: all (default), commands, providers, troubleshooting, examples, or single')
+  .argument(
+    '[action]',
+    'Action: all (default), commands, providers, troubleshooting, examples, or single',
+  )
   .action(async (action) => {
     await docsCommand(action);
   });
@@ -415,8 +433,13 @@ program
 // autic observability — System Observability
 program
   .command('observability')
-  .description('View system observability snapshots — runtime health, orchestration, queue, provider, context, learning')
-  .argument('[action]', 'Action: health (default), orchestration, queue, provider, context, learning, or events')
+  .description(
+    'View system observability snapshots — runtime health, orchestration, queue, provider, context, learning',
+  )
+  .argument(
+    '[action]',
+    'Action: health (default), orchestration, queue, provider, context, learning, or events',
+  )
   .action(async (action) => {
     await observabilityCommand(action);
   });
@@ -425,7 +448,10 @@ program
 program
   .command('template')
   .description('Scaffold a new project from a built-in template')
-  .argument('[template]', 'Template name (saas-starter, cli-starter, api-starter, ai-tool-starter, or list)')
+  .argument(
+    '[template]',
+    'Template name (saas-starter, cli-starter, api-starter, ai-tool-starter, or list)',
+  )
   .argument('[target]', 'Target directory for the new project')
   .action(async (template, target) => {
     await templateCommand(template, target);
@@ -444,7 +470,9 @@ program
 // autic validate-security — Security Validation
 program
   .command('validate-security')
-  .description('Run final security validation — vault, sanitization, permissions, extensions, providers, local-first guarantees')
+  .description(
+    'Run final security validation — vault, sanitization, permissions, extensions, providers, local-first guarantees',
+  )
   .action(async () => {
     await validateSecurityCommand();
   });
@@ -456,8 +484,13 @@ program
 // autic workflow-validate (#1) — Real-World Workflow Validation
 program
   .command('workflow-validate')
-  .description('Validate workflows against real project types — TypeScript, Next.js, Python, SaaS, monorepo, CLI')
-  .argument('[action]', 'Project type: all (default), typescript, nextjs, python, saas, monorepo, or cli')
+  .description(
+    'Validate workflows against real project types — TypeScript, Next.js, Python, SaaS, monorepo, CLI',
+  )
+  .argument(
+    '[action]',
+    'Project type: all (default), typescript, nextjs, python, saas, monorepo, or cli',
+  )
   .action(async (action) => {
     await workflowValidateCommand(action);
   });
@@ -465,8 +498,13 @@ program
 // autic chaos (#2) — Provider Chaos Testing
 program
   .command('chaos')
-  .description('Run provider chaos testing — simulate outages, invalid auth, slow streaming, rate limits, partial failures, degraded responses')
-  .argument('[action]', 'Scenario: all (default), outage, auth, slow, rate-limit, partial, or degraded')
+  .description(
+    'Run provider chaos testing — simulate outages, invalid auth, slow streaming, rate limits, partial failures, degraded responses',
+  )
+  .argument(
+    '[action]',
+    'Scenario: all (default), outage, auth, slow, rate-limit, partial, or degraded',
+  )
   .action(async (action) => {
     await chaosCommand(action);
   });
@@ -474,7 +512,9 @@ program
 // autic longrun (#3) — Long-Run Autonomous Testing
 program
   .command('longrun')
-  .description('Run long-running autonomous tests — multi-hour workflows, repair cycles, queue saturation, orchestration stress, memory pressure')
+  .description(
+    'Run long-running autonomous tests — multi-hour workflows, repair cycles, queue saturation, orchestration stress, memory pressure',
+  )
   .argument('[action]', 'Test: all (default), workflow, repair, queue, orchestration, or memory')
   .action(async (action) => {
     await longrunCommand(action);
@@ -483,7 +523,9 @@ program
 // autic governance (#4) — Extension Governance
 program
   .command('governance')
-  .description('Manage extension governance — trust metadata, permission auditing, compatibility scoring, unsafe detection, runtime isolation')
+  .description(
+    'Manage extension governance — trust metadata, permission auditing, compatibility scoring, unsafe detection, runtime isolation',
+  )
   .argument('[action]', 'Action: all (default), trust, permissions, compat, unsafe, or isolation')
   .action(async (action) => {
     await governanceCommand(action);
@@ -492,8 +534,13 @@ program
 // autic regression (#5) — Regression Prevention
 program
   .command('regression')
-  .description('Run regression prevention checks — architecture, orchestration, provider, memory, security regression detection')
-  .argument('[action]', 'Check: all (default), architecture, orchestration, provider, memory, or security')
+  .description(
+    'Run regression prevention checks — architecture, orchestration, provider, memory, security regression detection',
+  )
+  .argument(
+    '[action]',
+    'Check: all (default), architecture, orchestration, provider, memory, or security',
+  )
   .action(async (action) => {
     await regressionCommand(action);
   });
@@ -501,7 +548,9 @@ program
 // autic telemetry (#6) — Safe Optional Telemetry
 program
   .command('telemetry')
-  .description('Manage safe optional telemetry — opt-in anonymized runtime metrics. Never collects secrets, source code, prompts, or credentials')
+  .description(
+    'Manage safe optional telemetry — opt-in anonymized runtime metrics. Never collects secrets, source code, prompts, or credentials',
+  )
   .argument('[action]', 'Action: status (default), enable, disable, report, or clear')
   .action(async (action) => {
     await telemetryCommand(action);
@@ -510,8 +559,13 @@ program
 // autic profiling (#7) — Runtime Profiling System
 program
   .command('profiling')
-  .description('Run runtime profiling — CPU, memory, queue latency, provider latency, orchestration profiling, and performance baselines')
-  .argument('[action]', 'Action: all (default), cpu, memory, queue, provider, orchestration, baseline, or compare')
+  .description(
+    'Run runtime profiling — CPU, memory, queue latency, provider latency, orchestration profiling, and performance baselines',
+  )
+  .argument(
+    '[action]',
+    'Action: all (default), cpu, memory, queue, provider, orchestration, baseline, or compare',
+  )
   .action(async (action) => {
     await profilingCommand(action);
   });
@@ -519,8 +573,13 @@ program
 // autic security-audit (#9) — Security Audit Framework
 program
   .command('security-audit')
-  .description('Run comprehensive security audit — permission bypass detection, vault isolation, sanitization integrity, unsafe commands, extension boundaries')
-  .argument('[action]', 'Audit: all (default), permissions, vault, sanitization, commands, or boundaries')
+  .description(
+    'Run comprehensive security audit — permission bypass detection, vault isolation, sanitization integrity, unsafe commands, extension boundaries',
+  )
+  .argument(
+    '[action]',
+    'Audit: all (default), permissions, vault, sanitization, commands, or boundaries',
+  )
   .action(async (action) => {
     await securityAuditCommand(action);
   });
@@ -528,7 +587,9 @@ program
 // autic ecosystem (#10) — Ecosystem Maintenance Tooling
 program
   .command('ecosystem')
-  .description('Ecosystem maintenance — extension diagnostics, compatibility inspection, runtime audit, plugin lifecycle management')
+  .description(
+    'Ecosystem maintenance — extension diagnostics, compatibility inspection, runtime audit, plugin lifecycle management',
+  )
   .argument('[action]', 'Action: all (default), diagnostics, compat, audit, or plugins')
   .action(async (action) => {
     await ecosystemCommand(action);
@@ -537,15 +598,23 @@ program
 // autic platform-certify (#15) — Final Platform Certification
 program
   .command('platform-certify')
-  .description('Run platform certification — validates local-first integrity, BYOK guarantees, offline-safe workflows, orchestration stability, security boundaries, ecosystem safety')
-  .argument('[action]', 'Certification: all (default), local-first, byok, offline, orchestration, security, or ecosystem')
+  .description(
+    'Run platform certification — validates local-first integrity, BYOK guarantees, offline-safe workflows, orchestration stability, security boundaries, ecosystem safety',
+  )
+  .argument(
+    '[action]',
+    'Certification: all (default), local-first, byok, offline, orchestration, security, or ecosystem',
+  )
   .action(async (action) => {
     await platformCertifyCommand(action);
   });
 
 // Global error handling
 process.on('unhandledRejection', (reason: unknown) => {
-  console.error('\n  ✗ Unhandled error:', reason instanceof Error ? reason.message : String(reason));
+  console.error(
+    '\n  ✗ Unhandled error:',
+    reason instanceof Error ? reason.message : String(reason),
+  );
   process.exit(1);
 });
 

@@ -208,7 +208,9 @@ export class GracefulShutdown extends EventEmitter {
       // For now, the phase tracks that save was attempted
       this.emit('phaseChanged', 'saving');
     } catch (error) {
-      this.state.saveErrors.push(`Save state failed: ${error instanceof Error ? error.message : String(error)}`);
+      this.state.saveErrors.push(
+        `Save state failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
       this.emit('shutdownError', 'saving', error instanceof Error ? error.message : String(error));
     }
   }
@@ -221,7 +223,8 @@ export class GracefulShutdown extends EventEmitter {
 
     for (const [id, worker] of this.workers) {
       if (worker.isRunning()) {
-        const stopPromise = worker.stop()
+        const stopPromise = worker
+          .stop()
           .then(() => {
             this.state.workersStopped++;
             this.emit('workerStopped', id);
@@ -236,10 +239,7 @@ export class GracefulShutdown extends EventEmitter {
 
     if (stopPromises.length > 0) {
       // Wait for all workers with timeout
-      await Promise.race([
-        Promise.all(stopPromises),
-        this.sleep(this.options.workerStopTimeoutMs),
-      ]);
+      await Promise.race([Promise.all(stopPromises), this.sleep(this.options.workerStopTimeoutMs)]);
     }
   }
 
@@ -257,8 +257,14 @@ export class GracefulShutdown extends EventEmitter {
       this.state.queueTasksPersisted = count;
       this.emit('queuePersisted', count);
     } catch (error) {
-      this.state.saveErrors.push(`Queue persist failed: ${error instanceof Error ? error.message : String(error)}`);
-      this.emit('shutdownError', 'persisting_queue', error instanceof Error ? error.message : String(error));
+      this.state.saveErrors.push(
+        `Queue persist failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      this.emit(
+        'shutdownError',
+        'persisting_queue',
+        error instanceof Error ? error.message : String(error),
+      );
     }
   }
 

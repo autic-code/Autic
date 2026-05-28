@@ -215,7 +215,11 @@ export class ConfigManager {
     if (!this.workspaceConfig) return;
     const dir = join(process.cwd(), '.autic');
     await mkdir(dir, { recursive: true });
-    await writeFile(join(dir, 'config.json'), JSON.stringify(this.workspaceConfig, null, 2), 'utf-8');
+    await writeFile(
+      join(dir, 'config.json'),
+      JSON.stringify(this.workspaceConfig, null, 2),
+      'utf-8',
+    );
   }
 
   /** Check if workspace is initialized */
@@ -250,7 +254,9 @@ export class ConfigManager {
   /** Set global profile */
   async setProfile(profile: DeveloperProfile): Promise<void> {
     if (!PROFILE_PRESETS[profile]) {
-      throw new Error(`Invalid profile: ${profile}. Valid: ${Object.keys(PROFILE_PRESETS).join(', ')}`);
+      throw new Error(
+        `Invalid profile: ${profile}. Valid: ${Object.keys(PROFILE_PRESETS).join(', ')}`,
+      );
     }
     this.globalConfig.profile = profile;
     await this.saveGlobalConfig();
@@ -259,7 +265,9 @@ export class ConfigManager {
   /** Set workspace profile override */
   async setWorkspaceProfile(profile: DeveloperProfile): Promise<void> {
     if (!PROFILE_PRESETS[profile]) {
-      throw new Error(`Invalid profile: ${profile}. Valid: ${Object.keys(PROFILE_PRESETS).join(', ')}`);
+      throw new Error(
+        `Invalid profile: ${profile}. Valid: ${Object.keys(PROFILE_PRESETS).join(', ')}`,
+      );
     }
     if (!this.workspaceConfig) {
       this.workspaceConfig = defaultWorkspaceConfig();
@@ -328,7 +336,10 @@ export class ConfigManager {
   }
 
   /** Set a preference value in global config */
-  async setPreference<K extends keyof RuntimePreferences>(key: K, value: RuntimePreferences[K]): Promise<void> {
+  async setPreference<K extends keyof RuntimePreferences>(
+    key: K,
+    value: RuntimePreferences[K],
+  ): Promise<void> {
     (this.globalConfig.preferences as unknown as Record<string, unknown>)[key] = value;
     await this.saveGlobalConfig();
   }
@@ -365,7 +376,11 @@ export class ConfigManager {
   }
 
   /** Update the update check state */
-  async setUpdateChecked(version: string, available: boolean, releaseNotes?: string): Promise<void> {
+  async setUpdateChecked(
+    version: string,
+    available: boolean,
+    releaseNotes?: string,
+  ): Promise<void> {
     this.globalConfig.update.lastCheckedAt = Date.now();
     this.globalConfig.update.latestVersion = version;
     this.globalConfig.update.updateAvailable = available;
@@ -404,7 +419,11 @@ export class ConfigManager {
     // Check env overrides
     const envKey = `AUTIC_${key.replace(/([A-Z])/g, '_$1').toUpperCase()}`;
     if (this.envOverrides.has(envKey)) {
-      return { value: this.envOverrides.get(envKey) as unknown as T, source: 'env', overridden: true };
+      return {
+        value: this.envOverrides.get(envKey) as unknown as T,
+        source: 'env',
+        overridden: true,
+      };
     }
 
     // Check workspace config
@@ -439,9 +458,7 @@ export class ConfigManager {
   }
 
   private loadEnvOverrides(): void {
-    const auticEnvVars = Object.keys(process.env).filter(
-      (k) => k.startsWith('AUTIC_'),
-    );
+    const auticEnvVars = Object.keys(process.env).filter((k) => k.startsWith('AUTIC_'));
     for (const key of auticEnvVars) {
       const val = process.env[key];
       if (val) {

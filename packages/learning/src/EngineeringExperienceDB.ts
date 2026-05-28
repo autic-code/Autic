@@ -92,7 +92,10 @@ export class EngineeringExperienceDB {
         fw.knownIssues.push({ ...params.knownIssue, frequency: 1 });
       }
     }
-    if (params.dependencyConflict && !fw.dependencyConflicts.some((d) => d.conflict === params.dependencyConflict!.conflict)) {
+    if (
+      params.dependencyConflict &&
+      !fw.dependencyConflicts.some((d) => d.conflict === params.dependencyConflict!.conflict)
+    ) {
       fw.dependencyConflicts.push({ ...params.dependencyConflict });
     }
     if (params.buildTip && !fw.buildConfigTips.includes(params.buildTip)) {
@@ -102,12 +105,13 @@ export class EngineeringExperienceDB {
     fw.updatedAt = timestamp();
   }
 
-  getFrameworkKnownIssues(framework: string, limit = 10): Array<{ issue: string; fix: string; frequency: number }> {
+  getFrameworkKnownIssues(
+    framework: string,
+    limit = 10,
+  ): Array<{ issue: string; fix: string; frequency: number }> {
     const fw = this.frameworks.get(framework.toLowerCase());
     if (!fw) return [];
-    return [...fw.knownIssues]
-      .sort((a, b) => b.frequency - a.frequency)
-      .slice(0, limit);
+    return [...fw.knownIssues].sort((a, b) => b.frequency - a.frequency).slice(0, limit);
   }
 
   getFrameworkBuildTips(framework: string): string[] {
@@ -155,9 +159,7 @@ export class EngineeringExperienceDB {
   }
 
   findByFrameworkDependency(framework: string, limit = 10): DependencyResolution[] {
-    return this.dependencyResolutions
-      .filter((d) => d.framework === framework)
-      .slice(0, limit);
+    return this.dependencyResolutions.filter((d) => d.framework === framework).slice(0, limit);
   }
 
   // ── Runtime Recovery Patterns ──
@@ -176,7 +178,8 @@ export class EngineeringExperienceDB {
       } else {
         existing.failureCount += 1;
       }
-      existing.successRate = existing.successCount / Math.max(1, existing.successCount + existing.failureCount);
+      existing.successRate =
+        existing.successCount / Math.max(1, existing.successCount + existing.failureCount);
       existing.lastUsed = timestamp();
       return;
     }

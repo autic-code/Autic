@@ -82,9 +82,7 @@ export class RuntimeEvents extends EventEmitter {
    * Get recent events of a specific type.
    */
   getEvents(type?: RuntimeEventType, limit = 50): RuntimeEvent[] {
-    const filtered = type
-      ? this.eventLog.filter((e) => e.type === type)
-      : [...this.eventLog];
+    const filtered = type ? this.eventLog.filter((e) => e.type === type) : [...this.eventLog];
 
     return filtered.slice(-limit);
   }
@@ -93,9 +91,7 @@ export class RuntimeEvents extends EventEmitter {
    * Get events within a time range.
    */
   getEventsInRange(startTime: number, endTime: number): RuntimeEvent[] {
-    return this.eventLog.filter(
-      (e) => e.timestamp >= startTime && e.timestamp <= endTime,
-    );
+    return this.eventLog.filter((e) => e.timestamp >= startTime && e.timestamp <= endTime);
   }
 
   /**

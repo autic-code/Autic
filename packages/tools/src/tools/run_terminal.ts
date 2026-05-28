@@ -40,9 +40,15 @@ export async function runTerminalTool(args: {
         try {
           child.kill('SIGTERM');
           setTimeout(() => {
-            try { child.kill('SIGKILL'); } catch { /* already dead */ }
+            try {
+              child.kill('SIGKILL');
+            } catch {
+              /* already dead */
+            }
           }, 3000).unref();
-        } catch { /* process already exited */ }
+        } catch {
+          /* process already exited */
+        }
       }, timeoutMs);
 
       child.stdout?.on('data', (data: Buffer) => {
@@ -69,9 +75,10 @@ export async function runTerminalTool(args: {
             timedOut,
             cancelled: false,
           },
-          error: code !== 0
-            ? `Command exited with code ${code}${stderr ? `: ${stderr.slice(0, 500)}` : ''}`
-            : undefined,
+          error:
+            code !== 0
+              ? `Command exited with code ${code}${stderr ? `: ${stderr.slice(0, 500)}` : ''}`
+              : undefined,
           durationMs,
         });
       });

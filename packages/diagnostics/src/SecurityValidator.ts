@@ -181,7 +181,8 @@ export class SecurityValidator {
         passed: true,
         check: 'permission-model',
         description: 'Permission model is properly scoped',
-        message: 'Granular permission scopes (filesystem, network, provider, vault, session, config)',
+        message:
+          'Granular permission scopes (filesystem, network, provider, vault, session, config)',
         severity: 'error',
         timestamp: timestamp(),
       },
@@ -216,7 +217,8 @@ export class SecurityValidator {
         passed: true,
         check: 'extension-manifest',
         description: 'Extensions require valid manifest',
-        message: 'All extensions must declare autic-extension.json with permissions and compatibility',
+        message:
+          'All extensions must declare autic-extension.json with permissions and compatibility',
         severity: 'critical',
         timestamp: timestamp(),
       },

@@ -9,7 +9,9 @@ import { join } from 'node:path';
 import { ConfigManager } from '@autic/config';
 import type { WorkspaceConfig } from '@autic/shared';
 
-export async function initCommand(options: { force?: boolean; profile?: string } = {}): Promise<void> {
+export async function initCommand(
+  options: { force?: boolean; profile?: string } = {},
+): Promise<void> {
   const cwd = process.cwd();
   const auticDir = join(cwd, '.autic');
 
@@ -96,7 +98,11 @@ async function detectProjectInfo(cwd: string): Promise<{
   framework: string | null;
   packageManager: string | null;
 }> {
-  const result = { name: null as string | null, framework: null as string | null, packageManager: null as string | null };
+  const result = {
+    name: null as string | null,
+    framework: null as string | null,
+    packageManager: null as string | null,
+  };
 
   // Detect package.json
   try {

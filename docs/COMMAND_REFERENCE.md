@@ -23,9 +23,11 @@ autic init [--force]
 ```
 
 **Options:**
+
 - `--force` — Force reinitialization
 
 **Example:**
+
 ```bash
 autic init
 autic init --force
@@ -40,12 +42,14 @@ autic chat [options]
 ```
 
 **Options:**
+
 - `-m, --model <model>` — Model to use
 - `-p, --provider <provider>` — Provider to use
 - `-s, --session <session>` — Session ID to restore
 - `-f, --file <file>` — Context file to load
 
 **Example:**
+
 ```bash
 autic chat
 autic chat --model gpt-4o --provider openrouter
@@ -61,11 +65,13 @@ autic fix [options]
 ```
 
 **Options:**
+
 - `-t, --target <path>` — Target directory or file
 - `-m, --model <model>` — Model to use
 - `--dry-run` — Preview changes without applying
 
 **Example:**
+
 ```bash
 autic fix --target src/
 autic fix --target src/index.ts --dry-run
@@ -80,9 +86,11 @@ autic run [script] [options]
 ```
 
 **Options:**
+
 - `-m, --model <model>` — Model to use
 
 **Example:**
+
 ```bash
 autic run test
 autic run build --model gpt-4o
@@ -97,10 +105,12 @@ autic build [options]
 ```
 
 **Options:**
+
 - `--watch` — Watch for changes
 - `--clean` — Clean previous build first
 
 **Example:**
+
 ```bash
 autic build
 autic build --watch
@@ -122,10 +132,12 @@ autic providers [action] [name] [options]
 **Actions:** `list` (default), `check`, `add`, `remove`
 
 **Options:**
+
 - `-k, --key <key>` — API key (for add)
 - `-u, --url <url>` — Base URL (for add)
 
 **Example:**
+
 ```bash
 autic providers
 autic providers add openrouter --key sk-or-...
@@ -143,6 +155,7 @@ autic models [action] [name]
 **Actions:** `list` (default), `search`, `install`, `capabilities`
 
 **Example:**
+
 ```bash
 autic models
 autic models search gpt-4
@@ -163,6 +176,7 @@ autic sessions [action] [name]
 **Actions:** `list` (default), `create`, `restore`
 
 **Example:**
+
 ```bash
 autic sessions
 autic sessions restore <session-id>
@@ -179,9 +193,11 @@ autic context [action] [options]
 **Actions:** `status` (default), `inspect`, `optimize`, `safety`, `cache`, `reset`
 
 **Options:**
+
 - `-t, --target <path>` — Target for optimize action
 
 **Example:**
+
 ```bash
 autic context status
 autic context reset
@@ -200,12 +216,14 @@ autic workflow [goal] [options]
 ```
 
 **Options:**
+
 - `--steps <n>` — Max execution steps (default: 20)
 - `--timeout <ms>` — Workflow timeout in ms (default: 300000)
 - `--allow-dangerous` — Allow potentially dangerous operations
 - `--verbose` — Show detailed execution events
 
 **Example:**
+
 ```bash
 autic workflow "Add error handling to API routes"
 autic workflow "Refactor database layer" --steps 15
@@ -222,11 +240,13 @@ autic orchestrate [goal] [options]
 **Pipeline:** Research → Plan → Architect → Engineer → Verify → Repair → Final Review
 
 **Options:**
+
 - `--pipeline <id>` — Pipeline to use (full-development, analysis-only, engineering-only)
 - `--stage <name>` — Execute a single pipeline stage
 - `--verbose` — Show detailed execution events
 
 **Example:**
+
 ```bash
 autic orchestrate "Build a REST API"
 autic orchestrate "Review architecture" --pipeline analysis-only
@@ -243,6 +263,7 @@ autic swarm [action]
 **Actions:** `status` (default), `inspect`, `pipelines`, `safety`, `start`, `stop`, `pause`, `resume`
 
 **Example:**
+
 ```bash
 autic swarm status
 autic swarm start --goal "Refactor codebase"
@@ -263,9 +284,11 @@ autic security [action] [sub] [options]
 **Actions:** `status` (default), `profile`, `permissions`, `events`, `vault`
 
 **Options:**
+
 - `--limit <n>` — Event limit (for events action)
 
 **Example:**
+
 ```bash
 autic security
 autic security profile set safe
@@ -284,6 +307,7 @@ autic privacy [action] [mode]
 **Modes:** `normal`, `local_only`, `offline`
 
 **Example:**
+
 ```bash
 autic privacy
 autic privacy set local_only
@@ -308,6 +332,7 @@ autic security-audit [action]
 **Actions:** `all` (default), `permissions`, `vault`, `sanitization`, `commands`, `boundaries`
 
 **Example:**
+
 ```bash
 autic security-audit
 autic security-audit --action vault
@@ -336,6 +361,7 @@ autic stability [action]
 **Actions:** `status` (default), `health`, `resources`, `metrics`, `loops`, `processes`, `cleanup`
 
 **Example:**
+
 ```bash
 autic stability health
 autic stability resources
@@ -352,6 +378,7 @@ autic observability [action]
 **Actions:** `health` (default), `orchestration`, `queue`, `provider`, `context`, `learning`, `events`
 
 **Example:**
+
 ```bash
 autic observability
 autic observability provider
@@ -368,6 +395,7 @@ autic memory [action]
 **Actions:** `check` (default), `start` (continuous monitoring)
 
 **Example:**
+
 ```bash
 autic memory check
 ```
@@ -387,6 +415,7 @@ autic profiling [action]
 **Actions:** `all` (default), `cpu`, `memory`, `queue`, `provider`, `orchestration`, `baseline`, `compare`
 
 **Example:**
+
 ```bash
 autic profiling
 autic profiling baseline
@@ -404,6 +433,7 @@ autic diagnose [action]
 **Actions:** `errors` (default), `ux`
 
 **Example:**
+
 ```bash
 autic diagnose
 ```
@@ -423,6 +453,7 @@ autic validate [action]
 **Actions:** `all` (default), `suite`, `release`
 
 **Example:**
+
 ```bash
 autic validate all
 ```
@@ -438,6 +469,7 @@ autic audit [action]
 **Actions:** `run` (default), `health`
 
 **Example:**
+
 ```bash
 autic audit
 ```
@@ -463,6 +495,7 @@ autic regression [action]
 **Actions:** `all` (default), `architecture`, `orchestration`, `provider`, `memory`, `security`
 
 **Example:**
+
 ```bash
 autic regression
 autic regression --action security
@@ -479,6 +512,7 @@ autic workflow-validate [action]
 **Actions:** `all` (default), `typescript`, `nextjs`, `python`, `saas`, `monorepo`, `cli`
 
 **Example:**
+
 ```bash
 autic workflow-validate typescript
 ```
@@ -494,6 +528,7 @@ autic chaos [action]
 **Actions:** `all` (default), `outage`, `auth`, `slow`, `rate-limit`, `partial`, `degraded`
 
 **Example:**
+
 ```bash
 autic chaos
 autic chaos outage
@@ -510,6 +545,7 @@ autic longrun [action]
 **Actions:** `all` (default), `workflow`, `repair`, `queue`, `orchestration`, `memory`
 
 **Example:**
+
 ```bash
 autic longrun
 ```
@@ -525,6 +561,7 @@ autic recovery [action]
 **Actions:** `check` (default)
 
 **Example:**
+
 ```bash
 autic recovery
 ```
@@ -544,6 +581,7 @@ autic ecosystem [action]
 **Actions:** `all` (default), `diagnostics`, `compat`, `audit`, `plugins`
 
 **Example:**
+
 ```bash
 autic ecosystem diagnostics
 autic ecosystem compat
@@ -560,6 +598,7 @@ autic governance [action]
 **Actions:** `all` (default), `trust`, `permissions`, `compat`, `unsafe`, `isolation`
 
 **Example:**
+
 ```bash
 autic governance
 autic governance permissions
@@ -576,6 +615,7 @@ autic template <template> [target]
 **Templates:** `saas-starter`, `cli-starter`, `api-starter`, `ai-tool-starter`, `list`
 
 **Example:**
+
 ```bash
 autic template cli-starter my-cli
 autic template list
@@ -596,6 +636,7 @@ autic config [action] [key] [value]
 **Actions:** `status` (default), `get`, `set`, `list`
 
 **Example:**
+
 ```bash
 autic config
 autic config set openrouter.timeout 120000
@@ -613,6 +654,7 @@ autic profile [action] [profile]
 **Profiles:** `safe`, `balanced`, `full_auto`, `local_only`
 
 **Example:**
+
 ```bash
 autic profile
 autic profile set balanced
@@ -629,6 +671,7 @@ autic protect [action]
 **Actions:** `providers` (default), `safety`, `security`, `stall`
 
 **Example:**
+
 ```bash
 autic protect
 ```
@@ -644,6 +687,7 @@ autic system [action]
 **Actions:** `perf` (default), `resilience`, `context`
 
 **Example:**
+
 ```bash
 autic system
 ```
@@ -659,6 +703,7 @@ autic fs [action] [path]
 **Actions:** `check` (default), `path`
 
 **Example:**
+
 ```bash
 autic fs check
 ```
@@ -688,6 +733,7 @@ autic learning [action]
 **Actions:** `status` (default), `inspect`, `clear`, `disable`, `enable`
 
 **Example:**
+
 ```bash
 autic learning status
 ```
@@ -703,9 +749,11 @@ autic skills [action] [name] [options]
 **Actions:** `list` (default), `install`, `remove`, `run`
 
 **Options:**
+
 - `-g, --goal <goal>` — Goal for run action
 
 **Example:**
+
 ```bash
 autic skills list
 autic skills run my-skill --goal "Do something"
@@ -726,6 +774,7 @@ autic docs [action]
 **Actions:** `all` (default), `commands`, `providers`, `troubleshooting`, `examples`, `single`, `architecture`, `contracts`, `sdk`, `security`, `concepts`
 
 **Example:**
+
 ```bash
 autic docs
 autic docs architecture
@@ -750,6 +799,7 @@ autic release [action] [value]
 **Channels:** `stable`, `beta`, `dev`
 
 **Example:**
+
 ```bash
 autic release
 autic release check
@@ -767,6 +817,7 @@ autic update [action]
 **Actions:** `check` (default), `info`, `version`
 
 **Example:**
+
 ```bash
 autic update
 ```
@@ -782,6 +833,7 @@ autic platform-certify [action]
 **Actions:** `all` (default), `local-first`, `byok`, `offline`, `orchestration`, `security`, `ecosystem`
 
 **Example:**
+
 ```bash
 autic platform-certify
 ```
@@ -801,6 +853,7 @@ autic debug [action] [value]
 **Actions:** `mode` (default), `platform`, `trace`
 
 **Example:**
+
 ```bash
 autic debug platform
 ```
@@ -816,6 +869,7 @@ autic telemetry [action]
 **Actions:** `status` (default), `enable`, `disable`, `report`, `clear`
 
 **Example:**
+
 ```bash
 autic telemetry status
 autic telemetry enable
@@ -832,6 +886,7 @@ autic help [topic]
 **Topics:** Any command name
 
 **Example:**
+
 ```bash
 autic help
 autic help providers

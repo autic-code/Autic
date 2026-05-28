@@ -124,7 +124,10 @@ export class OrchestrationObservability {
   } {
     const hasPipelineStart = this.events.find((e) => e.type === 'pipeline:started');
     const hasPipelineEnd = this.events.find(
-      (e) => e.type === 'pipeline:completed' || e.type === 'pipeline:failed' || e.type === 'pipeline:cancelled',
+      (e) =>
+        e.type === 'pipeline:completed' ||
+        e.type === 'pipeline:failed' ||
+        e.type === 'pipeline:cancelled',
     );
 
     return {
@@ -133,9 +136,10 @@ export class OrchestrationObservability {
       failedStages: this.events.filter((e) => e.type === 'pipeline:stage_failed').length,
       startedAt: hasPipelineStart?.timestamp,
       completedAt: hasPipelineEnd?.timestamp,
-      totalDurationMs: hasPipelineStart && hasPipelineEnd
-        ? hasPipelineEnd.timestamp - hasPipelineStart.timestamp
-        : undefined,
+      totalDurationMs:
+        hasPipelineStart && hasPipelineEnd
+          ? hasPipelineEnd.timestamp - hasPipelineStart.timestamp
+          : undefined,
     };
   }
 
@@ -152,7 +156,11 @@ export class OrchestrationObservability {
  * Create display data for each pipeline stage.
  * Useful for UI rendering in the CLI.
  */
-export function createStageDisplay(stage: OrchestrationStage, _index: number, _total: number): PipelineDisplayStage {
+export function createStageDisplay(
+  stage: OrchestrationStage,
+  _index: number,
+  _total: number,
+): PipelineDisplayStage {
   return {
     stage,
     status: 'pending',

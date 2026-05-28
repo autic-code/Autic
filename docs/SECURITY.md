@@ -29,6 +29,7 @@ autic providers add openrouter --key YOUR_KEY
 ```
 
 **Guarantees:**
+
 - Secrets are encrypted at rest
 - Decryption only occurs in-memory when needed
 - Vault file permissions are restricted to the current user
@@ -50,6 +51,7 @@ autic validate-security
 ```
 
 **Guarantees:**
+
 - Known patterns (API keys, tokens) are automatically redacted
 - Custom patterns can be registered
 - Sanitization is applied before any output is emitted
@@ -110,6 +112,7 @@ autic security-audit
 ```
 
 **Validation checks:**
+
 1. **Permission Bypass Detection** — Validates that permission boundaries are enforced
 2. **Vault Isolation** — Ensures vault cannot be accessed from unauthorized contexts
 3. **Sanitization Integrity** — Verifies secret redaction is working correctly
@@ -132,6 +135,7 @@ autic governance unsafe
 ```
 
 **Governance checks:**
+
 - Extension trust metadata validation
 - Permission auditing against declared scope
 - Compatibility scoring
@@ -154,6 +158,7 @@ autic telemetry report
 ```
 
 **Telemetry data policy:**
+
 - ✅ Anonymized runtime health metrics (uptime, version)
 - ✅ Crash categories (error type, count)
 - ✅ Provider reliability stats (success rate, avg latency)
@@ -162,15 +167,15 @@ autic telemetry report
 
 ## Threat Model
 
-| Threat | Mitigation |
-|--------|-----------|
-| API key theft | Encrypted vault, memory-only decryption |
-| Secret leakage in logs | Automatic sanitization of all output |
-| Malicious extensions | Sandboxed execution, permission enforcement, governance checks |
-| Unauthorized file access | Filesystem permission controls, profile enforcement |
-| Network exfiltration | Profile-based network restrictions, local-first architecture |
-| Privilege escalation | Defense-in-depth, independent security layers |
-| Session hijacking | Encrypted session storage, vault-backed authentication |
+| Threat                   | Mitigation                                                     |
+| ------------------------ | -------------------------------------------------------------- |
+| API key theft            | Encrypted vault, memory-only decryption                        |
+| Secret leakage in logs   | Automatic sanitization of all output                           |
+| Malicious extensions     | Sandboxed execution, permission enforcement, governance checks |
+| Unauthorized file access | Filesystem permission controls, profile enforcement            |
+| Network exfiltration     | Profile-based network restrictions, local-first architecture   |
+| Privilege escalation     | Defense-in-depth, independent security layers                  |
+| Session hijacking        | Encrypted session storage, vault-backed authentication         |
 
 ## Security Audit Procedures
 
@@ -197,6 +202,7 @@ autic security events --limit 100
 ## Reporting Vulnerabilities
 
 If you discover a security vulnerability in Autic:
+
 1. Do not create a public GitHub issue
 2. Report via the project's security contact
 3. Include a detailed description and reproduction steps
@@ -204,6 +210,7 @@ If you discover a security vulnerability in Autic:
 ## Security Checklist
 
 Before using Autic in production:
+
 - [ ] Run `autic validate-security` — passes all checks
 - [ ] Run `autic security-audit` — no findings
 - [ ] Configure appropriate trust profile

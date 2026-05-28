@@ -46,9 +46,7 @@ export function RuntimeLog({ title = 'Runtime Log', entries, maxDisplay = 15 }: 
         <Text bold color="#4A9EFF">
           ❯ {title}
         </Text>
-        <Text dimColor>
-          {' '}{entries.length} events
-        </Text>
+        <Text dimColor> {entries.length} events</Text>
       </Box>
       <Box marginLeft={2} flexDirection="column">
         {displayed.length === 0 ? (
@@ -61,11 +59,9 @@ export function RuntimeLog({ title = 'Runtime Log', entries, maxDisplay = 15 }: 
             return (
               <Box key={index}>
                 <Text dimColor>{entry.timestamp}</Text>
-                <Text color={color}>{' '}[{label}]</Text>
-                <Text>{' '}{entry.message}</Text>
-                {entry.detail && (
-                  <Text dimColor>{' '}{entry.detail}</Text>
-                )}
+                <Text color={color}> [{label}]</Text>
+                <Text> {entry.message}</Text>
+                {entry.detail && <Text dimColor> {entry.detail}</Text>}
               </Box>
             );
           })

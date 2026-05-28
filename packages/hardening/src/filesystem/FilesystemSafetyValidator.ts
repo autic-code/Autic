@@ -13,9 +13,19 @@ import type { FilesystemSafetyValidation } from '@autic/shared';
 
 export class FilesystemSafetyValidator {
   private protectedPaths = [
-    '/etc', '/boot', '/dev', '/proc', '/sys',
-    '/bin', '/sbin', '/usr/bin', '/usr/sbin',
-    '/lib', '/lib64', '/opt', '/var/log',
+    '/etc',
+    '/boot',
+    '/dev',
+    '/proc',
+    '/sys',
+    '/bin',
+    '/sbin',
+    '/usr/bin',
+    '/usr/sbin',
+    '/lib',
+    '/lib64',
+    '/opt',
+    '/var/log',
   ];
 
   async validateAll(): Promise<FilesystemSafetyValidation> {
@@ -58,7 +68,8 @@ export class FilesystemSafetyValidator {
       atomicWriteValidated,
       rollbackCapability,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['All filesystem safety checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['All filesystem safety checks passed'],
     };
   }
 

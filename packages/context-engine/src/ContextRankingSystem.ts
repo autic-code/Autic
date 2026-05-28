@@ -44,7 +44,7 @@ export class ContextRankingSystem {
    */
   rank(items: RankableItem[], options: RankingOptions): ContextRankingScore[] {
     const goalLower = options.goal.toLowerCase();
-    const goalWords = goalLower.split(/\s+/).filter(w => w.length > 3);
+    const goalWords = goalLower.split(/\s+/).filter((w) => w.length > 3);
     const maxResults = options.maxResults || 20;
 
     const scores: ContextRankingScore[] = [];
@@ -57,24 +57,23 @@ export class ContextRankingSystem {
       const contentLower = item.content.toLowerCase();
       for (const kw of goalWords) {
         if (item.path?.toLowerCase().includes(kw)) relevance += 25;
-        const matches = (contentLower.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
+        const matches = (
+          contentLower.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []
+        ).length;
         relevance += Math.min(matches * 3, 20);
       }
 
       // Recency score
       const now = Date.now();
       const lastAccess = accessInfo?.lastAccess || item.lastAccessed || 0;
-      const recency = lastAccess > 0
-        ? Math.max(0, 1 - (now - lastAccess) / (7 * 24 * 60 * 60 * 1000))
-        : 0;
+      const recency =
+        lastAccess > 0 ? Math.max(0, 1 - (now - lastAccess) / (7 * 24 * 60 * 60 * 1000)) : 0;
 
       // Frequency score
       const frequency = accessInfo ? Math.min(accessInfo.count / 50, 1) : 0;
 
       // Dependency score
-      const dependencyScore = item.importedByCount
-        ? Math.min(item.importedByCount / 10, 1)
-        : 0;
+      const dependencyScore = item.importedByCount ? Math.min(item.importedByCount / 10, 1) : 0;
 
       // Weights from options
       const wRelevance = options.relevanceWeight ?? 0.5;
@@ -82,12 +81,11 @@ export class ContextRankingSystem {
       const wFrequency = options.frequencyWeight ?? 0.15;
       const wDependency = options.dependencyWeight ?? 0.15;
 
-      const totalScore = (
+      const totalScore =
         relevance * wRelevance +
         recency * 100 * wRecency +
         frequency * 100 * wFrequency +
-        dependencyScore * 100 * wDependency
-      );
+        dependencyScore * 100 * wDependency;
 
       scores.push({
         itemId: item.id,
@@ -130,10 +128,8 @@ export class ContextRankingSystem {
   /**
    * Build rankable items from files.
    */
-  buildFromFiles(
-    files: Array<{ path: string; content: string; tags?: string[] }>,
-  ): RankableItem[] {
-    return files.map(f => ({
+  buildFromFiles(files: Array<{ path: string; content: string; tags?: string[] }>): RankableItem[] {
+    return files.map((f) => ({
       id: f.path,
       type: 'file' as const,
       content: f.content,
@@ -150,7 +146,7 @@ export class ContextRankingSystem {
   buildFromMemory(
     entries: Array<{ id: string; key: string; value: unknown; tags?: string[] }>,
   ): RankableItem[] {
-    return entries.map(e => ({
+    return entries.map((e) => ({
       id: e.id,
       type: 'memory' as const,
       content: typeof e.value === 'string' ? e.value : JSON.stringify(e.value),

@@ -32,7 +32,8 @@ export function classifyProviderError(
       retryable: true,
       retryAfterMs: extractRetryAfter(message) || 30_000,
       actionable: true,
-      suggestion: 'Provider is rate-limited. Waiting before retrying. Consider adding additional API keys for rotation.',
+      suggestion:
+        'Provider is rate-limited. Waiting before retrying. Consider adding additional API keys for rotation.',
     };
   }
 
@@ -42,7 +43,8 @@ export function classifyProviderError(
       code: 'auth_failed',
       retryable: false,
       actionable: true,
-      suggestion: 'Invalid API key. Check your provider credentials and update the key with: autic providers add --key <your-key>',
+      suggestion:
+        'Invalid API key. Check your provider credentials and update the key with: autic providers add --key <your-key>',
     };
   }
 
@@ -52,7 +54,8 @@ export function classifyProviderError(
       code: 'invalid_key',
       retryable: false,
       actionable: true,
-      suggestion: 'API key does not have access to the requested resource. Check your key permissions or top up your account.',
+      suggestion:
+        'API key does not have access to the requested resource. Check your key permissions or top up your account.',
     };
   }
 
@@ -74,7 +77,8 @@ export function classifyProviderError(
       code: 'insufficient_quota',
       retryable: false,
       actionable: true,
-      suggestion: 'Insufficient quota or credits. Top up your account or switch to a different provider.',
+      suggestion:
+        'Insufficient quota or credits. Top up your account or switch to a different provider.',
     };
   }
 
@@ -96,7 +100,8 @@ export function classifyProviderError(
       retryable: true,
       retryAfterMs: 5_000,
       actionable: false,
-      suggestion: 'Request timed out. The provider may be experiencing high load. Retrying with a longer timeout.',
+      suggestion:
+        'Request timed out. The provider may be experiencing high load. Retrying with a longer timeout.',
     };
   }
 
@@ -115,7 +120,8 @@ export function classifyProviderError(
       code: 'invalid_request',
       retryable: false,
       actionable: true,
-      suggestion: 'Invalid request. This may be caused by an unsupported parameter or message format.',
+      suggestion:
+        'Invalid request. This may be caused by an unsupported parameter or message format.',
     };
   }
 
@@ -124,7 +130,8 @@ export function classifyProviderError(
     code: 'internal_error',
     retryable: false,
     actionable: false,
-    suggestion: 'An unexpected provider error occurred. Check the provider status with: autic doctor',
+    suggestion:
+      'An unexpected provider error occurred. Check the provider status with: autic doctor',
   };
 }
 
@@ -162,9 +169,7 @@ export function createProviderError(
  */
 export function formatProviderError(error: ProviderError): string {
   const icon = error.retryable ? '○' : '✗';
-  const lines: string[] = [
-    `  ${icon} [${error.code}] ${error.message}`,
-  ];
+  const lines: string[] = [`  ${icon} [${error.code}] ${error.message}`];
 
   if (error.suggestion) {
     lines.push(`     ${error.suggestion}`);
@@ -181,7 +186,9 @@ export function formatProviderError(error: ProviderError): string {
 
 function extractRetryAfter(message: string): number | undefined {
   // Try to extract retry-after duration from error message
-  const matches = message.match(/retry\s*(?:after|in)?\s*(?:(\d+)\s*(?:ms|milliseconds|seconds?|s))?/i);
+  const matches = message.match(
+    /retry\s*(?:after|in)?\s*(?:(\d+)\s*(?:ms|milliseconds|seconds?|s))?/i,
+  );
   if (matches?.[1]) {
     const value = parseInt(matches[1], 10);
     if (message.toLowerCase().includes('ms')) return value;
@@ -266,7 +273,12 @@ function classifyErrorFromMessage(
     };
   }
 
-  if (lower.includes('auth') || lower.includes('unauthorized') || lower.includes('invalid key') || lower.includes('api key')) {
+  if (
+    lower.includes('auth') ||
+    lower.includes('unauthorized') ||
+    lower.includes('invalid key') ||
+    lower.includes('api key')
+  ) {
     return {
       code: 'auth_failed',
       retryable: false,
@@ -275,16 +287,27 @@ function classifyErrorFromMessage(
     };
   }
 
-  if (lower.includes('quota') || lower.includes('credit') || lower.includes('billing') || lower.includes('insufficient')) {
+  if (
+    lower.includes('quota') ||
+    lower.includes('credit') ||
+    lower.includes('billing') ||
+    lower.includes('insufficient')
+  ) {
     return {
       code: 'insufficient_quota',
       retryable: false,
       actionable: true,
-      suggestion: 'Insufficient credits or quota. Top up your account or switch to a different model.',
+      suggestion:
+        'Insufficient credits or quota. Top up your account or switch to a different model.',
     };
   }
 
-  if (modelId && (lower.includes(modelId.toLowerCase()) || lower.includes('not found') || lower.includes('unavailable'))) {
+  if (
+    modelId &&
+    (lower.includes(modelId.toLowerCase()) ||
+      lower.includes('not found') ||
+      lower.includes('unavailable'))
+  ) {
     return {
       code: 'model_unavailable',
       retryable: false,

@@ -71,8 +71,9 @@ export class GlobalIntelligenceFoundation {
 
     // Enforce max
     if (this.entries.size >= this.options.maxEntries) {
-      const oldest = Array.from(this.entries.entries())
-        .sort(([, a], [, b]) => a.createdAt - b.createdAt)[0];
+      const oldest = Array.from(this.entries.entries()).sort(
+        ([, a], [, b]) => a.createdAt - b.createdAt,
+      )[0];
       if (oldest) this.entries.delete(oldest[0]);
     }
 

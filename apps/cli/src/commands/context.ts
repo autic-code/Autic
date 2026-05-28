@@ -156,7 +156,9 @@ async function handleInspect(): Promise<void> {
  */
 async function handleOptimize(_target: string): Promise<void> {
   console.log(`\n  \u001b[38;5;39m\u25cf Optimizing context for: ${_target}\u001b[0m`);
-  console.log(`  \u001b[38;5;240mOptimization started. Use 'autic context status' to check progress.\u001b[0m`);
+  console.log(
+    `  \u001b[38;5;240mOptimization started. Use 'autic context status' to check progress.\u001b[0m`,
+  );
 }
 
 /**
@@ -219,7 +221,7 @@ export async function contextCommand(action?: string, _options?: ContextOptions)
       await handleInspect();
       break;
     case 'optimize':
-      await handleOptimize(_options?.target as string || '.');
+      await handleOptimize((_options?.target as string) || '.');
       break;
     case 'safety':
       await handleSafety();

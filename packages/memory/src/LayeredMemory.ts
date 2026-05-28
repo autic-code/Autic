@@ -14,9 +14,9 @@ import type { MemoryLayer, MemoryRecord } from '@autic/shared';
 
 // TTL for each layer in milliseconds
 const LAYER_TTL: Record<MemoryLayer, number | null> = {
-  short_term: 30 * 60 * 1000,   // 30 minutes
+  short_term: 30 * 60 * 1000, // 30 minutes
   mid_term: 24 * 60 * 60 * 1000, // 24 hours
-  long_term: null,                // No expiry
+  long_term: null, // No expiry
 };
 
 // Max entries per layer
@@ -43,7 +43,11 @@ export class LayeredMemory {
 
     // Periodic cleanup for short-term and mid-term layers
     this.cleanupTimer = setInterval(() => this.runCleanup(), 60_000);
-    if (this.cleanupTimer && typeof this.cleanupTimer === 'object' && 'unref' in this.cleanupTimer) {
+    if (
+      this.cleanupTimer &&
+      typeof this.cleanupTimer === 'object' &&
+      'unref' in this.cleanupTimer
+    ) {
       this.cleanupTimer.unref();
     }
   }
@@ -78,8 +82,9 @@ export class LayeredMemory {
 
     // Enforce max entries — remove oldest if over limit
     if (layerMap.size > LAYER_MAX_ENTRIES[layer]) {
-      const sorted = Array.from(layerMap.entries())
-        .sort(([, a], [, b]) => a.updatedAt - b.updatedAt);
+      const sorted = Array.from(layerMap.entries()).sort(
+        ([, a], [, b]) => a.updatedAt - b.updatedAt,
+      );
       const toRemove = layerMap.size - LAYER_MAX_ENTRIES[layer];
       for (let i = 0; i < toRemove; i++) {
         layerMap.delete(sorted[i][0]);
@@ -203,7 +208,9 @@ export class LayeredMemory {
     this.init();
     const results: MemoryRecord[] = [];
 
-    const searchLayers = layer ? [layer] : (['short_term', 'mid_term', 'long_term'] as MemoryLayer[]);
+    const searchLayers = layer
+      ? [layer]
+      : (['short_term', 'mid_term', 'long_term'] as MemoryLayer[]);
 
     for (const l of searchLayers) {
       const layerMap = this.layers.get(l);

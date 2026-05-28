@@ -15,12 +15,17 @@ export async function readFileTool(args: ReadFileArgs): Promise<ToolResult> {
   const startTime = Date.now();
   try {
     const content = await readFile(args.path, 'utf-8');
-    const truncated = args.maxLength && content.length > args.maxLength
-      ? content.slice(0, args.maxLength) + '\n... [truncated]'
-      : content;
+    const truncated =
+      args.maxLength && content.length > args.maxLength
+        ? content.slice(0, args.maxLength) + '\n... [truncated]'
+        : content;
     return {
       success: true,
-      data: { path: args.path, content: truncated, byteLength: Buffer.byteLength(content, 'utf-8') },
+      data: {
+        path: args.path,
+        content: truncated,
+        byteLength: Buffer.byteLength(content, 'utf-8'),
+      },
       durationMs: Date.now() - startTime,
     };
   } catch (error) {

@@ -32,7 +32,11 @@ export { RepairAgent } from './RepairAgent.js';
 export { FinalReviewAgent } from './FinalReviewAgent.js';
 
 export { PipelineCoordinator } from './PipelineCoordinator.js';
-export type { PipelineCoordinatorOptions, AgentHandler, AgentHandlerResult } from './PipelineCoordinator.js';
+export type {
+  PipelineCoordinatorOptions,
+  AgentHandler,
+  AgentHandlerResult,
+} from './PipelineCoordinator.js';
 
 import type { PipelineDefinition, OrchestrationStage } from '@autic/shared';
 
@@ -43,8 +47,17 @@ export function createDefaultPipeline(): PipelineDefinition {
   return {
     id: 'full-development',
     name: 'Full Development Pipeline',
-    description: 'Research → Plan → Architecture → Engineering → Verification → Repair → Final Review',
-    stages: ['research', 'planning', 'architecture', 'engineering', 'verification', 'repair', 'final_review'] as OrchestrationStage[],
+    description:
+      'Research → Plan → Architecture → Engineering → Verification → Repair → Final Review',
+    stages: [
+      'research',
+      'planning',
+      'architecture',
+      'engineering',
+      'verification',
+      'repair',
+      'final_review',
+    ] as OrchestrationStage[],
     timeoutMs: 600_000,
     maxDelegations: 50,
     safetyProfile: 'balanced' as const,

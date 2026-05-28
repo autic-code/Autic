@@ -77,20 +77,14 @@ export class EngineeringMemory {
     record.resolvedAt = timestamp();
     record.resolution = resolution;
 
-    await writeFile(
-      join(ENGINEERING_DIR, 'errors.json'),
-      JSON.stringify(errors, null, 2),
-      'utf-8',
-    );
+    await writeFile(join(ENGINEERING_DIR, 'errors.json'), JSON.stringify(errors, null, 2), 'utf-8');
 
     return true;
   }
 
   async getRecentErrors(limit = 10): Promise<ErrorRecord[]> {
     const errors = await this.getErrors();
-    return errors
-      .sort((a, b) => b.occurredAt - a.occurredAt)
-      .slice(0, limit);
+    return errors.sort((a, b) => b.occurredAt - a.occurredAt).slice(0, limit);
   }
 
   async getUnresolvedErrors(): Promise<ErrorRecord[]> {
@@ -135,20 +129,14 @@ export class EngineeringMemory {
 
     // Keep last 200 fixes
     const trimmed = fixes.slice(-200);
-    await writeFile(
-      join(ENGINEERING_DIR, 'fixes.json'),
-      JSON.stringify(trimmed, null, 2),
-      'utf-8',
-    );
+    await writeFile(join(ENGINEERING_DIR, 'fixes.json'), JSON.stringify(trimmed, null, 2), 'utf-8');
 
     return record;
   }
 
   async getRecentFixes(limit = 10): Promise<FixRecord[]> {
     const fixes = await this.getFixes();
-    return fixes
-      .sort((a, b) => b.appliedAt - a.appliedAt)
-      .slice(0, limit);
+    return fixes.sort((a, b) => b.appliedAt - a.appliedAt).slice(0, limit);
   }
 
   async getFixCount(): Promise<number> {

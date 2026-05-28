@@ -15,33 +15,140 @@ import { type ExecutionSafetyCheck, type RiskLevel, type DangerousPattern } from
 
 /** Default dangerous command patterns */
 const DESTRUCTIVE_PATTERNS: DangerousPattern[] = [
-  { pattern: /^rm\s+-rf\s+(?:\/\s*|\.\s*|\*)/i, classification: 'destructive', riskLevel: 'high', description: 'Recursive force delete of root or all files' },
-  { pattern: /^rm\s+-rf/i, classification: 'destructive', riskLevel: 'high', description: 'Recursive force delete' },
-  { pattern: /^rmdir\s+\//i, classification: 'destructive', riskLevel: 'high', description: 'Delete root directory' },
-  { pattern: /^mkfs/i, classification: 'destructive', riskLevel: 'high', description: 'Format filesystem' },
-  { pattern: /^dd\s+if=/i, classification: 'destructive', riskLevel: 'high', description: 'Raw disk write' },
-  { pattern: /^chmod\s+777/i, classification: 'destructive', riskLevel: 'high', description: 'Make files world-writable' },
-  { pattern: /^chown\s+-R/i, classification: 'destructive', riskLevel: 'high', description: 'Recursive ownership change' },
-  { pattern: /^sudo/i, classification: 'system', riskLevel: 'high', description: 'Superuser command execution' },
+  {
+    pattern: /^rm\s+-rf\s+(?:\/\s*|\.\s*|\*)/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Recursive force delete of root or all files',
+  },
+  {
+    pattern: /^rm\s+-rf/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Recursive force delete',
+  },
+  {
+    pattern: /^rmdir\s+\//i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Delete root directory',
+  },
+  {
+    pattern: /^mkfs/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Format filesystem',
+  },
+  {
+    pattern: /^dd\s+if=/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Raw disk write',
+  },
+  {
+    pattern: /^chmod\s+777/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Make files world-writable',
+  },
+  {
+    pattern: /^chown\s+-R/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Recursive ownership change',
+  },
+  {
+    pattern: /^sudo/i,
+    classification: 'system',
+    riskLevel: 'high',
+    description: 'Superuser command execution',
+  },
   { pattern: /^su\s/, classification: 'system', riskLevel: 'high', description: 'Switch user' },
-  { pattern: /^passwd/i, classification: 'system', riskLevel: 'high', description: 'Password modification' },
-  { pattern: /^docker\s+(rm|kill|stop|system)/i, classification: 'destructive', riskLevel: 'high', description: 'Docker destructive operation' },
-  { pattern: /^npm\s+(publish|unpublish)/i, classification: 'destructive', riskLevel: 'high', description: 'Package publishing' },
-  { pattern: /^pnpm\s+(publish|unpublish)/i, classification: 'destructive', riskLevel: 'high', description: 'Package publishing' },
-  { pattern: /^git\s+push\s+--force/i, classification: 'destructive', riskLevel: 'high', description: 'Force push to git' },
-  { pattern: /^git\s+reset\s+--hard/i, classification: 'destructive', riskLevel: 'high', description: 'Hard git reset' },
-  { pattern: /^curl\s+.+?--data/i, classification: 'network', riskLevel: 'medium', description: 'HTTP request with data payload' },
-  { pattern: /^wget\s+/i, classification: 'network', riskLevel: 'medium', description: 'File download' },
-  { pattern: /^ssh\s+/i, classification: 'network', riskLevel: 'medium', description: 'SSH connection' },
-  { pattern: />\s*\/dev\//i, classification: 'destructive', riskLevel: 'high', description: 'Write to device file' },
-  { pattern: /\|\s*sudo/i, classification: 'system', riskLevel: 'high', description: 'Piped sudo execution' },
+  {
+    pattern: /^passwd/i,
+    classification: 'system',
+    riskLevel: 'high',
+    description: 'Password modification',
+  },
+  {
+    pattern: /^docker\s+(rm|kill|stop|system)/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Docker destructive operation',
+  },
+  {
+    pattern: /^npm\s+(publish|unpublish)/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Package publishing',
+  },
+  {
+    pattern: /^pnpm\s+(publish|unpublish)/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Package publishing',
+  },
+  {
+    pattern: /^git\s+push\s+--force/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Force push to git',
+  },
+  {
+    pattern: /^git\s+reset\s+--hard/i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Hard git reset',
+  },
+  {
+    pattern: /^curl\s+.+?--data/i,
+    classification: 'network',
+    riskLevel: 'medium',
+    description: 'HTTP request with data payload',
+  },
+  {
+    pattern: /^wget\s+/i,
+    classification: 'network',
+    riskLevel: 'medium',
+    description: 'File download',
+  },
+  {
+    pattern: /^ssh\s+/i,
+    classification: 'network',
+    riskLevel: 'medium',
+    description: 'SSH connection',
+  },
+  {
+    pattern: />\s*\/dev\//i,
+    classification: 'destructive',
+    riskLevel: 'high',
+    description: 'Write to device file',
+  },
+  {
+    pattern: /\|\s*sudo/i,
+    classification: 'system',
+    riskLevel: 'high',
+    description: 'Piped sudo execution',
+  },
 ];
 
 /** Paths that should never be modified */
 const PROTECTED_PATHS = [
-  '/etc', '/boot', '/dev', '/proc', '/sys', '/bin', '/sbin',
-  '/usr/bin', '/usr/sbin', '/usr/lib', '/lib', '/lib64',
-  '/opt', '/var/log', '/var/lib',
+  '/etc',
+  '/boot',
+  '/dev',
+  '/proc',
+  '/sys',
+  '/bin',
+  '/sbin',
+  '/usr/bin',
+  '/usr/sbin',
+  '/usr/lib',
+  '/lib',
+  '/lib64',
+  '/opt',
+  '/var/log',
+  '/var/lib',
 ];
 
 export interface ExecutionSafetyOptions {
@@ -166,11 +273,29 @@ export class ExecutionSafetySystem {
     category: 'destructive' | 'network' | 'system' | 'read' | 'write' | 'unknown';
     riskLevel: RiskLevel;
   } {
-    const writeActions = ['write_file', 'create_file', 'delete_file', 'modify_config', 'install', 'mv', 'cp'];
+    const writeActions = [
+      'write_file',
+      'create_file',
+      'delete_file',
+      'modify_config',
+      'install',
+      'mv',
+      'cp',
+    ];
     const destructiveActions = ['rm', 'rmdir', 'chmod', 'chown', 'mkfs', 'dd'];
     const networkActions = ['curl', 'wget', 'ssh', 'docker'];
     const systemActions = ['sudo', 'su', 'passwd', 'service', 'systemctl'];
-    const readActions = ['read_file', 'list_files', 'search_files', 'cat', 'ls', 'grep', 'head', 'tail', 'wc'];
+    const readActions = [
+      'read_file',
+      'list_files',
+      'search_files',
+      'cat',
+      'ls',
+      'grep',
+      'head',
+      'tail',
+      'wc',
+    ];
 
     if (destructiveActions.some((a) => action.startsWith(a))) {
       return { category: 'destructive', riskLevel: 'high' };

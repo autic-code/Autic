@@ -39,9 +39,19 @@ export async function doctorCommand(action?: string): Promise<void> {
 
   // Help
   console.log(`\n  ${colorText('Usage:', 'primary')} autic doctor [action]\n`);
-  console.log(`  ${colorText('Actions:', 'bold')}`);    console.log(`    ${colorText('(default)', 'dim')}    ${colorText('Run full diagnostics', 'default')}`);    console.log(`    ${colorText('full', 'primary')}      ${colorText('Run comprehensive diagnostics', 'default')}`);
-    console.log(`    ${colorText('quick', 'primary')}      ${colorText('Run quick system + provider check', 'default')}`);
-    console.log(`    ${colorText('validate', 'primary')}   ${colorText('Run installation validation', 'default')}`);
+  console.log(`  ${colorText('Actions:', 'bold')}`);
+  console.log(
+    `    ${colorText('(default)', 'dim')}    ${colorText('Run full diagnostics', 'default')}`,
+  );
+  console.log(
+    `    ${colorText('full', 'primary')}      ${colorText('Run comprehensive diagnostics', 'default')}`,
+  );
+  console.log(
+    `    ${colorText('quick', 'primary')}      ${colorText('Run quick system + provider check', 'default')}`,
+  );
+  console.log(
+    `    ${colorText('validate', 'primary')}   ${colorText('Run installation validation', 'default')}`,
+  );
   console.log(`  ${divider(48)}\n`);
 }
 
@@ -61,7 +71,8 @@ function printQuickResults(checks: DiagnosticCheck[]): void {
   console.log(`  ${divider(48)}\n`);
   for (const check of checks) {
     const icon = check.status === 'pass' ? '✓' : check.status === 'warn' ? '⚠' : '✗';
-    const variant = check.status === 'pass' ? 'success' : check.status === 'warn' ? 'warning' : 'error';
+    const variant =
+      check.status === 'pass' ? 'success' : check.status === 'warn' ? 'warning' : 'error';
     console.log(`  ${colorText(icon, variant)} ${colorText(check.name, 'bold')}`);
     console.log(`     ${check.message}`);
     if (check.suggestion) console.log(`     ${colorText('→', 'dim')} ${check.suggestion}`);
@@ -70,7 +81,9 @@ function printQuickResults(checks: DiagnosticCheck[]): void {
 }
 
 async function printProviderHelp(doctor: Doctor): Promise<void> {
-  console.log(`\n  ${colorText('Provider diagnostics:', 'primary')} ${colorText('autic doctor provider <provider-id>', 'dim')}\n`);
+  console.log(
+    `\n  ${colorText('Provider diagnostics:', 'primary')} ${colorText('autic doctor provider <provider-id>', 'dim')}\n`,
+  );
 }
 
 async function printValidationResults(cm: ConfigManager): Promise<void> {
@@ -85,9 +98,13 @@ async function printValidationResults(cm: ConfigManager): Promise<void> {
   for (const check of result.checks) {
     const icon = icons[check.status] || '?';
     const variant = variants[check.status] || 'dim';
-    console.log(`  ${colorText(icon, variant as 'success' | 'warning' | 'error' | 'dim')} ${colorText(check.name, 'bold')}`);
+    console.log(
+      `  ${colorText(icon, variant as 'success' | 'warning' | 'error' | 'dim')} ${colorText(check.name, 'bold')}`,
+    );
     console.log(`     ${check.message}`);
     if (check.details) console.log(`     ${colorText('→', 'dim')} ${check.details}`);
   }
-  console.log(`\n  ${result.passed ? colorText('✓ All checks passed', 'success') : colorText('⚠ Some checks need attention', 'warning')}\n`);
+  console.log(
+    `\n  ${result.passed ? colorText('✓ All checks passed', 'success') : colorText('⚠ Some checks need attention', 'warning')}\n`,
+  );
 }

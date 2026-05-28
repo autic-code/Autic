@@ -46,7 +46,10 @@ export class Vault {
     try {
       await access(VAULT_DIR);
     } catch {
-      await writeFile(VAULT_PATH, JSON.stringify({ entries: {}, salt: '', version: VAULT_VERSION }));
+      await writeFile(
+        VAULT_PATH,
+        JSON.stringify({ entries: {}, salt: '', version: VAULT_VERSION }),
+      );
     }
 
     await this.load();
@@ -103,7 +106,11 @@ export class Vault {
    */
   async hasProviderKey(providerId: string): Promise<boolean> {
     if (!this.initialized) await this.init();
-    const keyNames = [`provider:${providerId}`, `provider:${providerId}:key`, `${providerId}_api_key`];
+    const keyNames = [
+      `provider:${providerId}`,
+      `provider:${providerId}:key`,
+      `${providerId}_api_key`,
+    ];
     return keyNames.some((k) => k in this.entries);
   }
 
@@ -192,16 +199,9 @@ export class Vault {
 
   private decrypt(ciphertext: string): string {
     const { iv, authTag, data } = JSON.parse(ciphertext);
-    const decipher = createDecipheriv(
-      ALGORITHM,
-      this.masterKey,
-      Buffer.from(iv, 'hex'),
-    );
+    const decipher = createDecipheriv(ALGORITHM, this.masterKey, Buffer.from(iv, 'hex'));
     decipher.setAuthTag(Buffer.from(authTag, 'hex'));
-    const decrypted = Buffer.concat([
-      decipher.update(Buffer.from(data, 'hex')),
-      decipher.final(),
-    ]);
+    const decrypted = Buffer.concat([decipher.update(Buffer.from(data, 'hex')), decipher.final()]);
     return decrypted.toString('utf-8');
   }
 }

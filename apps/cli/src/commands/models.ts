@@ -10,10 +10,7 @@ import { spawn } from 'node:child_process';
 
 const modelRegistry = new ModelRegistry();
 
-export async function modelsCommand(
-  action?: string,
-  name?: string,
-): Promise<void> {
+export async function modelsCommand(action?: string, name?: string): Promise<void> {
   console.log('❯ Autic Models\n');
 
   switch (action) {
@@ -79,7 +76,9 @@ async function listModels(): Promise<void> {
               ? `$${model.pricing.perMillionTokensInput.toFixed(2)}/$${model.pricing.perMillionTokensOutput.toFixed(2)} per 1M tokens`
               : '';
             console.log(`  ○ ${model.id}`);
-            console.log(`     Context: ${formatContext(model.contextLength)}${pricing ? ` | ${pricing}` : ''}`);
+            console.log(
+              `     Context: ${formatContext(model.contextLength)}${pricing ? ` | ${pricing}` : ''}`,
+            );
             console.log(`     Capabilities: ${model.capabilities.map((c) => c.type).join(', ')}`);
             console.log('');
           }
@@ -102,7 +101,9 @@ async function listModels(): Promise<void> {
   // Show aggregate stats
   const stats = modelRegistry.getStats();
   if (stats.totalModels > 0) {
-    console.log(`  Registered: ${stats.totalModels} models (${stats.localModels} local, ${stats.cloudModels} cloud)\n`);
+    console.log(
+      `  Registered: ${stats.totalModels} models (${stats.localModels} local, ${stats.cloudModels} cloud)\n`,
+    );
   }
 }
 
@@ -150,9 +151,9 @@ async function searchModels(query?: string): Promise<void> {
 
       const lines = results.split('\n').filter(Boolean);
       if (lines.length > 1) {
-        const matching = lines.slice(1).filter((line) =>
-          line.toLowerCase().includes(searchTerm.toLowerCase()),
-        );
+        const matching = lines
+          .slice(1)
+          .filter((line) => line.toLowerCase().includes(searchTerm.toLowerCase()));
 
         if (matching.length > 0) {
           console.log(`  Installed models matching "${searchTerm}":\n`);
@@ -170,8 +171,14 @@ async function searchModels(query?: string): Promise<void> {
   // Suggest installable models
   console.log('  Common models you can install:\n');
   const suggestions = [
-    'llama3.2', 'llama3.1', 'mistral', 'codellama',
-    'qwen2.5', 'gemma2', 'phi3', 'neural-chat',
+    'llama3.2',
+    'llama3.1',
+    'mistral',
+    'codellama',
+    'qwen2.5',
+    'gemma2',
+    'phi3',
+    'neural-chat',
   ].filter((m) => m.includes(searchTerm.toLowerCase()));
 
   for (const model of suggestions) {
@@ -206,15 +213,21 @@ async function installModel(name?: string): Promise<void> {
 
           // Register in model registry
           const ollama = new OllamaProvider();
-          ollama.connect().then(() => {
-            ollama.listModels().then((models) => {
-              const installed = models.find((m) => m.id === name);
-              if (installed) {
-                modelRegistry.registerModel(installed, 'ollama', true);
-                console.log(`  Registered in model catalog.\n`);
-              }
-            }).catch(() => {});
-          }).catch(() => {});
+          ollama
+            .connect()
+            .then(() => {
+              ollama
+                .listModels()
+                .then((models) => {
+                  const installed = models.find((m) => m.id === name);
+                  if (installed) {
+                    modelRegistry.registerModel(installed, 'ollama', true);
+                    console.log(`  Registered in model catalog.\n`);
+                  }
+                })
+                .catch(() => {});
+            })
+            .catch(() => {});
 
           resolve();
         } else {
@@ -247,8 +260,12 @@ async function showCapabilities(modelName?: string): Promise<void> {
         }
         if (entry.model.pricing) {
           console.log(`\n  Pricing:`);
-          console.log(`    Input: $${entry.model.pricing.perMillionTokensInput.toFixed(2)}/1M tokens`);
-          console.log(`    Output: $${entry.model.pricing.perMillionTokensOutput.toFixed(2)}/1M tokens`);
+          console.log(
+            `    Input: $${entry.model.pricing.perMillionTokensInput.toFixed(2)}/1M tokens`,
+          );
+          console.log(
+            `    Output: $${entry.model.pricing.perMillionTokensOutput.toFixed(2)}/1M tokens`,
+          );
         }
         console.log('');
       }

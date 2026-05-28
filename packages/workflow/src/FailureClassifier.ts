@@ -38,42 +38,128 @@ export class FailureClassifier {
     }
 
     // Provider errors
-    if (this.matchesAny(lower, ['provider', 'api key', 'openrouter', 'ollama', 'model not found', 'rate limit', 'insufficient quota'])) {
+    if (
+      this.matchesAny(lower, [
+        'provider',
+        'api key',
+        'openrouter',
+        'ollama',
+        'model not found',
+        'rate limit',
+        'insufficient quota',
+      ])
+    ) {
       if (this.matchesAny(lower, ['timeout', 'timed out'])) {
-        return this.createClassification('timeout', 'Provider request timed out — consider retrying with a different model', true, 'backoff');
+        return this.createClassification(
+          'timeout',
+          'Provider request timed out — consider retrying with a different model',
+          true,
+          'backoff',
+        );
       }
       if (this.matchesAny(lower, ['rate limit', 'too many requests'])) {
-        return this.createClassification('provider_error', 'Rate limited by provider — backing off before retry', true, 'backoff');
+        return this.createClassification(
+          'provider_error',
+          'Rate limited by provider — backing off before retry',
+          true,
+          'backoff',
+        );
       }
       if (this.matchesAny(lower, ['auth', 'unauthorized', 'invalid key', 'api key'])) {
-        return this.createClassification('provider_error', 'Authentication failed — check provider API key', false, 'abort');
+        return this.createClassification(
+          'provider_error',
+          'Authentication failed — check provider API key',
+          false,
+          'abort',
+        );
       }
       if (this.matchesAny(lower, ['quota', 'credit', 'billing', 'insufficient'])) {
-        return this.createClassification('provider_error', 'Insufficient provider credits — top up account or switch models', false, 'abort');
+        return this.createClassification(
+          'provider_error',
+          'Insufficient provider credits — top up account or switch models',
+          false,
+          'abort',
+        );
       }
-      return this.createClassification('provider_error', 'Provider error occurred — check provider health', true, 'backoff');
+      return this.createClassification(
+        'provider_error',
+        'Provider error occurred — check provider health',
+        true,
+        'backoff',
+      );
     }
 
     // Compilation / type errors
-    if (this.matchesAny(lower, ['compilation', 'compile error', 'ts2304', 'ts2322', 'ts6133', 'ts2352', 'ts6196'])) {
-      return this.createClassification('compilation_error', 'TypeScript compilation error — check types and imports', false, 'skip_step');
+    if (
+      this.matchesAny(lower, [
+        'compilation',
+        'compile error',
+        'ts2304',
+        'ts2322',
+        'ts6133',
+        'ts2352',
+        'ts6196',
+      ])
+    ) {
+      return this.createClassification(
+        'compilation_error',
+        'TypeScript compilation error — check types and imports',
+        false,
+        'skip_step',
+      );
     }
-    if (this.matchesAny(lower, ['type error', 'typeerror', 'is not assignable', 'is declared but'])) {
-      return this.createClassification('type_error', 'Type error — fix type annotations', false, 'skip_step');
+    if (
+      this.matchesAny(lower, ['type error', 'typeerror', 'is not assignable', 'is declared but'])
+    ) {
+      return this.createClassification(
+        'type_error',
+        'Type error — fix type annotations',
+        false,
+        'skip_step',
+      );
     }
     if (this.matchesAny(lower, ['cannot find module', 'module not found', 'import resolution'])) {
-      return this.createClassification('dependency', 'Missing module import — check package dependencies', false, 'skip_step');
+      return this.createClassification(
+        'dependency',
+        'Missing module import — check package dependencies',
+        false,
+        'skip_step',
+      );
     }
 
     // Dependency errors
     if (this.matchesAny(lower, ['enoent', 'not found', 'no such file', 'does not exist'])) {
-      return this.createClassification('dependency', 'File or resource not found — check path', false, 'skip_step');
+      return this.createClassification(
+        'dependency',
+        'File or resource not found — check path',
+        false,
+        'skip_step',
+      );
     }
-    if (this.matchesAny(lower, ['npm error', 'pnpm error', 'yarn error', 'install failed', 'peer dependency', 'version mismatch'])) {
-      return this.createClassification('dependency', 'Package dependency error — check package.json', false, 'skip_step');
+    if (
+      this.matchesAny(lower, [
+        'npm error',
+        'pnpm error',
+        'yarn error',
+        'install failed',
+        'peer dependency',
+        'version mismatch',
+      ])
+    ) {
+      return this.createClassification(
+        'dependency',
+        'Package dependency error — check package.json',
+        false,
+        'skip_step',
+      );
     }
     if (this.matchesAny(lower, ['cannot find package', 'package not found'])) {
-      return this.createClassification('dependency', 'Missing package dependency — install required packages', false, 'skip_step');
+      return this.createClassification(
+        'dependency',
+        'Missing package dependency — install required packages',
+        false,
+        'skip_step',
+      );
     }
 
     // Timeout errors
@@ -81,37 +167,93 @@ export class FailureClassifier {
       return this.createClassification('timeout', 'Operation timed out', true, 'backoff');
     }
     if (durationMs && durationMs > 60_000) {
-      return this.createClassification('timeout', 'Operation exceeded maximum duration', false, 'skip_step');
+      return this.createClassification(
+        'timeout',
+        'Operation exceeded maximum duration',
+        false,
+        'skip_step',
+      );
     }
 
     // Permission errors
-    if (this.matchesAny(lower, ['permission denied', 'eacces', 'eprem', 'not allowed', 'forbidden', 'unauthorized access'])) {
-      return this.createClassification('permission_denied', 'Permission denied — operation requires elevated permissions', false, 'abort');
+    if (
+      this.matchesAny(lower, [
+        'permission denied',
+        'eacces',
+        'eprem',
+        'not allowed',
+        'forbidden',
+        'unauthorized access',
+      ])
+    ) {
+      return this.createClassification(
+        'permission_denied',
+        'Permission denied — operation requires elevated permissions',
+        false,
+        'abort',
+      );
     }
 
     // Verification failures
-    if (stepType === 'verify' || this.matchesAny(lower, ['verification failed', 'test failed', 'build failed', 'lint error'])) {
-      return this.createClassification('verification_failed', 'Verification check did not pass', false, 'skip_step');
+    if (
+      stepType === 'verify' ||
+      this.matchesAny(lower, ['verification failed', 'test failed', 'build failed', 'lint error'])
+    ) {
+      return this.createClassification(
+        'verification_failed',
+        'Verification check did not pass',
+        false,
+        'skip_step',
+      );
     }
 
     // Exit code based classification
     if (exitCode !== undefined && exitCode !== 0) {
       if (this.matchesAny(lower, ['test', 'spec', 'jest', 'vitest'])) {
-        return this.createClassification('verification_failed', `Test exited with code ${exitCode}`, false, 'skip_step');
+        return this.createClassification(
+          'verification_failed',
+          `Test exited with code ${exitCode}`,
+          false,
+          'skip_step',
+        );
       }
       if (this.matchesAny(lower, ['build', 'tsc', 'compile'])) {
-        return this.createClassification('compilation_error', `Build exited with code ${exitCode}`, false, 'skip_step');
+        return this.createClassification(
+          'compilation_error',
+          `Build exited with code ${exitCode}`,
+          false,
+          'skip_step',
+        );
       }
     }
 
     // Tool errors
     if (toolName) {
-      return this.createClassification('tool_error', `Tool "${toolName}" failed: ${error.slice(0, 100)}`, true, 'immediate');
+      return this.createClassification(
+        'tool_error',
+        `Tool "${toolName}" failed: ${error.slice(0, 100)}`,
+        true,
+        'immediate',
+      );
     }
 
     // Runtime crash
-    if (this.matchesAny(lower, ['crash', 'segfault', 'segmentation fault', 'abort', 'panic', 'out of memory'])) {
-      return this.createClassification('runtime_crash', 'Runtime crash detected — this may indicate a system issue', false, 'abort');
+    if (
+      this.matchesAny(lower, [
+        'crash',
+        'segfault',
+        'segmentation fault',
+        'abort',
+        'panic',
+        'out of memory',
+      ])
+    ) {
+      return this.createClassification(
+        'runtime_crash',
+        'Runtime crash detected — this may indicate a system issue',
+        false,
+        'abort',
+      );
     }
 
     // Default: unknown
@@ -121,7 +263,10 @@ export class FailureClassifier {
   /**
    * Get retry delay in ms based on strategy and retry count.
    */
-  getRetryDelay(strategy: 'immediate' | 'backoff' | 'skip_step' | 'abort', retryCount: number): number {
+  getRetryDelay(
+    strategy: 'immediate' | 'backoff' | 'skip_step' | 'abort',
+    retryCount: number,
+  ): number {
     switch (strategy) {
       case 'immediate':
         return 100;

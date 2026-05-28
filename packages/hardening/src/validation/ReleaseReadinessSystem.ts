@@ -21,7 +21,7 @@ export class ReleaseReadinessChecker {
     checks.push(await this.checkConfiguration());
     checks.push(await this.checkIntegrity());
 
-    const passed = checks.every(c => c.passed);
+    const passed = checks.every((c) => c.passed);
     return {
       passed,
       version,
@@ -37,7 +37,12 @@ export class ReleaseReadinessChecker {
     };
   }
 
-  private async checkPackage(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async checkPackage(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Package validation',
       passed: true,
@@ -45,7 +50,12 @@ export class ReleaseReadinessChecker {
     };
   }
 
-  private async checkDependencies(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async checkDependencies(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Dependency audit',
       passed: true,
@@ -53,7 +63,12 @@ export class ReleaseReadinessChecker {
     };
   }
 
-  private async checkRuntimeCompatibility(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async checkRuntimeCompatibility(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Runtime compatibility',
       passed: true,
@@ -61,7 +76,12 @@ export class ReleaseReadinessChecker {
     };
   }
 
-  private async checkConfiguration(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async checkConfiguration(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Configuration validation',
       passed: true,
@@ -69,7 +89,12 @@ export class ReleaseReadinessChecker {
     };
   }
 
-  private async checkIntegrity(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async checkIntegrity(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Integrity check',
       passed: true,
@@ -77,7 +102,10 @@ export class ReleaseReadinessChecker {
     };
   }
 
-  async validateReleaseCandidate(version: string, _buildDir: string): Promise<ReleaseReadinessResult> {
+  async validateReleaseCandidate(
+    version: string,
+    _buildDir: string,
+  ): Promise<ReleaseReadinessResult> {
     return this.checkAll(version);
   }
 }

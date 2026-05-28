@@ -61,10 +61,7 @@ export class AutoModeManager {
   private securityEvents: SecurityEventSystem;
   private consecutiveAutoApprovals = 0;
 
-  constructor(
-    initialMode: AutoMode = 'guided',
-    securityEvents?: SecurityEventSystem,
-  ) {
+  constructor(initialMode: AutoMode = 'guided', securityEvents?: SecurityEventSystem) {
     this.currentMode = initialMode;
     this.config = { ...MODE_CONFIGS[initialMode] };
     this.trustProfile = new TrustProfileSystem(MODE_TO_PROFILE[initialMode]);
@@ -112,11 +109,7 @@ export class AutoModeManager {
   /**
    * Evaluate whether an action should be auto-approved or requires user input.
    */
-  evaluateAction(params: {
-    action: string;
-    resource: string;
-    riskLevel: RiskLevel;
-  }): {
+  evaluateAction(params: { action: string; resource: string; riskLevel: RiskLevel }): {
     approved: boolean;
     requiresInput: boolean;
     reason: string;
@@ -176,7 +169,11 @@ export class AutoModeManager {
     }
 
     // Guided mode: medium risk requires approval for write operations
-    if (this.currentMode === 'guided' && riskLevel === 'medium' && this.config.requireApprovalForWrite) {
+    if (
+      this.currentMode === 'guided' &&
+      riskLevel === 'medium' &&
+      this.config.requireApprovalForWrite
+    ) {
       return {
         approved: false,
         requiresInput: true,

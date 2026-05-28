@@ -10,16 +10,8 @@
 
 // #7 — Runtime Profiling System
 export { RuntimeProfiler } from './RuntimeProfiler.js';
-export type {
-  ProfileSnapshot,
-  ProfileReport,
-  ProfilingConfig,
-} from './RuntimeProfiler.js';
+export type { ProfileSnapshot, ProfileReport, ProfilingConfig } from './RuntimeProfiler.js';
 
 // #14 — Performance Baseline System
 export { PerformanceBaseline } from './PerformanceBaseline.js';
-export type {
-  BaselineMetric,
-  BaselineReport,
-  BaselineComparison,
-} from './PerformanceBaseline.js';
+export type { BaselineMetric, BaselineReport, BaselineComparison } from './PerformanceBaseline.js';

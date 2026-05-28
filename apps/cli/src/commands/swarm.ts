@@ -25,14 +25,30 @@ function noopAction(action: string): void {
   lines.push(`${theme.icon.arrow} ${theme.colors.primary}Swarm Orchestration${theme.colors.text}`);
   lines.push('');
   lines.push(`  ${theme.colors.textDim}Usage:${theme.colors.text}`);
-  lines.push(`    ${theme.colors.primary}autic swarm status${theme.colors.text}      — Show swarm status`);
-  lines.push(`    ${theme.colors.primary}autic swarm inspect${theme.colors.text}     — Show detailed state`);
-  lines.push(`    ${theme.colors.primary}autic swarm pipelines${theme.colors.text}   — List pipeline templates`);
-  lines.push(`    ${theme.colors.primary}autic swarm safety${theme.colors.text}      — Show safety status`);
-  lines.push(`    ${theme.colors.primary}autic swarm start${theme.colors.text}       — Start swarm orchestrator`);
-  lines.push(`    ${theme.colors.primary}autic swarm stop${theme.colors.text}        — Stop swarm orchestrator`);
-  lines.push(`    ${theme.colors.primary}autic swarm pause${theme.colors.text}       — Pause swarm`);
-  lines.push(`    ${theme.colors.primary}autic swarm resume${theme.colors.text}      — Resume swarm`);
+  lines.push(
+    `    ${theme.colors.primary}autic swarm status${theme.colors.text}      — Show swarm status`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm inspect${theme.colors.text}     — Show detailed state`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm pipelines${theme.colors.text}   — List pipeline templates`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm safety${theme.colors.text}      — Show safety status`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm start${theme.colors.text}       — Start swarm orchestrator`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm stop${theme.colors.text}        — Stop swarm orchestrator`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm pause${theme.colors.text}       — Pause swarm`,
+  );
+  lines.push(
+    `    ${theme.colors.primary}autic swarm resume${theme.colors.text}      — Resume swarm`,
+  );
   console.log(lines.join('\n'));
 }
 
@@ -84,22 +100,36 @@ export async function swarmCommand(action?: string): Promise<void> {
       const violations = orchestrator.getSafetySystem().getViolations();
       const lines: string[] = [];
 
-      lines.push(`${theme.icon.arrow} ${theme.colors.primary}Swarm Detailed State${theme.colors.text}`);
+      lines.push(
+        `${theme.icon.arrow} ${theme.colors.primary}Swarm Detailed State${theme.colors.text}`,
+      );
       lines.push('');
       lines.push(`  ${theme.colors.textDim}Swarm ID:${theme.colors.text} ${status.id}`);
       lines.push(`  ${theme.colors.textDim}Status:${theme.colors.text} ${status.status}`);
       lines.push(`  ${theme.colors.textDim}Agents:${theme.colors.text} ${status.agents}`);
-      lines.push(`  ${theme.colors.textDim}Active Delegations:${theme.colors.text} ${status.activeDelegations}`);
+      lines.push(
+        `  ${theme.colors.textDim}Active Delegations:${theme.colors.text} ${status.activeDelegations}`,
+      );
       lines.push(`  ${theme.colors.textDim}Config:${theme.colors.text}`);
-      lines.push(`    ${theme.colors.textDim}Max Agents:${theme.colors.text} ${status.config.maxAgents}`);
-      lines.push(`    ${theme.colors.textDim}Max Depth:${theme.colors.text} ${status.config.maxDelegationDepth}`);
-      lines.push(`    ${theme.colors.textDim}Max Parallel:${theme.colors.text} ${status.config.maxParallelBatches}`);
-      lines.push(`    ${theme.colors.textDim}Safety Profile:${theme.colors.text} ${status.config.safetyProfile}`);
+      lines.push(
+        `    ${theme.colors.textDim}Max Agents:${theme.colors.text} ${status.config.maxAgents}`,
+      );
+      lines.push(
+        `    ${theme.colors.textDim}Max Depth:${theme.colors.text} ${status.config.maxDelegationDepth}`,
+      );
+      lines.push(
+        `    ${theme.colors.textDim}Max Parallel:${theme.colors.text} ${status.config.maxParallelBatches}`,
+      );
+      lines.push(
+        `    ${theme.colors.textDim}Safety Profile:${theme.colors.text} ${status.config.safetyProfile}`,
+      );
 
       if (violations.length > 0) {
         lines.push(`  ${theme.colors.warning}Safety Violations:${theme.colors.text}`);
         for (const v of violations) {
-          lines.push(`    ${theme.icon.warning} ${theme.colors.warning}${v.type}${theme.colors.text}: ${v.message}`);
+          lines.push(
+            `    ${theme.icon.warning} ${theme.colors.warning}${v.type}${theme.colors.text}: ${v.message}`,
+          );
         }
       }
 
@@ -111,12 +141,16 @@ export async function swarmCommand(action?: string): Promise<void> {
       const allPipelines = pipelines.list();
       const lines: string[] = [];
 
-      lines.push(`${theme.icon.arrow} ${theme.colors.primary}Swarm Pipeline Templates${theme.colors.text}`);
+      lines.push(
+        `${theme.icon.arrow} ${theme.colors.primary}Swarm Pipeline Templates${theme.colors.text}`,
+      );
       lines.push('');
       for (const p of allPipelines) {
         lines.push(`  ${theme.icon.arrow} ${theme.colors.primary}${p.name}${theme.colors.text}`);
         lines.push(`    ${theme.colors.textDim}${p.description}${theme.colors.text}`);
-        lines.push(`    ${theme.colors.textDim}Stages:${theme.colors.text} ${p.stages.length}  ${theme.colors.textDim}Timeout:${theme.colors.text} ${(p.timeoutMs / 1000).toFixed(0)}s  ${theme.colors.textDim}Max Parallel:${theme.colors.text} ${p.maxParallelism}`);
+        lines.push(
+          `    ${theme.colors.textDim}Stages:${theme.colors.text} ${p.stages.length}  ${theme.colors.textDim}Timeout:${theme.colors.text} ${(p.timeoutMs / 1000).toFixed(0)}s  ${theme.colors.textDim}Max Parallel:${theme.colors.text} ${p.maxParallelism}`,
+        );
         lines.push('');
       }
 
@@ -129,7 +163,9 @@ export async function swarmCommand(action?: string): Promise<void> {
       const protection = orchestrator.getProtectionState();
       const lines: string[] = [];
 
-      lines.push(`${theme.icon.arrow} ${theme.colors.primary}Swarm Safety & Protection${theme.colors.text}`);
+      lines.push(
+        `${theme.icon.arrow} ${theme.colors.primary}Swarm Safety & Protection${theme.colors.text}`,
+      );
       lines.push('');
 
       // Safety violations
@@ -137,16 +173,24 @@ export async function swarmCommand(action?: string): Promise<void> {
         lines.push(`  ${theme.colors.warning}Active Safety Violations:${theme.colors.text}`);
         for (const v of violations) {
           const icon = v.type === 'pipeline_collapse' ? theme.icon.cross : theme.icon.warning;
-          lines.push(`    ${icon} ${theme.colors.warning}${v.type}${theme.colors.text}: ${v.message}`);
+          lines.push(
+            `    ${icon} ${theme.colors.warning}${v.type}${theme.colors.text}: ${v.message}`,
+          );
         }
       } else {
-        lines.push(`  ${theme.icon.check} ${theme.colors.success}No safety violations${theme.colors.text}`);
+        lines.push(
+          `  ${theme.icon.check} ${theme.colors.success}No safety violations${theme.colors.text}`,
+        );
       }
 
       lines.push('');
       lines.push(`  ${theme.colors.textDim}Resource Protection:${theme.colors.text}`);
-      lines.push(`    ${theme.colors.textDim}CPU:${theme.colors.text} ${protection.cpuPressure}  ${theme.colors.textDim}Memory:${theme.colors.text} ${protection.memoryPressure}  ${theme.colors.textDim}Provider:${theme.colors.text} ${protection.providerPressure}  ${theme.colors.textDim}Workers:${theme.colors.text} ${protection.workerPressure}  ${theme.colors.textDim}Queue:${theme.colors.text} ${protection.queuePressure}`);
-      lines.push(`    ${theme.colors.textDim}Throttling:${theme.colors.text} ${protection.throttlingActive ? `${theme.icon.warning} ${theme.colors.warning}Active${theme.colors.text}` : `${theme.icon.check} ${theme.colors.success}Inactive${theme.colors.text}`}`);
+      lines.push(
+        `    ${theme.colors.textDim}CPU:${theme.colors.text} ${protection.cpuPressure}  ${theme.colors.textDim}Memory:${theme.colors.text} ${protection.memoryPressure}  ${theme.colors.textDim}Provider:${theme.colors.text} ${protection.providerPressure}  ${theme.colors.textDim}Workers:${theme.colors.text} ${protection.workerPressure}  ${theme.colors.textDim}Queue:${theme.colors.text} ${protection.queuePressure}`,
+      );
+      lines.push(
+        `    ${theme.colors.textDim}Throttling:${theme.colors.text} ${protection.throttlingActive ? `${theme.icon.warning} ${theme.colors.warning}Active${theme.colors.text}` : `${theme.icon.check} ${theme.colors.success}Inactive${theme.colors.text}`}`,
+      );
 
       console.log(lines.join('\n'));
       break;
@@ -154,25 +198,33 @@ export async function swarmCommand(action?: string): Promise<void> {
 
     case 'start': {
       orchestrator.start();
-      console.log(`${theme.icon.check} ${theme.colors.success}Swarm orchestrator started${theme.colors.text}`);
+      console.log(
+        `${theme.icon.check} ${theme.colors.success}Swarm orchestrator started${theme.colors.text}`,
+      );
       break;
     }
 
     case 'stop': {
       orchestrator.stop();
-      console.log(`${theme.icon.check} ${theme.colors.success}Swarm orchestrator stopped${theme.colors.text}`);
+      console.log(
+        `${theme.icon.check} ${theme.colors.success}Swarm orchestrator stopped${theme.colors.text}`,
+      );
       break;
     }
 
     case 'pause': {
       orchestrator.pause();
-      console.log(`${theme.icon.dot} ${theme.colors.warning}Swarm orchestrator paused${theme.colors.text}`);
+      console.log(
+        `${theme.icon.dot} ${theme.colors.warning}Swarm orchestrator paused${theme.colors.text}`,
+      );
       break;
     }
 
     case 'resume': {
       orchestrator.resume();
-      console.log(`${theme.icon.arrow} ${theme.colors.primary}Swarm orchestrator resumed${theme.colors.text}`);
+      console.log(
+        `${theme.icon.arrow} ${theme.colors.primary}Swarm orchestrator resumed${theme.colors.text}`,
+      );
       break;
     }
 

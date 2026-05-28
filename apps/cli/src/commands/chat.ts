@@ -9,12 +9,14 @@ import { TaskOrchestrator } from '@autic/runtime';
 import { ToolRegistry, registerBuiltinTools } from '@autic/tools';
 import { readFile } from 'node:fs/promises';
 
-export async function chatCommand(options: {
-  model?: string;
-  provider?: string;
-  session?: string;
-  file?: string;
-} = {}): Promise<void> {
+export async function chatCommand(
+  options: {
+    model?: string;
+    provider?: string;
+    session?: string;
+    file?: string;
+  } = {},
+): Promise<void> {
   console.log('❯ Starting Autic interactive session...\n');
 
   // Create or restore session

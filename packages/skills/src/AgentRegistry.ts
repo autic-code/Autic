@@ -113,7 +113,10 @@ export class AgentRegistry {
   /**
    * Update an agent execution context.
    */
-  updateContext(agentId: string, updates: Partial<AgentExecutionContext>): AgentExecutionContext | undefined {
+  updateContext(
+    agentId: string,
+    updates: Partial<AgentExecutionContext>,
+  ): AgentExecutionContext | undefined {
     const context = this.executionContexts.get(agentId);
     if (!context) return undefined;
     Object.assign(context, updates);

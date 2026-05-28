@@ -42,7 +42,10 @@ import {
 } from './agents/index.js';
 import { OrchestrationObservability } from './observability.js';
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class Orchestrator {
   private pipelineRegistry: PipelineRegistry;
@@ -116,19 +119,21 @@ export class Orchestrator {
   /**
    * Execute a full orchestrated pipeline.
    */
-  async orchestrate(params: {
-    goal: string;
-    pipelineId?: string;
-    runTool: ToolRunner;
-  }): Promise<{
+  async orchestrate(params: { goal: string; pipelineId?: string; runTool: ToolRunner }): Promise<{
     state: PipelineState;
-    results: Array<{ stage: OrchestrationStage; success: boolean; durationMs: number; error?: string }>;
+    results: Array<{
+      stage: OrchestrationStage;
+      success: boolean;
+      durationMs: number;
+      error?: string;
+    }>;
   }> {
     const { goal, runTool } = params;
 
     // 1. Select pipeline
     const pipeline = params.pipelineId
-      ? this.pipelineRegistry.get(params.pipelineId) || this.pipelineRegistry.selectForGoal(goal, this.options)
+      ? this.pipelineRegistry.get(params.pipelineId) ||
+        this.pipelineRegistry.selectForGoal(goal, this.options)
       : this.pipelineRegistry.selectForGoal(goal, this.options);
 
     this.currentPipeline = pipeline;
@@ -287,7 +292,13 @@ export class Orchestrator {
    */
   private emitEvent(
     type: OrchestrationEventType,
-    data: { message: string; stage?: OrchestrationStage; agentId?: string; error?: string; data?: Record<string, unknown> },
+    data: {
+      message: string;
+      stage?: OrchestrationStage;
+      agentId?: string;
+      error?: string;
+      data?: Record<string, unknown>;
+    },
   ): void {
     const event: OrchestrationEvent = {
       type,

@@ -54,12 +54,12 @@ export class SecurityAuditor {
    */
   async runFullAudit(): Promise<AuditReport> {
     const findings: AuditFinding[] = [
-      ...await this.auditPermissionBypass(),
-      ...await this.auditVaultIsolation(),
-      ...await this.auditSanitizationIntegrity(),
-      ...await this.auditUnsafeCommandHandling(),
-      ...await this.auditExtensionBoundaries(),
-      ...await this.auditLocalOnlyIntegrity(),
+      ...(await this.auditPermissionBypass()),
+      ...(await this.auditVaultIsolation()),
+      ...(await this.auditSanitizationIntegrity()),
+      ...(await this.auditUnsafeCommandHandling()),
+      ...(await this.auditExtensionBoundaries()),
+      ...(await this.auditLocalOnlyIntegrity()),
     ];
 
     this.auditLog = findings;
@@ -87,7 +87,9 @@ export class SecurityAuditor {
   /**
    * Public wrapper — check permission bypass
    */
-  async checkPermissionBypass(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async checkPermissionBypass(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const findings = await this.auditPermissionBypass();
     return findings.map((f) => ({
       name: f.check,
@@ -100,7 +102,9 @@ export class SecurityAuditor {
   /**
    * Public wrapper — validate vault isolation
    */
-  async validateVaultIsolation(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async validateVaultIsolation(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const findings = await this.auditVaultIsolation();
     return findings.map((f) => ({
       name: f.check,
@@ -113,7 +117,9 @@ export class SecurityAuditor {
   /**
    * Public wrapper — verify sanitization integrity
    */
-  async verifySanitization(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async verifySanitization(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const findings = await this.auditSanitizationIntegrity();
     return findings.map((f) => ({
       name: f.check,
@@ -126,7 +132,9 @@ export class SecurityAuditor {
   /**
    * Public wrapper — audit unsafe commands
    */
-  async auditUnsafeCommands(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async auditUnsafeCommands(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const findings = await this.auditUnsafeCommandHandling();
     return findings.map((f) => ({
       name: f.check,
@@ -139,7 +147,9 @@ export class SecurityAuditor {
   /**
    * Public wrapper — enforce extension boundaries
    */
-  async enforceExtensionBoundaries(): Promise<Array<{ name: string; passed: boolean; detail?: string; severity?: string }>> {
+  async enforceExtensionBoundaries(): Promise<
+    Array<{ name: string; passed: boolean; detail?: string; severity?: string }>
+  > {
     const findings = await this.auditExtensionBoundaries();
     return findings.map((f) => ({
       name: f.check,
@@ -156,7 +166,8 @@ export class SecurityAuditor {
         passed: true,
         check: 'permission-model-completeness',
         description: 'Verify no operation escapes the permission model',
-        message: 'All operations routed through PermissionManager — no direct access paths detected',
+        message:
+          'All operations routed through PermissionManager — no direct access paths detected',
         severity: 'critical',
       },
       {
@@ -330,7 +341,9 @@ export class SecurityAuditor {
     const warnings = findings.filter((f) => !f.passed);
 
     if (critical.length > 0) {
-      recs.push(`CRITICAL: ${critical.length} critical security finding(s) — immediate action required`);
+      recs.push(
+        `CRITICAL: ${critical.length} critical security finding(s) — immediate action required`,
+      );
       for (const f of critical) {
         recs.push(`  ✗ ${f.check}: ${f.recommendation ?? f.message}`);
       }

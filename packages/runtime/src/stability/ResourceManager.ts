@@ -34,8 +34,13 @@ export class ResourceManager extends EventEmitter {
   private history: ResourceMetrics[] = [];
   private options: Required<ResourceManagerOptions>;
   private timer: ReturnType<typeof setInterval> | null = null;
-  private _providers: Map<string, { healthy: boolean; degraded: boolean; active: boolean }> = new Map();
-  private _pipelines: { active: number; completed: number; failed: number } = { active: 0, completed: 0, failed: 0 };
+  private _providers: Map<string, { healthy: boolean; degraded: boolean; active: boolean }> =
+    new Map();
+  private _pipelines: { active: number; completed: number; failed: number } = {
+    active: 0,
+    completed: 0,
+    failed: 0,
+  };
   private _queueMetrics = { pending: 0, running: 0, completed: 0, failed: 0 };
   private _workerMetrics = { active: 0, idle: 0, total: 0 };
   private _providerLatencies: number[] = [];
@@ -179,9 +184,10 @@ export class ResourceManager extends EventEmitter {
     else if (pending > threshold) level = 'high';
     else if (pending > threshold / 2) level = 'medium';
 
-    const avgWait = this._queueWaitTimes.length > 0
-      ? this._queueWaitTimes.reduce((a, b) => a + b, 0) / this._queueWaitTimes.length
-      : 0;
+    const avgWait =
+      this._queueWaitTimes.length > 0
+        ? this._queueWaitTimes.reduce((a, b) => a + b, 0) / this._queueWaitTimes.length
+        : 0;
 
     return {
       level,
@@ -189,9 +195,10 @@ export class ResourceManager extends EventEmitter {
       runningCount: running,
       avgWaitMs: Math.round(avgWait),
       throughputPerMin: this.calculateThroughput(),
-      concurrencyUtilization: this._workerMetrics.total > 0
-        ? (this._workerMetrics.active / this._workerMetrics.total) * 100
-        : 0,
+      concurrencyUtilization:
+        this._workerMetrics.total > 0
+          ? (this._workerMetrics.active / this._workerMetrics.total) * 100
+          : 0,
       recommendation: this.getPressureRecommendation(level),
     };
   }
@@ -203,9 +210,10 @@ export class ResourceManager extends EventEmitter {
     const degraded = this.countDegradedProviders();
     const total = this._providers.size;
 
-    const avgLatency = this._providerLatencies.length > 0
-      ? this._providerLatencies.reduce((a, b) => a + b, 0) / this._providerLatencies.length
-      : 0;
+    const avgLatency =
+      this._providerLatencies.length > 0
+        ? this._providerLatencies.reduce((a, b) => a + b, 0) / this._providerLatencies.length
+        : 0;
 
     return {
       total,
@@ -261,24 +269,46 @@ export class ResourceManager extends EventEmitter {
 
   private getPressureRecommendation(level: QueuePressure['level']): string {
     switch (level) {
-      case 'low': return 'Normal operation';
-      case 'medium': return 'Monitor queue growth';
-      case 'high': return 'Consider increasing worker count or throttling new tasks';
-      case 'critical': return 'Immediate intervention needed — reduce task inflow';
+      case 'low':
+        return 'Normal operation';
+      case 'medium':
+        return 'Monitor queue growth';
+      case 'high':
+        return 'Consider increasing worker count or throttling new tasks';
+      case 'critical':
+        return 'Immediate intervention needed — reduce task inflow';
     }
   }
 
   private checkResourceWarnings(metrics: ResourceMetrics): void {
     if (metrics.memory.heapPercent > this.options.pressureThresholds!.memoryHighMB!) {
-      this.emit('resourceWarning', 'memory', metrics.memory.heapPercent, this.options.pressureThresholds!.memoryHighMB!);
+      this.emit(
+        'resourceWarning',
+        'memory',
+        metrics.memory.heapPercent,
+        this.options.pressureThresholds!.memoryHighMB!,
+      );
     }
     if (this._queueMetrics.pending > this.options.pressureThresholds!.queuePendingHigh!) {
-      this.emit('resourceWarning', 'queue', this._queueMetrics.pending, this.options.pressureThresholds!.queuePendingHigh!);
+      this.emit(
+        'resourceWarning',
+        'queue',
+        this._queueMetrics.pending,
+        this.options.pressureThresholds!.queuePendingHigh!,
+      );
     }
   }
 
-  getActiveWorkerCount(): number { return this._workerMetrics.active; }
-  getQueuedTaskCount(): number { return this._queueMetrics.pending; }
-  getProviderCount(): number { return this._providers.size; }
-  getActivePipelineCount(): number { return this._pipelines.active; }
+  getActiveWorkerCount(): number {
+    return this._workerMetrics.active;
+  }
+  getQueuedTaskCount(): number {
+    return this._queueMetrics.pending;
+  }
+  getProviderCount(): number {
+    return this._providers.size;
+  }
+  getActivePipelineCount(): number {
+    return this._pipelines.active;
+  }
 }

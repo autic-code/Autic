@@ -77,59 +77,98 @@ export function renderLearningPanel(display: LearningDisplay): string[] {
   const enabled = display.engine.totalEntries > 0;
 
   // Header
-  lines.push(`${theme.colors.info}${theme.icon.bullet} Learning System${theme.colors.text} ${enabled ? theme.colors.success + 'active' : theme.colors.textDim + 'no data'}${theme.colors.text}`);
+  lines.push(
+    `${theme.colors.info}${theme.icon.bullet} Learning System${theme.colors.text} ${enabled ? theme.colors.success + 'active' : theme.colors.textDim + 'no data'}${theme.colors.text}`,
+  );
 
   if (!enabled) {
-    lines.push(`  ${theme.colors.textDim}No learning data recorded yet. Start a workflow to build operational memory.${theme.colors.text}`);
+    lines.push(
+      `  ${theme.colors.textDim}No learning data recorded yet. Start a workflow to build operational memory.${theme.colors.text}`,
+    );
     return lines;
   }
 
   // Engine stats
-  lines.push(`  ${theme.colors.textDim}Entries:${theme.colors.text} ${display.engine.totalEntries} total, ${display.engine.verifiedEntries} verified`);
-  lines.push(`  ${theme.colors.textDim}Avg Confidence:${theme.colors.text} ${confidenceBar(display.engine.avgConfidence)}`);
-  lines.push(`  ${theme.colors.textDim}Verified Fixes:${theme.colors.text} ${display.engine.totalFixes}`);
+  lines.push(
+    `  ${theme.colors.textDim}Entries:${theme.colors.text} ${display.engine.totalEntries} total, ${display.engine.verifiedEntries} verified`,
+  );
+  lines.push(
+    `  ${theme.colors.textDim}Avg Confidence:${theme.colors.text} ${confidenceBar(display.engine.avgConfidence)}`,
+  );
+  lines.push(
+    `  ${theme.colors.textDim}Verified Fixes:${theme.colors.text} ${display.engine.totalFixes}`,
+  );
 
   // Retrieval section
   if (display.retrieval.totalHits > 0) {
-    const hitRate = display.retrieval.totalHits > 0
-      ? Math.round((display.retrieval.totalHits / Math.max(1, display.retrieval.totalHits + display.observability.recentMisses)) * 100)
-      : 0;
-    lines.push(`  ${theme.colors.textDim}Retrieval:${theme.colors.text} ${display.retrieval.totalHits} hits ${theme.colors.textDim}(${hitRate}% success rate)${theme.colors.text}`);
+    const hitRate =
+      display.retrieval.totalHits > 0
+        ? Math.round(
+            (display.retrieval.totalHits /
+              Math.max(1, display.retrieval.totalHits + display.observability.recentMisses)) *
+              100,
+          )
+        : 0;
+    lines.push(
+      `  ${theme.colors.textDim}Retrieval:${theme.colors.text} ${display.retrieval.totalHits} hits ${theme.colors.textDim}(${hitRate}% success rate)${theme.colors.text}`,
+    );
 
     if (display.retrieval.topQueries.length > 0) {
       const topQuery = display.retrieval.topQueries[0];
-      lines.push(`    ${theme.colors.textDim}Top query:${theme.colors.text} "${topQuery.query}" ${theme.colors.textDim}(${topQuery.count}x)${theme.colors.text}`);
+      lines.push(
+        `    ${theme.colors.textDim}Top query:${theme.colors.text} "${topQuery.query}" ${theme.colors.textDim}(${topQuery.count}x)${theme.colors.text}`,
+      );
     }
   }
 
   // Local learning section
   if (display.localLearning.totalWorkspaces > 0) {
-    lines.push(`  ${theme.colors.textDim}Local Learning:${theme.colors.text} ${display.localLearning.totalWorkspaces} workspaces, ${display.localLearning.totalPatterns} patterns`);
+    lines.push(
+      `  ${theme.colors.textDim}Local Learning:${theme.colors.text} ${display.localLearning.totalWorkspaces} workspaces, ${display.localLearning.totalPatterns} patterns`,
+    );
   }
 
   // Global section
   if (display.global.syncEnabled) {
-    lines.push(`  ${theme.colors.textDim}Global Intelligence:${theme.colors.text} ${display.global.totalEntries} entries ${theme.colors.textDim}(sync enabled)${theme.colors.text}`);
+    lines.push(
+      `  ${theme.colors.textDim}Global Intelligence:${theme.colors.text} ${display.global.totalEntries} entries ${theme.colors.textDim}(sync enabled)${theme.colors.text}`,
+    );
   } else if (display.global.totalEntries > 0) {
-    lines.push(`  ${theme.colors.textDim}Global Intelligence:${theme.colors.text} ${display.global.totalEntries} entries ${theme.colors.textDim}(sync disabled)${theme.colors.text}`);
+    lines.push(
+      `  ${theme.colors.textDim}Global Intelligence:${theme.colors.text} ${display.global.totalEntries} entries ${theme.colors.textDim}(sync disabled)${theme.colors.text}`,
+    );
   }
 
   // Optimizations section
   if (display.optimizations.totalOptimizations > 0) {
-    const successRate = (display.optimizations.totalSuccesses + display.optimizations.totalFailures) > 0
-      ? Math.round((display.optimizations.totalSuccesses / Math.max(1, display.optimizations.totalSuccesses + display.optimizations.totalFailures)) * 100)
-      : 0;
-    lines.push(`  ${theme.colors.textDim}Optimizations:${theme.colors.text} ${display.optimizations.totalOptimizations} entries ${theme.colors.textDim}(${successRate}% success rate)${theme.colors.text}`);
+    const successRate =
+      display.optimizations.totalSuccesses + display.optimizations.totalFailures > 0
+        ? Math.round(
+            (display.optimizations.totalSuccesses /
+              Math.max(
+                1,
+                display.optimizations.totalSuccesses + display.optimizations.totalFailures,
+              )) *
+              100,
+          )
+        : 0;
+    lines.push(
+      `  ${theme.colors.textDim}Optimizations:${theme.colors.text} ${display.optimizations.totalOptimizations} entries ${theme.colors.textDim}(${successRate}% success rate)${theme.colors.text}`,
+    );
   }
 
   // Experience DB section
   if (display.experienceDB.totalFrameworks > 0 || display.experienceDB.totalResolutions > 0) {
-    lines.push(`  ${theme.colors.textDim}Experience DB:${theme.colors.text} ${display.experienceDB.totalFrameworks} frameworks, ${display.experienceDB.totalResolutions} ${display.experienceDB.totalResolutions === 1 ? 'resolution' : 'resolutions'}, ${display.experienceDB.totalRecoveryPatterns} recovery patterns`);
+    lines.push(
+      `  ${theme.colors.textDim}Experience DB:${theme.colors.text} ${display.experienceDB.totalFrameworks} frameworks, ${display.experienceDB.totalResolutions} ${display.experienceDB.totalResolutions === 1 ? 'resolution' : 'resolutions'}, ${display.experienceDB.totalRecoveryPatterns} recovery patterns`,
+    );
   }
 
   // Observability section
   if (display.observability.totalEvents > 0) {
-    lines.push(`  ${theme.colors.textDim}Observability:${theme.colors.text} ${display.observability.totalEvents} events logged`);
+    lines.push(
+      `  ${theme.colors.textDim}Observability:${theme.colors.text} ${display.observability.totalEvents} events logged`,
+    );
   }
 
   return lines;
@@ -158,6 +197,7 @@ export function confidenceLine(label: string, confidence: number): string {
  */
 export function retrievalLine(query: string, hits: number, total: number): string {
   const rate = total > 0 ? Math.round((hits / total) * 100) : 0;
-  const color = rate > 50 ? theme.colors.success : rate > 20 ? theme.colors.warning : theme.colors.textDim;
+  const color =
+    rate > 50 ? theme.colors.success : rate > 20 ? theme.colors.warning : theme.colors.textDim;
   return `  Retrieval "${query}": ${color}${hits}/${total} hits (${rate}%)${theme.colors.text}`;
 }

@@ -6,16 +6,16 @@
 import type { TaskState } from '@autic/shared';
 
 const VALID_TRANSITIONS: Record<TaskState, TaskState[]> = {
-  pending:    ['queued', 'cancelled'],
-  queued:     ['planning', 'running', 'cancelled'],
-  planning:   ['running', 'failed', 'paused'],
-  running:    ['awaiting_tool', 'completed', 'failed', 'paused', 'cancelled'],
+  pending: ['queued', 'cancelled'],
+  queued: ['planning', 'running', 'cancelled'],
+  planning: ['running', 'failed', 'paused'],
+  running: ['awaiting_tool', 'completed', 'failed', 'paused', 'cancelled'],
   awaiting_tool: ['running', 'failed', 'cancelled'],
-  completed:  [],
-  failed:     ['retrying'],
-  retrying:   ['queued', 'failed', 'cancelled'],
-  paused:     ['queued', 'cancelled'],
-  cancelled:  [],
+  completed: [],
+  failed: ['retrying'],
+  retrying: ['queued', 'failed', 'cancelled'],
+  paused: ['queued', 'cancelled'],
+  cancelled: [],
 };
 
 export function canTransition(from: TaskState, to: TaskState): boolean {
@@ -58,5 +58,13 @@ export function canRetry(state: TaskState): boolean {
 }
 
 export function canCancel(state: TaskState): boolean {
-  return ['pending', 'queued', 'planning', 'running', 'awaiting_tool', 'paused', 'retrying'].includes(state);
+  return [
+    'pending',
+    'queued',
+    'planning',
+    'running',
+    'awaiting_tool',
+    'paused',
+    'retrying',
+  ].includes(state);
 }

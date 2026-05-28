@@ -13,8 +13,22 @@
 
 import type { FileContext } from '@autic/shared';
 
-export type AgentRole = 'researcher' | 'planner' | 'architect' | 'engineer' | 'verifier' | 'repairer' | 'reviewer';
-export type StageType = 'research' | 'planning' | 'architecture' | 'engineering' | 'verification' | 'repair' | 'review';
+export type AgentRole =
+  | 'researcher'
+  | 'planner'
+  | 'architect'
+  | 'engineer'
+  | 'verifier'
+  | 'repairer'
+  | 'reviewer';
+export type StageType =
+  | 'research'
+  | 'planning'
+  | 'architecture'
+  | 'engineering'
+  | 'verification'
+  | 'repair'
+  | 'review';
 
 interface RoleContextProfile {
   role: AgentRole;
@@ -67,7 +81,13 @@ const ROLE_PROFILES: Record<AgentRole, Omit<RoleContextProfile, 'role' | 'stage'
     includeDocumentation: false,
   },
   verifier: {
-    filePatterns: ['**/*.test.*', '**/*.spec.*', '**/__tests__/**', 'tsconfig.json', 'package.json'],
+    filePatterns: [
+      '**/*.test.*',
+      '**/*.spec.*',
+      '**/__tests__/**',
+      'tsconfig.json',
+      'package.json',
+    ],
     priorityKeywords: ['test', 'spec', 'assert', 'expect', 'verify', 'check'],
     maxFiles: 8,
     maxTokens: 24_000,
@@ -125,7 +145,7 @@ export class ExecutionAwareContextAssembly {
     const profile = this.getProfile(role);
 
     // Score files based on role-specific priority keywords
-    const scored = files.map(f => {
+    const scored = files.map((f) => {
       let boost = 0;
       for (const kw of profile.priorityKeywords) {
         if (f.path.toLowerCase().includes(kw)) boost += 15;
@@ -142,7 +162,10 @@ export class ExecutionAwareContextAssembly {
   /**
    * Estimate token savings from role-specific filtering.
    */
-  estimateSavings(allFiles: FileContext[], role: AgentRole): { before: number; after: number; saved: number; percent: string } {
+  estimateSavings(
+    allFiles: FileContext[],
+    role: AgentRole,
+  ): { before: number; after: number; saved: number; percent: string } {
     const before = allFiles.reduce((s, f) => s + f.tokenCount, 0);
     const after = this.filterFilesByRole(allFiles, role).reduce((s, f) => s + f.tokenCount, 0);
     const saved = before - after;

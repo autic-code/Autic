@@ -13,18 +13,15 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  VerificationOutput, 
-  TaskContract, 
-  OrchestrationStage,
-} from '@autic/shared';
+import type { VerificationOutput, TaskContract, OrchestrationStage } from '@autic/shared';
 import { createContract, fulfillContract } from '../contracts.js';
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class VerificationAgent {
-
-
   /**
    * Execute a verification stage.
    * Runs build, typecheck, and lint verification commands.

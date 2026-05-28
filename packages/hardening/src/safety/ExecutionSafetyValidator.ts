@@ -21,7 +21,7 @@ export class ExecutionSafetyValidator {
     checks.push(await this.validateSecretSanitization());
     checks.push(await this.validateProviderIsolation());
 
-    const passed = checks.every(c => c.passed);
+    const passed = checks.every((c) => c.passed);
     return {
       passed,
       permissionBoundaryValid: checks[0].passed,
@@ -33,7 +33,12 @@ export class ExecutionSafetyValidator {
     };
   }
 
-  private async validatePermissionBoundaries(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async validatePermissionBoundaries(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Permission boundary validation',
       passed: true,
@@ -42,16 +47,27 @@ export class ExecutionSafetyValidator {
     };
   }
 
-  private async validateRecursionLimits(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async validateRecursionLimits(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Recursion limit validation',
       passed: true,
       message: 'Execution depth limits active — max depth: 50',
-      details: 'Loop protection: recursion, repeated failures, infinite verification, runaway repair',
+      details:
+        'Loop protection: recursion, repeated failures, infinite verification, runaway repair',
     };
   }
 
-  private async validateDangerousCommands(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async validateDangerousCommands(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Dangerous command handling',
       passed: true,
@@ -60,15 +76,26 @@ export class ExecutionSafetyValidator {
     };
   }
 
-  private async validateSecretSanitization(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async validateSecretSanitization(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Secret sanitization verification',
       passed: true,
-      message: 'Vault-isolated secrets — sanitization applied to all provider prompts and command output',
+      message:
+        'Vault-isolated secrets — sanitization applied to all provider prompts and command output',
     };
   }
 
-  private async validateProviderIsolation(): Promise<{ name: string; passed: boolean; message: string; details?: string }> {
+  private async validateProviderIsolation(): Promise<{
+    name: string;
+    passed: boolean;
+    message: string;
+    details?: string;
+  }> {
     return {
       name: 'Provider isolation validation',
       passed: true,
@@ -76,15 +103,26 @@ export class ExecutionSafetyValidator {
     };
   }
 
-  async validateExecutionSafety(executionSteps: Array<{ toolName?: string; args?: Record<string, unknown> }>): Promise<ExecutionSafetyValidation> {
+  async validateExecutionSafety(
+    executionSteps: Array<{ toolName?: string; args?: Record<string, unknown> }>,
+  ): Promise<ExecutionSafetyValidation> {
     const checks: ExecutionSafetyValidation['checks'] = [];
     let recursionDepth = 0;
 
     for (const step of executionSteps) {
       if (step.toolName === 'run_terminal') {
         const command = String(step.args?.command || '');
-        const dangerousPatterns = ['rm -rf', 'sudo', 'chmod 777', 'mkfs', 'dd if=', 'git push --force'];
-        const matched = dangerousPatterns.filter(p => command.toLowerCase().includes(p.toLowerCase()));
+        const dangerousPatterns = [
+          'rm -rf',
+          'sudo',
+          'chmod 777',
+          'mkfs',
+          'dd if=',
+          'git push --force',
+        ];
+        const matched = dangerousPatterns.filter((p) =>
+          command.toLowerCase().includes(p.toLowerCase()),
+        );
         if (matched.length > 0) {
           checks.push({
             name: `Dangerous command: ${matched[0]}`,
@@ -108,24 +146,32 @@ export class ExecutionSafetyValidator {
     }
 
     // Add default pass checks for any missing categories
-    if (!checks.some(c => c.name.includes('Permission'))) {
-      checks.push({ name: 'Permission boundaries', passed: true, message: 'No violations detected' });
+    if (!checks.some((c) => c.name.includes('Permission'))) {
+      checks.push({
+        name: 'Permission boundaries',
+        passed: true,
+        message: 'No violations detected',
+      });
     }
-    if (!checks.some(c => c.name.includes('Sanitization'))) {
+    if (!checks.some((c) => c.name.includes('Sanitization'))) {
       checks.push({ name: 'Secret sanitization', passed: true, message: 'No secrets exposed' });
     }
-    if (!checks.some(c => c.name.includes('Isolation'))) {
-      checks.push({ name: 'Provider isolation', passed: true, message: 'Isolation boundaries intact' });
+    if (!checks.some((c) => c.name.includes('Isolation'))) {
+      checks.push({
+        name: 'Provider isolation',
+        passed: true,
+        message: 'Isolation boundaries intact',
+      });
     }
 
-    const passed = checks.every(c => c.passed);
+    const passed = checks.every((c) => c.passed);
     return {
       passed,
-      permissionBoundaryValid: checks.some(c => c.name.includes('Permission') && c.passed),
+      permissionBoundaryValid: checks.some((c) => c.name.includes('Permission') && c.passed),
       recursionLimitsValid: recursionDepth <= 50,
-      dangerousCommandsHandled: !checks.some(c => c.name.includes('Dangerous') && !c.passed),
-      secretSanitizationValid: checks.some(c => c.name.includes('Sanitization') && c.passed),
-      providerIsolationValid: checks.some(c => c.name.includes('Isolation') && c.passed),
+      dangerousCommandsHandled: !checks.some((c) => c.name.includes('Dangerous') && !c.passed),
+      secretSanitizationValid: checks.some((c) => c.name.includes('Sanitization') && c.passed),
+      providerIsolationValid: checks.some((c) => c.name.includes('Isolation') && c.passed),
       checks,
     };
   }

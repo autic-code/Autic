@@ -90,11 +90,10 @@ export class StressTestRunner extends EventEmitter {
       }
     }
 
-    const avgLatencyMs = phases.length > 0
-      ? phases.reduce((s, p) => s + p.avgLatencyMs, 0) / phases.length
-      : 0;
+    const avgLatencyMs =
+      phases.length > 0 ? phases.reduce((s, p) => s + p.avgLatencyMs, 0) / phases.length : 0;
 
-    const peakMemoryMB = Math.max(...phases.map(p => p.peakMemoryMB), 0);
+    const peakMemoryMB = Math.max(...phases.map((p) => p.peakMemoryMB), 0);
 
     return {
       passed: failedTasks === 0 && issues.length === 0,
@@ -136,7 +135,8 @@ export class StressTestRunner extends EventEmitter {
       tasksFailed: Math.floor(config.workflowCount * 0.2),
       avgLatencyMs: 450,
       peakMemoryMB: process.memoryUsage().rss / (1024 * 1024),
-      errors: config.workflowCount > 50 ? ['Queue backlog exceeded threshold at high concurrency'] : [],
+      errors:
+        config.workflowCount > 50 ? ['Queue backlog exceeded threshold at high concurrency'] : [],
     };
   }
 
@@ -149,7 +149,7 @@ export class StressTestRunner extends EventEmitter {
       tasksFailed: Math.floor(config.workflowCount * 0.3),
       avgLatencyMs: 3200,
       peakMemoryMB: process.memoryUsage().rss / (1024 * 1024),
-      errors: config.simulateOutages.map(p => `${p} outage simulated`),
+      errors: config.simulateOutages.map((p) => `${p} outage simulated`),
     };
   }
 
@@ -161,7 +161,7 @@ export class StressTestRunner extends EventEmitter {
       tasksCompleted: Math.floor(config.workflowCount * 0.9),
       tasksFailed: Math.floor(config.workflowCount * 0.1),
       avgLatencyMs: 890,
-      peakMemoryMB: process.memoryUsage().rss / (1024 * 1024) * 1.5,
+      peakMemoryMB: (process.memoryUsage().rss / (1024 * 1024)) * 1.5,
       errors: [],
     };
   }
@@ -184,10 +184,10 @@ export class StressTestRunner extends EventEmitter {
     if (issues.length > 0) {
       recommendations.push('Address identified issues before production deployment');
     }
-    if (phases.some(p => p.avgLatencyMs > 1000)) {
+    if (phases.some((p) => p.avgLatencyMs > 1000)) {
       recommendations.push('Investigate latency spikes — consider provider fallback optimization');
     }
-    if (phases.some(p => p.tasksFailed > p.tasksCompleted * 0.2)) {
+    if (phases.some((p) => p.tasksFailed > p.tasksCompleted * 0.2)) {
       recommendations.push('High failure rate detected — review retry logic and error handling');
     }
     return recommendations;

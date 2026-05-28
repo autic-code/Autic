@@ -268,7 +268,11 @@ export class PerformanceBaseline {
   /**
    * Compare current performance against established baselines
    */
-  async compareAgainstBaselines(): Promise<{ differences: Record<string, string>; regressions: string[]; improvements: string[] }> {
+  async compareAgainstBaselines(): Promise<{
+    differences: Record<string, string>;
+    regressions: string[];
+    improvements: string[];
+  }> {
     const report = await this.measureBaselines();
     const differences: Record<string, string> = {};
     const regressions: string[] = [];
@@ -276,7 +280,8 @@ export class PerformanceBaseline {
 
     for (const comp of report.comparisons) {
       const direction = comp.change > 0 ? '+' : '';
-      differences[comp.metric] = `${comp.baseline} → ${comp.current} (${direction}${comp.changePercent}%)`;
+      differences[comp.metric] =
+        `${comp.baseline} → ${comp.current} (${direction}${comp.changePercent}%)`;
       if (comp.regressed) {
         regressions.push(`${comp.metric}: ${comp.changePercent}% increase (${comp.severity})`);
       } else if (comp.changePercent < -5) {
@@ -295,13 +300,17 @@ export class PerformanceBaseline {
     if (critical.length > 0) {
       recs.push(`CRITICAL: ${critical.length} performance regression(s) detected:`);
       for (const c of critical) {
-        recs.push(`  ✗ ${c.metric}: ${c.baseline} → ${c.current} (${c.changePercent > 0 ? '+' : ''}${c.changePercent}%)`);
+        recs.push(
+          `  ✗ ${c.metric}: ${c.baseline} → ${c.current} (${c.changePercent > 0 ? '+' : ''}${c.changePercent}%)`,
+        );
       }
     }
     if (major.length > 0) {
       recs.push(`Significant regression(s) in ${major.length} metric(s)`);
       for (const m of major) {
-        recs.push(`  ⚠ ${m.metric}: ${m.baseline} → ${m.current} (${m.changePercent > 0 ? '+' : ''}${m.changePercent}%)`);
+        recs.push(
+          `  ⚠ ${m.metric}: ${m.baseline} → ${m.current} (${m.changePercent > 0 ? '+' : ''}${m.changePercent}%)`,
+        );
       }
     }
     recs.push('Run `autic performance-baseline` to refresh baseline measurements');

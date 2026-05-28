@@ -32,11 +32,13 @@ autic release
 ### 1. Provider Connection Failures
 
 **Symptoms:**
+
 - Error: "No provider available"
 - Timeout errors
 - "Failed to connect to provider"
 
 **Diagnosis:**
+
 ```bash
 # Check configured providers
 autic providers
@@ -52,6 +54,7 @@ autic profiling provider
 ```
 
 **Solutions:**
+
 1. Verify API keys are configured:
    ```bash
    autic security vault
@@ -77,11 +80,13 @@ autic profiling provider
 ### 2. Installation & Setup Issues
 
 **Symptoms:**
+
 - Command not found
 - Module errors
 - Missing dependencies
 
 **Solutions:**
+
 1. Verify installation:
    ```bash
    autic init --force
@@ -102,11 +107,13 @@ autic profiling provider
 ### 3. Session & Context Problems
 
 **Symptoms:**
+
 - Session not found
 - Context loss between commands
 - Token limit errors
 
 **Solutions:**
+
 1. List active sessions:
    ```bash
    autic sessions
@@ -128,11 +135,13 @@ autic profiling provider
 ### 4. Permission & Security Issues
 
 **Symptoms:**
+
 - "Permission denied" errors
 - Security warnings
 - Command blocked
 
 **Solutions:**
+
 1. Check security status:
    ```bash
    autic security status
@@ -158,11 +167,13 @@ autic profiling provider
 ### 5. Performance Issues
 
 **Symptoms:**
+
 - Slow responses
 - High memory usage
 - Queue backpressure
 
 **Solutions:**
+
 1. Check system resources:
    ```bash
    autic stability resources
@@ -187,11 +198,13 @@ autic profiling provider
 ### 6. Extension/Plugin Issues
 
 **Symptoms:**
+
 - Extension load failures
 - Compatibility warnings
 - Hook execution errors
 
 **Solutions:**
+
 1. Run extension diagnostics:
    ```bash
    autic ecosystem diagnostics
@@ -212,11 +225,13 @@ autic profiling provider
 ### 7. Workflow Failures
 
 **Symptoms:**
+
 - Workflow hangs
 - Partial completion
 - Unexpected behavior
 
 **Solutions:**
+
 1. Check workflow status:
    ```bash
    autic observability orchestration
@@ -290,20 +305,20 @@ autic stress
 
 ## Diagnostics Commands Reference
 
-| Command | Purpose |
-|---------|---------|
-| `autic doctor` | Full environment diagnostics |
-| `autic observability` | Runtime system snapshots |
-| `autic stability` | Runtime health and resources |
-| `autic audit` | Comprehensive runtime audit |
-| `autic diagnose` | Error diagnostics |
-| `autic validate-security` | Security validation |
-| `autic security-audit` | Comprehensive security audit |
-| `autic memory` | Memory leak detection |
-| `autic profiling` | CPU/memory/latency profiling |
-| `autic telemetry` | Anonymized runtime metrics |
-| `autic regression` | Regression prevention checks |
-| `autic platform-certify` | Platform certification |
+| Command                   | Purpose                      |
+| ------------------------- | ---------------------------- |
+| `autic doctor`            | Full environment diagnostics |
+| `autic observability`     | Runtime system snapshots     |
+| `autic stability`         | Runtime health and resources |
+| `autic audit`             | Comprehensive runtime audit  |
+| `autic diagnose`          | Error diagnostics            |
+| `autic validate-security` | Security validation          |
+| `autic security-audit`    | Comprehensive security audit |
+| `autic memory`            | Memory leak detection        |
+| `autic profiling`         | CPU/memory/latency profiling |
+| `autic telemetry`         | Anonymized runtime metrics   |
+| `autic regression`        | Regression prevention checks |
+| `autic platform-certify`  | Platform certification       |
 
 ## Getting Help
 

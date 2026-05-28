@@ -13,22 +13,66 @@ import type { ExtensionPermission } from '../extension/ExtensionManifest.js';
  * Predefined permission scopes
  */
 export const PERMISSION_SCOPES = {
-  FILESYSTEM_READ: { name: 'filesystem:read', description: 'Read files from workspace', required: false },
-  FILESYSTEM_WRITE: { name: 'filesystem:write', description: 'Write files to workspace', required: false },
-  FILESYSTEM_DELETE: { name: 'filesystem:delete', description: 'Delete files from workspace', required: false },
-  NETWORK_CONNECT: { name: 'network:connect', description: 'Make outbound network connections', required: false },
-  NETWORK_SERVE: { name: 'network:serve', description: 'Start a local network server', required: false },
-  EXECUTE_COMMAND: { name: 'execute:command', description: 'Execute shell commands', required: false },
-  PROVIDER_ACCESS: { name: 'provider:access', description: 'Access LLM providers', required: false },
-  PROVIDER_MANAGE: { name: 'provider:manage', description: 'Add/remove providers', required: false },
+  FILESYSTEM_READ: {
+    name: 'filesystem:read',
+    description: 'Read files from workspace',
+    required: false,
+  },
+  FILESYSTEM_WRITE: {
+    name: 'filesystem:write',
+    description: 'Write files to workspace',
+    required: false,
+  },
+  FILESYSTEM_DELETE: {
+    name: 'filesystem:delete',
+    description: 'Delete files from workspace',
+    required: false,
+  },
+  NETWORK_CONNECT: {
+    name: 'network:connect',
+    description: 'Make outbound network connections',
+    required: false,
+  },
+  NETWORK_SERVE: {
+    name: 'network:serve',
+    description: 'Start a local network server',
+    required: false,
+  },
+  EXECUTE_COMMAND: {
+    name: 'execute:command',
+    description: 'Execute shell commands',
+    required: false,
+  },
+  PROVIDER_ACCESS: {
+    name: 'provider:access',
+    description: 'Access LLM providers',
+    required: false,
+  },
+  PROVIDER_MANAGE: {
+    name: 'provider:manage',
+    description: 'Add/remove providers',
+    required: false,
+  },
   VAULT_ACCESS: { name: 'vault:access', description: 'Access encrypted vault', required: false },
   VAULT_MANAGE: { name: 'vault:manage', description: 'Modify vault contents', required: false },
   SESSION_ACCESS: { name: 'session:access', description: 'Access session data', required: false },
-  SESSION_MANAGE: { name: 'session:manage', description: 'Create/delete sessions', required: false },
+  SESSION_MANAGE: {
+    name: 'session:manage',
+    description: 'Create/delete sessions',
+    required: false,
+  },
   CONFIG_READ: { name: 'config:read', description: 'Read configuration', required: false },
   CONFIG_WRITE: { name: 'config:write', description: 'Modify configuration', required: false },
-  EXTENSION_MANAGE: { name: 'extension:manage', description: 'Install/uninstall extensions', required: false },
-  INTERNAL: { name: 'internal:*', description: 'Full internal access (trusted extensions only)', required: false },
+  EXTENSION_MANAGE: {
+    name: 'extension:manage',
+    description: 'Install/uninstall extensions',
+    required: false,
+  },
+  INTERNAL: {
+    name: 'internal:*',
+    description: 'Full internal access (trusted extensions only)',
+    required: false,
+  },
 } as const;
 
 /**
@@ -97,10 +141,7 @@ export class PermissionManager extends EventEmitter {
   /**
    * Register an extension's permission scopes
    */
-  registerExtension(
-    extensionId: string,
-    permissions: ExtensionPermission[],
-  ): void {
+  registerExtension(extensionId: string, permissions: ExtensionPermission[]): void {
     if (this.scopes.has(extensionId)) {
       throw new Error(`Extension already registered: ${extensionId}`);
     }

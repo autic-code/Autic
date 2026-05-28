@@ -109,7 +109,11 @@ export class WorkflowValidator {
   /**
    * Validate against a TypeScript project
    */
-  async validateTypeScriptProject(): Promise<{ success: boolean; metrics: Record<string, number>; issues: string[] }> {
+  async validateTypeScriptProject(): Promise<{
+    success: boolean;
+    metrics: Record<string, number>;
+    issues: string[];
+  }> {
     const result = await this.validateProject('typescript');
     return {
       success: result.successMetrics.completed,
@@ -128,7 +132,11 @@ export class WorkflowValidator {
   /**
    * Validate against a Next.js project
    */
-  async validateNextJSProject(): Promise<{ success: boolean; metrics: Record<string, number>; issues: string[] }> {
+  async validateNextJSProject(): Promise<{
+    success: boolean;
+    metrics: Record<string, number>;
+    issues: string[];
+  }> {
     const result = await this.validateProject('nextjs');
     return {
       success: result.successMetrics.completed,
@@ -147,7 +155,11 @@ export class WorkflowValidator {
   /**
    * Validate against a Python project
    */
-  async validatePythonProject(): Promise<{ success: boolean; metrics: Record<string, number>; issues: string[] }> {
+  async validatePythonProject(): Promise<{
+    success: boolean;
+    metrics: Record<string, number>;
+    issues: string[];
+  }> {
     const result = await this.validateProject('python');
     return {
       success: result.successMetrics.completed,
@@ -166,7 +178,11 @@ export class WorkflowValidator {
   /**
    * Validate against a SaaS repository
    */
-  async validateSaasRepository(): Promise<{ success: boolean; metrics: Record<string, number>; issues: string[] }> {
+  async validateSaasRepository(): Promise<{
+    success: boolean;
+    metrics: Record<string, number>;
+    issues: string[];
+  }> {
     const result = await this.validateProject('saas');
     return {
       success: result.successMetrics.completed,
@@ -185,7 +201,11 @@ export class WorkflowValidator {
   /**
    * Validate against a monorepo
    */
-  async validateMonorepo(): Promise<{ success: boolean; metrics: Record<string, number>; issues: string[] }> {
+  async validateMonorepo(): Promise<{
+    success: boolean;
+    metrics: Record<string, number>;
+    issues: string[];
+  }> {
     const result = await this.validateProject('monorepo');
     return {
       success: result.successMetrics.completed,
@@ -204,7 +224,11 @@ export class WorkflowValidator {
   /**
    * Validate against a CLI repository
    */
-  async validateCLIRepository(): Promise<{ success: boolean; metrics: Record<string, number>; issues: string[] }> {
+  async validateCLIRepository(): Promise<{
+    success: boolean;
+    metrics: Record<string, number>;
+    issues: string[];
+  }> {
     const result = await this.validateProject('cli');
     return {
       success: result.successMetrics.completed,
@@ -223,7 +247,9 @@ export class WorkflowValidator {
   /**
    * Run all validations
    */
-  async runAllValidations(): Promise<Array<{ success: boolean; metrics: Record<string, number>; issues: string[] }>> {
+  async runAllValidations(): Promise<
+    Array<{ success: boolean; metrics: Record<string, number>; issues: string[] }>
+  > {
     const report = await this.validateAllProjectTypes();
     return report.results.map((r) => ({
       success: r.successMetrics.completed,
@@ -308,7 +334,14 @@ export class WorkflowValidator {
    * Run validation across all project types (full certification)
    */
   async validateAllProjectTypes(): Promise<WorkflowValidationReport> {
-    const projectTypes: ProjectType[] = ['monorepo', 'typescript', 'nextjs', 'python', 'saas', 'cli'];
+    const projectTypes: ProjectType[] = [
+      'monorepo',
+      'typescript',
+      'nextjs',
+      'python',
+      'saas',
+      'cli',
+    ];
     const results: ProjectValidationResult[] = [];
 
     for (const type of projectTypes) {
@@ -320,8 +353,10 @@ export class WorkflowValidator {
     const failed = results.filter((r) => !r.successMetrics.completed).length;
     const totalSteps = results.reduce((s, r) => s + r.successMetrics.stepsExecuted, 0);
     const failedSteps = results.reduce((s, r) => s + r.successMetrics.stepsFailed, 0);
-    const avgDurationMs = results.reduce((s, r) => s + r.successMetrics.totalDurationMs, 0) / results.length;
-    const avgRecoveryRate = results.reduce((s, r) => s + r.successMetrics.recoverySuccessRate, 0) / results.length;
+    const avgDurationMs =
+      results.reduce((s, r) => s + r.successMetrics.totalDurationMs, 0) / results.length;
+    const avgRecoveryRate =
+      results.reduce((s, r) => s + r.successMetrics.recoverySuccessRate, 0) / results.length;
 
     const allIssues = results.flatMap((r) => r.issues);
     const allRecs = results.flatMap((r) => r.recommendations);
@@ -355,17 +390,43 @@ export class WorkflowValidator {
     const commonSteps = ['verify-environment', 'check-dependencies', 'validate-config'];
     switch (type) {
       case 'monorepo':
-        return [...commonSteps, 'resolve-workspace-packages', 'validate-cross-references', 'verify-build-order'];
+        return [
+          ...commonSteps,
+          'resolve-workspace-packages',
+          'validate-cross-references',
+          'verify-build-order',
+        ];
       case 'typescript':
-        return [...commonSteps, 'typecheck-project', 'validate-tsconfig', 'check-export-boundaries'];
+        return [
+          ...commonSteps,
+          'typecheck-project',
+          'validate-tsconfig',
+          'check-export-boundaries',
+        ];
       case 'nextjs':
-        return [...commonSteps, 'validate-next-config', 'check-page-structure', 'verify-api-routes', 'validate-middleware'];
+        return [
+          ...commonSteps,
+          'validate-next-config',
+          'check-page-structure',
+          'verify-api-routes',
+          'validate-middleware',
+        ];
       case 'python':
         return [...commonSteps, 'validate-venv', 'check-imports', 'verify-requirements'];
       case 'saas':
-        return [...commonSteps, 'validate-service-boundaries', 'check-shared-libs', 'verify-deployment-config'];
+        return [
+          ...commonSteps,
+          'validate-service-boundaries',
+          'check-shared-libs',
+          'verify-deployment-config',
+        ];
       case 'cli':
-        return [...commonSteps, 'validate-bin-entry', 'check-argument-parsing', 'verify-exit-codes'];
+        return [
+          ...commonSteps,
+          'validate-bin-entry',
+          'check-argument-parsing',
+          'verify-exit-codes',
+        ];
       default:
         return commonSteps;
     }
@@ -380,8 +441,16 @@ export class WorkflowValidator {
     await new Promise((r) => setTimeout(r, 10));
 
     // Simulate some realistic pass/fail patterns
-    const alwaysPass = ['verify-environment', 'check-dependencies', 'validate-config', 'validate-tsconfig',
-      'check-export-boundaries', 'check-page-structure', 'validate-venv', 'check-imports'];
+    const alwaysPass = [
+      'verify-environment',
+      'check-dependencies',
+      'validate-config',
+      'validate-tsconfig',
+      'check-export-boundaries',
+      'check-page-structure',
+      'validate-venv',
+      'check-imports',
+    ];
     const passed = alwaysPass.includes(step) || Math.random() > 0.15;
 
     return {

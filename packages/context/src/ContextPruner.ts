@@ -102,7 +102,9 @@ export class ContextPruner {
     if (entries.length === 0) return '';
 
     const count = entries.length;
-    const completed = entries.filter((e) => e.status === 'completed' || e.status === 'success').length;
+    const completed = entries.filter(
+      (e) => e.status === 'completed' || e.status === 'success',
+    ).length;
     const failed = entries.filter((e) => e.status === 'failed').length;
     const types = new Set(entries.map((e) => e.type).filter(Boolean));
 
@@ -178,7 +180,12 @@ export class ContextPruner {
    * This is the "what should the LLM know" summary.
    */
   generateWorkspaceSummary(memory: {
-    architecture?: { projectName?: string; framework?: string; language?: string; keyFiles?: string[] };
+    architecture?: {
+      projectName?: string;
+      framework?: string;
+      language?: string;
+      keyFiles?: string[];
+    };
     repoSummary?: { totalFiles?: number; languages?: string[]; frameworks?: string[] };
     recentFixes?: Array<{ issue: string; success: boolean }>;
     activeGoals?: string[];

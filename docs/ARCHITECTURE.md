@@ -44,6 +44,7 @@ Autic is a production-grade CLI-native autonomous AI engineering runtime. It pro
 The entry point. Commander-based CLI with 40+ commands organized across development phases.
 
 **Key components:**
+
 - `src/index.ts` — Main entry with all command registration
 - `src/commands/` — Individual command implementations
 - `src/constants.ts` — CLI name, version, description
@@ -51,22 +52,23 @@ The entry point. Commander-based CLI with 40+ commands organized across developm
 
 **Commands by category:**
 
-| Category | Commands |
-|----------|----------|
-| **Core** | `init`, `chat`, `fix`, `run`, `build` |
-| **Manage** | `providers`, `models`, `sessions`, `skills`, `config`, `profile` |
-| **Orchestrate** | `workflow`, `orchestrate`, `swarm` |
-| **Security** | `security`, `privacy`, `validate-security`, `security-audit` |
-| **Diagnostics** | `doctor`, `stability`, `memory`, `diagnose`, `observability`, `telemetry` |
-| **Validate** | `validate`, `audit`, `stress`, `system`, `recovery`, `regression`, `workflow-validate`, `chaos`, `longrun`, `platform-certify` |
-| **System** | `debug`, `fs`, `protect`, `swarm-hardening`, `context`, `learning` |
-| **Ecosystem** | `docs`, `template`, `release`, `governance`, `ecosystem`, `profiling` |
+| Category        | Commands                                                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Core**        | `init`, `chat`, `fix`, `run`, `build`                                                                                          |
+| **Manage**      | `providers`, `models`, `sessions`, `skills`, `config`, `profile`                                                               |
+| **Orchestrate** | `workflow`, `orchestrate`, `swarm`                                                                                             |
+| **Security**    | `security`, `privacy`, `validate-security`, `security-audit`                                                                   |
+| **Diagnostics** | `doctor`, `stability`, `memory`, `diagnose`, `observability`, `telemetry`                                                      |
+| **Validate**    | `validate`, `audit`, `stress`, `system`, `recovery`, `regression`, `workflow-validate`, `chaos`, `longrun`, `platform-certify` |
+| **System**      | `debug`, `fs`, `protect`, `swarm-hardening`, `context`, `learning`                                                             |
+| **Ecosystem**   | `docs`, `template`, `release`, `governance`, `ecosystem`, `profiling`                                                          |
 
 ### 2. Orchestration Layer
 
 The brain of Autic — handles multi-agent coordination, pipeline execution, and controlled swarm operations.
 
 **Key packages:**
+
 - `@autic/orchestrator` — Neuro Brain, role-based agents, pipeline system
 - `@autic/swarm` — Controlled multi-agent coordination
 - `@autic/workflow` — Autonomous workflow execution engine
@@ -78,6 +80,7 @@ The brain of Autic — handles multi-agent coordination, pipeline execution, and
 Handles provider communication, context management, and autonomous execution.
 
 **Key packages:**
+
 - `@autic/runtime` — Core autonomous execution, task management, session handling
 - `@autic/provider` — Provider abstraction, OpenRouter/Ollama integration, model routing
 - `@autic/context` — Token optimization, context engineering, caching
@@ -87,11 +90,13 @@ Handles provider communication, context management, and autonomous execution.
 Defense-in-depth security with multiple independent validation layers.
 
 **Key packages:**
+
 - `@autic/vault` — Encrypted secret storage, BYOK architecture
 - `@autic/sanitization` — Secret redaction from logs/outputs
 - `@autic/permissions` — Permission scopes, trust profiles
 
 **Security principles:**
+
 - BYOK (Bring Your Own Key) — secrets stay local
 - Defense in depth — multiple independent check layers
 - Least privilege — granular permission scopes
@@ -102,6 +107,7 @@ Defense-in-depth security with multiple independent validation layers.
 Production-grade reliability systems for long-running autonomous operations.
 
 **Key packages:**
+
 - `@autic/hardening` — Watchdog, recovery, deadlock protection, memory leak detection, stress testing
 - `@autic/recovery` — Crash recovery, queue restoration, session continuity
 
@@ -110,6 +116,7 @@ Production-grade reliability systems for long-running autonomous operations.
 Comprehensive runtime introspection and production telemetry.
 
 **Key packages:**
+
 - `@autic/diagnostics` — Doctor, observability, security validation, documentation generation
 - `@autic/profiling` — CPU/memory/queue/provider latency profiling, performance baselines
 - `@autic/telemetry` — Privacy-safe, opt-in, anonymized runtime metrics
@@ -119,6 +126,7 @@ Comprehensive runtime introspection and production telemetry.
 Operational validation for real-world production readiness.
 
 **Key packages:**
+
 - `@autic/validation` — Workflow validation, chaos testing, long-run testing, regression prevention, recovery validation, platform certification
 
 ### 8. Ecosystem & Extensibility
@@ -126,6 +134,7 @@ Operational validation for real-world production readiness.
 Safe plugin architecture with governance and lifecycle management.
 
 **Key packages:**
+
 - `@autic/sdk` — Extension manifest, lifecycle, loader, registry, plugin sandbox, API hooks, permission management
 - `@autic/governance` — Extension governance, security audit, ecosystem maintenance
 - `@autic/templates` — Project scaffolding templates
@@ -135,6 +144,7 @@ Safe plugin architecture with governance and lifecycle management.
 Release management and update distribution infrastructure.
 
 **Key packages:**
+
 - `@autic/release` — Release channels (stable/beta/dev), update checking, version management, release operations
 
 ## Data Flow

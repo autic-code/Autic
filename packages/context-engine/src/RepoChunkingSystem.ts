@@ -38,7 +38,11 @@ export class RepoChunkingSystem {
    */
   async index(options: { force?: boolean; maxFiles?: number } = {}): Promise<number> {
     const now = Date.now();
-    if (!options.force && this.chunks.size > 0 && now - this.lastFullIndexAt < this.indexCooldownMs) {
+    if (
+      !options.force &&
+      this.chunks.size > 0 &&
+      now - this.lastFullIndexAt < this.indexCooldownMs
+    ) {
       return this.chunks.size;
     }
 
@@ -65,7 +69,7 @@ export class RepoChunkingSystem {
       this.fileIndex.set(filePath, {
         path: filePath,
         lastModified: stat,
-        chunkIds: fileChunks.map(c => c.id),
+        chunkIds: fileChunks.map((c) => c.id),
       });
 
       for (const chunk of fileChunks) {
@@ -114,7 +118,7 @@ export class RepoChunkingSystem {
    */
   searchByType(type: ChunkMetadata['type']): FileChunk[] {
     return Array.from(this.chunks.values())
-      .filter(c => c.metadata.type === type)
+      .filter((c) => c.metadata.type === type)
       .sort((a, b) => b.metadata.priority - a.metadata.priority);
   }
 
@@ -152,7 +156,8 @@ export class RepoChunkingSystem {
       const entries = await readdir(dir, { withFileTypes: true });
       for (const entry of entries) {
         if (files.length >= maxFiles) return;
-        if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist') continue;
+        if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist')
+          continue;
         const fullPath = join(dir, entry.name);
         if (entry.isDirectory()) {
           await this.collectFiles(fullPath, files, maxFiles);
@@ -163,7 +168,9 @@ export class RepoChunkingSystem {
           }
         }
       }
-    } catch { /* skip */ }
+    } catch {
+      /* skip */
+    }
   }
 
   private async chunkFile(filePath: string): Promise<FileChunk[]> {
@@ -216,9 +223,11 @@ export class RepoChunkingSystem {
 
       if (exportLines.length > 0) {
         const exports = exportLines
-          .filter(l => l.includes('export'))
-          .map(l => {
-            const m = l.match(/export\s+(?:default\s+)?(?:function|class|const|interface|type)\s+(\w+)/);
+          .filter((l) => l.includes('export'))
+          .map((l) => {
+            const m = l.match(
+              /export\s+(?:default\s+)?(?:function|class|const|interface|type)\s+(\w+)/,
+            );
             return m ? m[1] : '';
           })
           .filter(Boolean);
@@ -240,7 +249,7 @@ export class RepoChunkingSystem {
       }
 
       // Chunk 3: Main implementation (everything else)
-      const implLines = lines.slice(i).filter(l => l.trim().length > 0);
+      const implLines = lines.slice(i).filter((l) => l.trim().length > 0);
       if (implLines.length > 0) {
         chunks.push({
           id: generateId(),

@@ -8,10 +8,24 @@
  *   run       — Run a skill as an agent-driven workflow with real-time UI
  */
 
-import { SkillRegistry, AgentRegistry, SkillExecutor, SkillValidator, registerBuiltinSkills, BUILTIN_SKILL_DEFINITIONS } from '@autic/skills';
+import {
+  SkillRegistry,
+  AgentRegistry,
+  SkillExecutor,
+  SkillValidator,
+  registerBuiltinSkills,
+  BUILTIN_SKILL_DEFINITIONS,
+} from '@autic/skills';
 import { colorText, heading, agentSummary } from '@autic/ui';
 import type { AgentDisplay } from '@autic/ui';
-import { ToolRegistry, readFileTool, writeFileTool, listFilesTool, searchFilesTool, runTerminalTool } from '@autic/tools';
+import {
+  ToolRegistry,
+  readFileTool,
+  writeFileTool,
+  listFilesTool,
+  searchFilesTool,
+  runTerminalTool,
+} from '@autic/tools';
 
 // Lazy singletons
 let _skillRegistry: SkillRegistry | null = null;
@@ -53,7 +67,10 @@ function getSkillValidator(): SkillValidator {
 /** Tool handler mapping: string IDs to actual async functions.
  * Functions are cast since they accept specific arg shapes at runtime. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const TOOL_HANDLERS: Record<string, (args: any) => Promise<{ success: boolean; data?: unknown; error?: string }>> = {
+const TOOL_HANDLERS: Record<
+  string,
+  (args: any) => Promise<{ success: boolean; data?: unknown; error?: string }>
+> = {
   readFileTool,
   writeFileTool,
   listFilesTool,
@@ -77,7 +94,11 @@ function buildToolExecutor() {
       const result = await handler(args);
       return { success: result.success, data: result.data, error: result.error };
     } catch (err) {
-      return { success: false, data: undefined, error: err instanceof Error ? err.message : String(err) };
+      return {
+        success: false,
+        data: undefined,
+        error: err instanceof Error ? err.message : String(err),
+      };
     }
   };
 }
@@ -108,12 +129,16 @@ export async function skillsListCommand(): Promise<void> {
       : '';
     const pipeline = skill.workflowPipeline?.join(' → ') || '—';
 
-    console.log(`  ${icon} ${colorText(skill.name, 'primary')}${colorText(` v${skill.version}`, 'dim')}`);
+    console.log(
+      `  ${icon} ${colorText(skill.name, 'primary')}${colorText(` v${skill.version}`, 'dim')}`,
+    );
     console.log(`     ${skill.description}`);
     console.log(`     ${colorText('Capabilities:', 'dim')} ${skill.capabilities.join(', ')}`);
     console.log(`     ${colorText('Pipeline:', 'dim')} ${pipeline}`);
     if (agent) {
-      console.log(`     ${colorText('Agent:', 'dim')} ${agent.id} (max depth: ${agent.maxDepth}, timeout: ${agent.timeoutMs}ms)`);
+      console.log(
+        `     ${colorText('Agent:', 'dim')} ${agent.id} (max depth: ${agent.maxDepth}, timeout: ${agent.timeoutMs}ms)`,
+      );
       console.log(`     ${colorText('Tools:', 'dim')} ${agent.allowedTools.join(', ')}`);
     }
     console.log(`     ${providerLine}${modelLine}`);
@@ -165,12 +190,18 @@ export async function skillsInstallCommand(name: string): Promise<void> {
         preferredProvider: match.preferredProvider,
         defaultPipeline: match.workflowPipeline,
       });
-      console.log(`  ${colorText('✓', 'success')} Installed skill: ${colorText(match.name, 'primary')} v${match.version}`);
+      console.log(
+        `  ${colorText('✓', 'success')} Installed skill: ${colorText(match.name, 'primary')} v${match.version}`,
+      );
     } catch (err) {
-      console.log(`  ${colorText('✗', 'error')} Failed to install "${name}": ${err instanceof Error ? err.message : String(err)}`);
+      console.log(
+        `  ${colorText('✗', 'error')} Failed to install "${name}": ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
   } else {
-    console.log(`  ${colorText('!', 'warning')} Skill "${name}" not found. Available built-in skills:`);
+    console.log(
+      `  ${colorText('!', 'warning')} Skill "${name}" not found. Available built-in skills:`,
+    );
     for (const s of BUILTIN_SKILL_DEFINITIONS) {
       console.log(`    ${colorText('•', 'primary')} ${s.id} — ${s.description}`);
     }
@@ -193,7 +224,9 @@ export async function skillsRemoveCommand(name: string): Promise<void> {
   for (const skill of skills) {
     registry.unregister(skill.id);
     agents.unregister(`agent-${skill.id}`);
-    console.log(`  ${colorText('✓', 'success')} Removed skill: ${colorText(skill.name, 'primary')}`);
+    console.log(
+      `  ${colorText('✓', 'success')} Removed skill: ${colorText(skill.name, 'primary')}`,
+    );
   }
 }
 
@@ -205,7 +238,9 @@ export async function skillsRunCommand(name: string, goal?: string): Promise<voi
   const skills = registry.findByName(name);
 
   if (skills.length === 0) {
-    console.log(`  ${colorText('✗', 'error')} Skill "${name}" not found. Use ${colorText('autic skills list', 'primary')} to see available skills.`);
+    console.log(
+      `  ${colorText('✗', 'error')} Skill "${name}" not found. Use ${colorText('autic skills list', 'primary')} to see available skills.`,
+    );
     return;
   }
 
@@ -291,6 +326,8 @@ export async function skillsCommand(
 
     default:
       console.log(`${colorText('Unknown action:', 'error')} ${action}`);
-      console.log(`  ${colorText('Usage:', 'primary')} autic skills <list|install|remove|run> [args]`);
+      console.log(
+        `  ${colorText('Usage:', 'primary')} autic skills <list|install|remove|run> [args]`,
+      );
   }
 }

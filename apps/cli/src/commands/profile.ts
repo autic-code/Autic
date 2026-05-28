@@ -19,10 +19,7 @@ async function getProfileManager(): Promise<ProfileManager> {
   return profileManager;
 }
 
-export async function profileCommand(
-  action?: string,
-  profile?: string,
-): Promise<void> {
+export async function profileCommand(action?: string, profile?: string): Promise<void> {
   const pm = await getProfileManager();
 
   if (!action || action === 'status') {
@@ -65,8 +62,12 @@ async function showProfileStatus(pm: ProfileManager): Promise<void> {
   console.log('');
   console.log('  Policies:');
   console.log(`    Dangerous commands:  ${config.allowDangerousCommands ? 'Allowed' : 'Blocked'}`);
-  console.log(`    Medium risk:         ${config.requireApprovalForMedium ? 'Requires approval' : 'Auto-approved'}`);
-  console.log(`    Low risk:            ${config.autoApproveLowRisk ? 'Auto-approved' : 'Requires approval'}`);
+  console.log(
+    `    Medium risk:         ${config.requireApprovalForMedium ? 'Requires approval' : 'Auto-approved'}`,
+  );
+  console.log(
+    `    Low risk:            ${config.autoApproveLowRisk ? 'Auto-approved' : 'Requires approval'}`,
+  );
   console.log(`    Max depth:           ${config.maxExecutionDepth}`);
   console.log(`    Workflow timeout:    ${config.workflowTimeoutMs}ms`);
   console.log(`    Cloud providers:     ${config.allowCloudProviders ? 'Allowed' : 'Blocked'}`);
@@ -85,7 +86,9 @@ async function listProfiles(pm: ProfileManager): Promise<void> {
     const marker = p.profile === current ? ' ◀' : '';
     console.log(`  ${p.profile}${marker}`);
     console.log(`    ${p.description}`);
-    console.log(`    Depth: ${p.maxExecutionDepth} | Timeout: ${p.workflowTimeoutMs}ms | Cloud: ${p.allowCloudProviders ? '✓' : '✗'}`);
+    console.log(
+      `    Depth: ${p.maxExecutionDepth} | Timeout: ${p.workflowTimeoutMs}ms | Cloud: ${p.allowCloudProviders ? '✓' : '✗'}`,
+    );
     console.log('');
   }
 }
@@ -137,8 +140,12 @@ async function describeProfile(pm: ProfileManager, profile?: string): Promise<vo
   console.log(`  ${config.description}\n`);
   console.log('  Policies:');
   console.log(`    Dangerous commands:  ${config.allowDangerousCommands ? 'Allowed' : 'Blocked'}`);
-  console.log(`    Medium risk:         ${config.requireApprovalForMedium ? 'Requires approval' : 'Auto-approved'}`);
-  console.log(`    Low risk:            ${config.autoApproveLowRisk ? 'Auto-approved' : 'Requires approval'}`);
+  console.log(
+    `    Medium risk:         ${config.requireApprovalForMedium ? 'Requires approval' : 'Auto-approved'}`,
+  );
+  console.log(
+    `    Low risk:            ${config.autoApproveLowRisk ? 'Auto-approved' : 'Requires approval'}`,
+  );
   console.log(`    Max depth:           ${config.maxExecutionDepth}`);
   console.log(`    Workflow timeout:    ${config.workflowTimeoutMs}ms`);
   console.log(`    Cloud providers:     ${config.allowCloudProviders ? 'Allowed' : 'Blocked'}`);

@@ -89,13 +89,18 @@ export async function profilingCommand(action?: string): Promise<void> {
 
       console.log(divider());
       console.log(`  ${colorText('Profiling complete', 'bold')}`);
-      console.log(`  ${colorText('Run "autic profiling baseline" to view full baseline report', 'dim')}`);
+      console.log(
+        `  ${colorText('Run "autic profiling baseline" to view full baseline report', 'dim')}`,
+      );
       break;
     }
   }
 }
 
-function printProfileReport(label: string, report: { metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] }): void {
+function printProfileReport(
+  label: string,
+  report: { metrics: Record<string, number>; bottlenecks: string[]; recommendations: string[] },
+): void {
   console.log(`  ${colorText(label + ' Profile', 'bold')}`);
   for (const [key, value] of Object.entries(report.metrics)) {
     console.log(`    ${key}: ${value}`);
@@ -116,13 +121,19 @@ function printProfileReport(label: string, report: { metrics: Record<string, num
 
 function printBaselines(report: { baselines: Record<string, number>; status: string }): void {
   console.log(`\n  ${colorText('Performance Baselines', 'bold')}`);
-  console.log(`  Status: ${report.status === 'established' ? colorText('✓ Established', 'success') : colorText('Pending', 'warning')}`);
+  console.log(
+    `  Status: ${report.status === 'established' ? colorText('✓ Established', 'success') : colorText('Pending', 'warning')}`,
+  );
   for (const [key, value] of Object.entries(report.baselines)) {
     console.log(`    ${key}: ${value}`);
   }
 }
 
-function printComparison(comparison: { differences: Record<string, string>; regressions: string[]; improvements: string[] }): void {
+function printComparison(comparison: {
+  differences: Record<string, string>;
+  regressions: string[];
+  improvements: string[];
+}): void {
   console.log(`\n  ${colorText('Baseline Comparison', 'bold')}`);
   for (const [key, value] of Object.entries(comparison.differences)) {
     console.log(`    ${key}: ${value}`);

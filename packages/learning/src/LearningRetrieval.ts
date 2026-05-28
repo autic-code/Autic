@@ -11,10 +11,7 @@
  */
 
 import { timestamp, EvictableMap } from '@autic/shared';
-import type {
-  LearningRetrievalQuery,
-  LearningRetrievalResult,
-} from '@autic/shared';
+import type { LearningRetrievalQuery, LearningRetrievalResult } from '@autic/shared';
 
 import { LearningEngine } from './LearningEngine.js';
 import { OperationalOptimizationMemory } from './OperationalOptimizationMemory.js';
@@ -24,10 +21,7 @@ export class LearningRetrieval {
   private optimizationMemory: OperationalOptimizationMemory;
   private hitCache: EvictableMap<string, number> = new EvictableMap<string, number>(500);
 
-  constructor(
-    engine: LearningEngine,
-    optimizationMemory: OperationalOptimizationMemory,
-  ) {
+  constructor(engine: LearningEngine, optimizationMemory: OperationalOptimizationMemory) {
     this.engine = engine;
     this.optimizationMemory = optimizationMemory;
   }
@@ -77,11 +71,7 @@ export class LearningRetrieval {
    * Quick retrieval for pre-execution context loading.
    * Returns the most relevant entries for the given framework + dependency context.
    */
-  quickLoad(
-    framework: string,
-    dependency?: string,
-    maxResults = 10,
-  ): LearningRetrievalResult {
+  quickLoad(framework: string, dependency?: string, maxResults = 10): LearningRetrievalResult {
     return this.query({
       framework,
       dependency,

@@ -57,7 +57,10 @@ export class EnhancedRecoveryManager extends RecoveryManager {
     return this;
   }
 
-  emit<K extends keyof EnhancedRecoveryEvents>(event: K, ...args: Parameters<EnhancedRecoveryEvents[K]>): boolean {
+  emit<K extends keyof EnhancedRecoveryEvents>(
+    event: K,
+    ...args: Parameters<EnhancedRecoveryEvents[K]>
+  ): boolean {
     return this.evm.emit(event, ...args);
   }
 
@@ -146,7 +149,11 @@ export class EnhancedRecoveryManager extends RecoveryManager {
    * Attempt provider recovery with backoff.
    * Returns true if the provider should be retried.
    */
-  shouldRetryProvider(_providerId: string, errorCode: string, retryCount: number): {
+  shouldRetryProvider(
+    _providerId: string,
+    errorCode: string,
+    retryCount: number,
+  ): {
     retry: boolean;
     delayMs: number;
   } {

@@ -75,7 +75,10 @@ export class TokenAwareSwarmCoordination {
    * Allocate tokens to an agent for a specific operation.
    * Returns remaining budget after allocation.
    */
-  allocateTokens(agentId: string, tokensNeeded: number): { granted: number; remaining: number; warning: string | null } {
+  allocateTokens(
+    agentId: string,
+    tokensNeeded: number,
+  ): { granted: number; remaining: number; warning: string | null } {
     const budget = this.agentBudgets.get(agentId);
     if (!budget) {
       return { granted: 0, remaining: 0, warning: 'Agent not registered' };
@@ -142,11 +145,20 @@ export class TokenAwareSwarmCoordination {
   /**
    * Get the current token usage across all agents.
    */
-  getUsage(): { totalUsed: number; totalRemaining: number; utilizationPercent: number; warningCount: number } {
-    const totalUsed = Array.from(this.agentBudgets.values()).reduce((s, b) => s + b.currentTokens, 0) + this.sharedContext.usedTokens;
+  getUsage(): {
+    totalUsed: number;
+    totalRemaining: number;
+    utilizationPercent: number;
+    warningCount: number;
+  } {
+    const totalUsed =
+      Array.from(this.agentBudgets.values()).reduce((s, b) => s + b.currentTokens, 0) +
+      this.sharedContext.usedTokens;
     const totalBudget = this.getTotalBudget().totalBudget;
     const totalRemaining = totalBudget - totalUsed;
-    const warningCount = Array.from(this.agentBudgets.values()).filter(b => b.warning !== null).length;
+    const warningCount = Array.from(this.agentBudgets.values()).filter(
+      (b) => b.warning !== null,
+    ).length;
 
     return {
       totalUsed,

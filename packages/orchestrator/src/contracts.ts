@@ -74,10 +74,7 @@ export function fulfillContract(
 /**
  * Reject a contract with an error.
  */
-export function rejectContract(
-  contract: TaskContract,
-  error: string,
-): TaskContract {
+export function rejectContract(contract: TaskContract, error: string): TaskContract {
   return {
     ...contract,
     status: 'rejected',
@@ -102,9 +99,8 @@ export function getContractOutput<T extends ContractPayload>(
  * Summarize a contract for display/logging.
  */
 export function summarizeContract(contract: TaskContract): string {
-  const statusIcon = contract.status === 'fulfilled' ? '✓'
-    : contract.status === 'rejected' ? '✗'
-    : '…';
+  const statusIcon =
+    contract.status === 'fulfilled' ? '✓' : contract.status === 'rejected' ? '✗' : '…';
 
   const duration = contract.completedAt
     ? `${contract.completedAt - contract.startedAt}ms`

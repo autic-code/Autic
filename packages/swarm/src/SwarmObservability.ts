@@ -99,8 +99,12 @@ export class SwarmObservability {
     return {
       totalEvents: this.events.length,
       delegations: this.events.filter((e) => e.type.startsWith('delegation:')).length,
-      completions: this.events.filter((e) => e.type === 'agent:completed' || e.type === 'delegation:completed').length,
-      failures: this.events.filter((e) => e.type === 'agent:failed' || e.type === 'delegation:failed').length,
+      completions: this.events.filter(
+        (e) => e.type === 'agent:completed' || e.type === 'delegation:completed',
+      ).length,
+      failures: this.events.filter(
+        (e) => e.type === 'agent:failed' || e.type === 'delegation:failed',
+      ).length,
       safetyViolations: this.events.filter((e) => e.type.startsWith('safety:')).length,
     };
   }
@@ -117,7 +121,7 @@ export class SwarmObservability {
       .filter((e) => e.type.startsWith('delegation:') || e.type.startsWith('agent:'))
       .map((e) => ({
         sourceAgentId: e.agentId || '',
-        targetAgentId: e.data?.targetAgentId as string || '',
+        targetAgentId: (e.data?.targetAgentId as string) || '',
         type: e.type,
         timestamp: e.timestamp,
         success: !e.error,
@@ -126,7 +130,10 @@ export class SwarmObservability {
 
   /** Get recent delegation counts per agent */
   getAgentActivity(): Map<string, { delegations: number; completions: number; failures: number }> {
-    const activity = new Map<string, { delegations: number; completions: number; failures: number }>();
+    const activity = new Map<
+      string,
+      { delegations: number; completions: number; failures: number }
+    >();
 
     for (const event of this.events) {
       if (!event.agentId) continue;

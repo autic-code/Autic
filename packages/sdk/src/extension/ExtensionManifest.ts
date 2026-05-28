@@ -140,9 +140,11 @@ export function createManifest(params: {
 /**
  * Validate an extension manifest for completeness and correctness
  */
-export function validateManifest(
-  manifest: Partial<ExtensionManifest>,
-): { valid: boolean; errors: string[]; warnings: string[] } {
+export function validateManifest(manifest: Partial<ExtensionManifest>): {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+} {
   const errors: string[] = [];
   const warnings: string[] = [];
 

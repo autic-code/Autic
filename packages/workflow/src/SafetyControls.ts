@@ -22,7 +22,7 @@ const DEFAULT_SAFETY_CONFIG: SafetyConfig = {
   maxWorkflowRetries: 5,
   maxStepRetries: 3,
   workflowTimeoutMs: 300_000, // 5 minutes
-  stepTimeoutMs: 60_000,      // 1 minute
+  stepTimeoutMs: 60_000, // 1 minute
   allowDangerousActions: false,
   requirePermissionForHighRisk: true,
   maxConsecutiveFailures: 3,
@@ -69,11 +69,10 @@ export class SafetyControls {
    * Check if an action is safe to execute.
    * Returns an object with allowed flag and reason.
    */
-  checkAction(params: {
-    step: WorkflowStep;
-    workflow: WorkflowState;
-    isDangerous?: boolean;
-  }): { allowed: boolean; reason?: string } {
+  checkAction(params: { step: WorkflowStep; workflow: WorkflowState; isDangerous?: boolean }): {
+    allowed: boolean;
+    reason?: string;
+  } {
     const { step, workflow: _wf, isDangerous } = params;
 
     // Check cancellation
@@ -93,7 +92,10 @@ export class SafetyControls {
 
     // Check execution depth
     if (this.context.depth >= this.config.maxExecutionDepth) {
-      return { allowed: false, reason: `Maximum execution depth (${this.config.maxExecutionDepth}) reached` };
+      return {
+        allowed: false,
+        reason: `Maximum execution depth (${this.config.maxExecutionDepth}) reached`,
+      };
     }
 
     // Check total actions
@@ -103,7 +105,10 @@ export class SafetyControls {
 
     // Check consecutive failures
     if (this.context.consecutiveFailures >= this.config.maxConsecutiveFailures) {
-      return { allowed: false, reason: `Too many consecutive failures (${this.context.consecutiveFailures})` };
+      return {
+        allowed: false,
+        reason: `Too many consecutive failures (${this.context.consecutiveFailures})`,
+      };
     }
 
     // Check dangerous actions
@@ -115,7 +120,11 @@ export class SafetyControls {
     }
 
     // Check step timeout (for long-running steps)
-    if (step.durationMs && step.durationMs > this.config.stepTimeoutMs && step.status === 'running') {
+    if (
+      step.durationMs &&
+      step.durationMs > this.config.stepTimeoutMs &&
+      step.status === 'running'
+    ) {
       return { allowed: false, reason: `Step exceeded timeout (${this.config.stepTimeoutMs}ms)` };
     }
 

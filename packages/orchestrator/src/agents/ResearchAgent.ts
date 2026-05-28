@@ -14,11 +14,7 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  ResearchOutput, 
-  TaskContract, 
-  OrchestrationStage,
-} from '@autic/shared';
+import type { ResearchOutput, TaskContract, OrchestrationStage } from '@autic/shared';
 import { createContract, fulfillContract, rejectContract } from '../contracts.js';
 
 export interface ResearchAgentOptions {
@@ -26,7 +22,10 @@ export interface ResearchAgentOptions {
   timeoutMs?: number;
 }
 
-type ToolRunner = (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>;
+type ToolRunner = (
+  toolName: string,
+  args: Record<string, unknown>,
+) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 
 export class ResearchAgent {
   private options: Required<ResearchAgentOptions>;
@@ -61,10 +60,21 @@ export class ResearchAgent {
 
       // 2. Find config files
       const configPatterns = [
-        'package.json', 'tsconfig.json', 'Cargo.toml', 'Gemfile',
-        'requirements.txt', 'Makefile', 'Dockerfile', '.env.example',
-        'composer.json', 'build.gradle', 'pom.xml', 'go.mod',
-        'pnpm-workspace.yaml', 'yarn.lock', 'package-lock.json',
+        'package.json',
+        'tsconfig.json',
+        'Cargo.toml',
+        'Gemfile',
+        'requirements.txt',
+        'Makefile',
+        'Dockerfile',
+        '.env.example',
+        'composer.json',
+        'build.gradle',
+        'pom.xml',
+        'go.mod',
+        'pnpm-workspace.yaml',
+        'yarn.lock',
+        'package-lock.json',
       ];
       const configFiles = rootFiles.filter((f) => configPatterns.includes(f));
 
@@ -83,7 +93,7 @@ export class ResearchAgent {
 
       // 4. Detect directories for structure
       const directories: string[] = [];
-      
+
       // Check for common source directories
       for (const dir of ['src', 'lib', 'app', 'packages', 'apps', 'components']) {
         const dirResult = await runTool('list_files', { path: dir });
@@ -123,10 +133,7 @@ export class ResearchAgent {
 
       return fulfillContract(contract, output as unknown as Record<string, unknown>);
     } catch (error) {
-      return rejectContract(
-        contract,
-        error instanceof Error ? error.message : String(error),
-      );
+      return rejectContract(contract, error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -146,7 +153,7 @@ export class ResearchAgent {
         if (json.dependencies) {
           const names = Object.keys(json.dependencies);
           deps.push(...names);
-          
+
           // Detect common frameworks
           if (names.some((n) => n.includes('react'))) {
             frameworks.push({ name: 'React', confidence: 0.9 });

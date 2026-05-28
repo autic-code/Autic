@@ -41,11 +41,13 @@ interface WorkflowConfig {
 **Purpose:** Abstract LLM provider interactions behind a unified interface.
 
 **Public API:**
+
 - `ProviderRouter` — Routes requests to the appropriate provider
 - `ProviderRegistry` — Manages registered providers
 - `ProviderHealthCheck` — Validates provider connectivity
 
 **Contract:**
+
 ```typescript
 interface ProviderRouter {
   route(config: ProviderConfig, prompt: string): Promise<ProviderResponse>;
@@ -59,11 +61,13 @@ interface ProviderRouter {
 **Purpose:** Manage LLM context windows with token optimization and caching.
 
 **Public API:**
+
 - `ContextManager` — Handles context assembly and optimization
 - `TokenOptimizer` — Compresses context within token limits
 - `ContextCache` — Caches processed contexts
 
 **Contract:**
+
 ```typescript
 interface ContextManager {
   buildContext(session: SessionConfig, messages: Message[]): Promise<ContextResult>;
@@ -77,11 +81,13 @@ interface ContextManager {
 **Purpose:** Coordinate multi-agent execution pipelines.
 
 **Public API:**
+
 - `NeuroBrain` — Central orchestration intelligence
 - `PipelineExecutor` — Executes staged pipelines
 - `SwarmCoordinator` — Manages multi-agent coordination
 
 **Contract:**
+
 ```typescript
 interface Orchestrator {
   executePipeline(goal: string, pipeline: PipelineConfig): Promise<PipelineResult>;
@@ -101,10 +107,12 @@ interface SwarmCoordinator {
 **Purpose:** Execute autonomous engineering workflows.
 
 **Public API:**
+
 - `WorkflowEngine` — Executes multi-step autonomous workflows
 - `TaskExecutor` — Executes individual tasks within workflows
 
 **Contract:**
+
 ```typescript
 interface WorkflowEngine {
   execute(goal: string, config: WorkflowConfig): Promise<WorkflowResult>;
@@ -118,6 +126,7 @@ interface WorkflowEngine {
 **Purpose:** Provide defense-in-depth security for secrets, output sanitization, and permission management.
 
 ### Vault Contract
+
 ```typescript
 interface Vault {
   set(key: string, value: string): Promise<void>;
@@ -129,6 +138,7 @@ interface Vault {
 ```
 
 ### Sanitization Contract
+
 ```typescript
 interface SecretSanitizer {
   sanitize(output: string): string;
@@ -138,6 +148,7 @@ interface SecretSanitizer {
 ```
 
 ### Permissions Contract
+
 ```typescript
 interface PermissionManager {
   checkPermission(action: string, scope: PermissionScope): Promise<boolean>;
@@ -151,6 +162,7 @@ interface PermissionManager {
 **Purpose:** Ensure runtime stability through watchdogs, recovery, and failure detection.
 
 **Public API:**
+
 - `Watchdog` — Monitors runtime health with heartbeat checks
 - `CrashRecovery` — Restores state after crashes
 - `DeadlockProtector` — Detects and resolves deadlocks/stalls
@@ -158,6 +170,7 @@ interface PermissionManager {
 - `ProviderFailureHardener` — Handles provider failures with fallback logic
 
 **Contract:**
+
 ```typescript
 interface Watchdog {
   start(interval: number): void;
@@ -177,6 +190,7 @@ interface CrashRecovery {
 **Purpose:** Provide runtime introspection, health monitoring, and documentation.
 
 **Public API:**
+
 - `Doctor` — Comprehensive environment diagnostics
 - `ObservabilityEnhancer` — Runtime system snapshots and health checks
 - `SecurityValidator` — Security validation framework
@@ -184,6 +198,7 @@ interface CrashRecovery {
 - `CrashDiagnostics` — Crash analysis and reporting
 
 **Contract:**
+
 ```typescript
 interface ObservabilityEnhancer {
   getRuntimeHealth(): RuntimeHealthIndicators;
@@ -200,6 +215,7 @@ interface ObservabilityEnhancer {
 **Purpose:** Validate real-world operational readiness.
 
 **Public API:**
+
 - `WorkflowValidator` — Validates workflows against project types
 - `ChaosSimulator` — Simulates provider failures for resilience testing
 - `LongRunTester` — Long-running autonomous workflow testing
@@ -212,6 +228,7 @@ interface ObservabilityEnhancer {
 **Purpose:** Manage extension ecosystem safety and compatibility.
 
 **Public API:**
+
 - `ExtensionGovernor` — Extension trust metadata, permission auditing, compatibility scoring
 - `SecurityAuditor` — Runtime security audit framework
 - `EcosystemMaintenance` — Extension diagnostics, compatibility inspection
@@ -221,6 +238,7 @@ interface ObservabilityEnhancer {
 **Purpose:** Production performance analysis and baseline establishment.
 
 **Public API:**
+
 - `RuntimeProfiler` — CPU, memory, queue, provider, orchestration profiling
 - `PerformanceBaseline` — Performance baseline management and comparison
 
@@ -229,6 +247,7 @@ interface ObservabilityEnhancer {
 **Purpose:** Safe, opt-in, privacy-preserving runtime metrics.
 
 **Contract:**
+
 ```typescript
 interface TelemetryCollector {
   enable(): void;
@@ -241,6 +260,7 @@ interface TelemetryCollector {
 ```
 
 **Data collection policy:**
+
 - ✅ Anonymized runtime metrics (aggregate only)
 - ✅ Crash categories (type, count — no stack traces)
 - ✅ Provider reliability metrics (latency, success rate — no API keys)
@@ -252,6 +272,7 @@ interface TelemetryCollector {
 **Purpose:** Enable safe third-party extension development.
 
 **Key contracts:**
+
 - `ExtensionManifest` — Extension metadata and permissions declaration
 - `ExtensionLifecycleManager` — Install, enable, disable, uninstall lifecycle
 - `ExtensionLoader` — Sandboxed extension loading
@@ -271,6 +292,7 @@ interface TelemetryCollector {
 **Purpose:** Manage release channels and updates.
 
 **Contract:**
+
 ```typescript
 interface ReleaseChannels {
   getCurrentChannel(): 'stable' | 'beta' | 'dev';

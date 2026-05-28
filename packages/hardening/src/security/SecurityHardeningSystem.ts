@@ -53,7 +53,8 @@ export class SecurityHardeningSystem {
       providerBoundarySecure,
       localOnlyModeIntegrity,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['All security hardening checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['All security hardening checks passed'],
     };
   }
 
@@ -102,7 +103,8 @@ export class SecurityHardeningSystem {
       secretSanitizationValid: true,
       promptSanitizationValid: true,
       providerBoundarySecure: true,
-      localOnlyModeIntegrity: !config.localOnly || (!config.telemetryEnabled && !config.cloudSyncEnabled),
+      localOnlyModeIntegrity:
+        !config.localOnly || (!config.telemetryEnabled && !config.cloudSyncEnabled),
       issues,
       recommendations: recommendations.length > 0 ? recommendations : ['Security posture is valid'],
     };

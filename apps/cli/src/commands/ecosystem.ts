@@ -21,7 +21,9 @@ export async function ecosystemCommand(action?: string): Promise<void> {
       for (const r of results) {
         const icon = r.healthy ? colorText('✓', 'success') : colorText('✗', 'error');
         console.log(`  ${icon} ${r.name} (${r.type})`);
-        console.log(`    Status: ${r.healthy ? colorText('Healthy', 'success') : colorText('Unhealthy', 'error')}`);
+        console.log(
+          `    Status: ${r.healthy ? colorText('Healthy', 'success') : colorText('Unhealthy', 'error')}`,
+        );
         if (r.issues.length > 0) {
           for (const issue of r.issues) {
             console.log(`    ${colorText('⚠', 'warning')} ${issue}`);
@@ -37,7 +39,9 @@ export async function ecosystemCommand(action?: string): Promise<void> {
       for (const i of inspections) {
         const icon = i.compatible ? colorText('✓', 'success') : colorText('✗', 'error');
         console.log(`  ${icon} ${i.name}`);
-        console.log(`    Compatible: ${i.compatible ? colorText('Yes', 'success') : colorText('No', 'error')}`);
+        console.log(
+          `    Compatible: ${i.compatible ? colorText('Yes', 'success') : colorText('No', 'error')}`,
+        );
         console.log(`    Runtime API version: ${i.runtimeApiVersion}`);
         console.log(`    Required API version: ${i.requiredApiVersion}`);
       }
@@ -79,30 +83,35 @@ export async function ecosystemCommand(action?: string): Promise<void> {
       // Diagnostics
       console.log(`  ${colorText('▸ Extension Diagnostics', 'bold')}`);
       const diag = await maintenance.runExtensionDiagnostics();
-      const healthyCount = diag.filter(d => d.healthy).length;
+      const healthyCount = diag.filter((d) => d.healthy).length;
       console.log(`    ${healthyCount}/${diag.length} extensions healthy\n`);
 
       // Compatibility
       console.log(`  ${colorText('▸ Compatibility Inspection', 'bold')}`);
       const compat = await maintenance.inspectCompatibility();
-      const compatCount = compat.filter(c => c.compatible).length;
+      const compatCount = compat.filter((c) => c.compatible).length;
       console.log(`    ${compatCount}/${compat.length} compatible\n`);
 
       // Runtime Audit
       console.log(`  ${colorText('▸ Runtime Audit', 'bold')}`);
       const audit = await maintenance.auditRuntime();
-      const passed = audit.filter(a => a.passed).length;
+      const passed = audit.filter((a) => a.passed).length;
       console.log(`    ${passed}/${audit.length} checks passed\n`);
 
       // Plugin Lifecycle
       console.log(`  ${colorText('▸ Plugin Lifecycle', 'bold')}`);
       const lifecycle = await maintenance.managePluginLifecycle();
-      const healthyPlugins = lifecycle.filter(p => p.healthy).length;
+      const healthyPlugins = lifecycle.filter((p) => p.healthy).length;
       console.log(`    ${healthyPlugins}/${lifecycle.length} plugins healthy\n`);
 
       console.log(divider());
-      const allHealthy = diag.every(d => d.healthy) && compat.every(c => c.compatible) && audit.every(a => a.passed);
-      console.log(`  ${allHealthy ? colorText('ECOSYSTEM HEALTHY', 'success') : colorText('ISSUES FOUND', 'warning')}`);
+      const allHealthy =
+        diag.every((d) => d.healthy) &&
+        compat.every((c) => c.compatible) &&
+        audit.every((a) => a.passed);
+      console.log(
+        `  ${allHealthy ? colorText('ECOSYSTEM HEALTHY', 'success') : colorText('ISSUES FOUND', 'warning')}`,
+      );
       break;
     }
   }

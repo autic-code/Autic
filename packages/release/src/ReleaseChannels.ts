@@ -103,10 +103,7 @@ export class ReleaseChannelManager extends EventEmitter {
   private config: ReleaseChannelConfig;
   private currentVersion: string;
 
-  constructor(
-    currentVersion: string = '0.1.0',
-    config?: Partial<ReleaseChannelConfig>,
-  ) {
+  constructor(currentVersion: string = '0.1.0', config?: Partial<ReleaseChannelConfig>) {
     super();
     this.currentVersion = currentVersion;
     this.config = { ...DEFAULT_CHANNEL_CONFIG, ...config };
@@ -178,7 +175,9 @@ export class ReleaseChannelManager extends EventEmitter {
     const latest = available[0];
 
     return {
-      updateAvailable: latest ? this.compareVersions(latest.version, this.currentVersion) > 0 : false,
+      updateAvailable: latest
+        ? this.compareVersions(latest.version, this.currentVersion) > 0
+        : false,
       currentVersion: this.currentVersion,
       latestVersion: latest,
       availableVersions: available,
@@ -235,7 +234,9 @@ export class ReleaseChannelManager extends EventEmitter {
         version,
         safe,
         reasons,
-        migrationNotes: safe ? undefined : `Manual migration may be required for ${version.version}`,
+        migrationNotes: safe
+          ? undefined
+          : `Manual migration may be required for ${version.version}`,
       });
     }
 

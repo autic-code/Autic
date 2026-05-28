@@ -47,7 +47,10 @@ interface ProviderState {
 
 export class ProviderStabilityLayer extends EventEmitter {
   private options: Required<ProviderStabilityLayerOptions>;
-  private healthCache: EvictableMap<string, ProviderHealthCache> = new EvictableMap<string, ProviderHealthCache>(200);
+  private healthCache: EvictableMap<string, ProviderHealthCache> = new EvictableMap<
+    string,
+    ProviderHealthCache
+  >(200);
   private providerStates: Map<string, ProviderState> = new Map();
 
   constructor(options: ProviderStabilityLayerOptions = {}) {
@@ -151,9 +154,11 @@ export class ProviderStabilityLayer extends EventEmitter {
     if (transientCodes.includes(error.code)) return true;
 
     // Network-level errors are often transient
-    if (error.originalError?.includes('ECONNRESET') ||
-        error.originalError?.includes('ETIMEDOUT') ||
-        error.originalError?.includes('ECONNREFUSED')) {
+    if (
+      error.originalError?.includes('ECONNRESET') ||
+      error.originalError?.includes('ETIMEDOUT') ||
+      error.originalError?.includes('ECONNREFUSED')
+    ) {
       return true;
     }
 
@@ -207,7 +212,8 @@ export class ProviderStabilityLayer extends EventEmitter {
    */
   startCooldown(providerId: string, durationMs?: number): void {
     const state = this.getOrCreateState(providerId);
-    const cooldownDuration = durationMs || this.options.cooldownBaseMs * Math.pow(2, state.consecutiveFailures);
+    const cooldownDuration =
+      durationMs || this.options.cooldownBaseMs * Math.pow(2, state.consecutiveFailures);
     state.inCooldown = true;
     state.cooldownUntil = Date.now() + cooldownDuration;
 
@@ -244,11 +250,15 @@ export class ProviderStabilityLayer extends EventEmitter {
    * Use this instead of directly calling startCooldown/isInCooldown
    * when a RateLimiter is also managing the same provider.
    */
-  synchronizeCooldown(rateLimiter: {
-    markRateLimited: (providerId: string, retryAfterMs?: number) => void;
-    isInCooldown: (providerId: string) => boolean;
-    getCooldownRemaining: (providerId: string) => number;
-  }, providerId: string, _durationMs?: number): void {
+  synchronizeCooldown(
+    rateLimiter: {
+      markRateLimited: (providerId: string, retryAfterMs?: number) => void;
+      isInCooldown: (providerId: string) => boolean;
+      getCooldownRemaining: (providerId: string) => number;
+    },
+    providerId: string,
+    _durationMs?: number,
+  ): void {
     // Sync cooldown from this layer to the rate limiter
     if (this.isInCooldown(providerId)) {
       const remaining = this.getCooldownRemaining(providerId);
@@ -288,14 +298,16 @@ export class ProviderStabilityLayer extends EventEmitter {
 
   // --- Provider State ---
 
-  getProviderState(providerId: string): {
-    consecutiveFailures: number;
-    inDegradedMode: boolean;
-    inCooldown: boolean;
-    totalFailures: number;
-    totalSuccesses: number;
-    lastError: string;
-  } | undefined {
+  getProviderState(providerId: string):
+    | {
+        consecutiveFailures: number;
+        inDegradedMode: boolean;
+        inCooldown: boolean;
+        totalFailures: number;
+        totalSuccesses: number;
+        lastError: string;
+      }
+    | undefined {
     const state = this.providerStates.get(providerId);
     if (!state) return undefined;
     return { ...state };

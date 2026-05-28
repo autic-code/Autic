@@ -58,9 +58,13 @@ async function showStatus(): Promise<void> {
 
   console.log(heading('Runtime Stability Status'));
   console.log('');
-  console.log(`  ${colorText('✓', 'success')} ${colorText('Runtime', 'default')} ${colorText(`— ${uptime} uptime`, 'dim')}`);
+  console.log(
+    `  ${colorText('✓', 'success')} ${colorText('Runtime', 'default')} ${colorText(`— ${uptime} uptime`, 'dim')}`,
+  );
   console.log(`  ${colorText('•', 'dim')} Memory: ${heapMB} MB heap, ${rssMB} MB RSS`);
-  console.log(`  ${colorText('•', 'dim')} CPU: ${(process.cpuUsage().user / 1_000_000).toFixed(2)}s user`);
+  console.log(
+    `  ${colorText('•', 'dim')} CPU: ${(process.cpuUsage().user / 1_000_000).toFixed(2)}s user`,
+  );
   console.log('');
 
   // Check for stability module availability
@@ -71,13 +75,19 @@ async function showStatus(): Promise<void> {
       console.log(`  ${colorText('•', 'dim')} ResourceManager: available`);
     }
   } catch {
-    console.log(`  ${colorText('!', 'warning')} Stability systems not loaded (use autic orchestrate or workflow to activate)`);
+    console.log(
+      `  ${colorText('!', 'warning')} Stability systems not loaded (use autic orchestrate or workflow to activate)`,
+    );
   }
 
   console.log('');
   console.log('  For detailed info:');
-  console.log(`    ${colorText('autic stability health', 'primary')}    — Provider and pipeline health`);
-  console.log(`    ${colorText('autic stability resources', 'primary')} — Memory, workers, queue, providers`);
+  console.log(
+    `    ${colorText('autic stability health', 'primary')}    — Provider and pipeline health`,
+  );
+  console.log(
+    `    ${colorText('autic stability resources', 'primary')} — Memory, workers, queue, providers`,
+  );
   console.log(`    ${colorText('autic stability metrics', 'primary')}   — Performance telemetry`);
   console.log(`    ${colorText('autic stability cleanup', 'primary')}  — Run cleanup tasks`);
   console.log('');
@@ -92,16 +102,24 @@ async function showHealth(): Promise<void> {
   console.log('');
   console.log(`  Status: ${colorText('Active', 'success')}`);
   console.log(`  Uptime: ${formatUptime(process.uptime())}`);
-  console.log(`  Memory: ${heapMB} MB / ${heapTotalMB} MB (${((mem.heapUsed / mem.heapTotal) * 100).toFixed(1)}%)`);
+  console.log(
+    `  Memory: ${heapMB} MB / ${heapTotalMB} MB (${((mem.heapUsed / mem.heapTotal) * 100).toFixed(1)}%)`,
+  );
   console.log(`  RSS:    ${(mem.rss / (1024 * 1024)).toFixed(1)} MB`);
   console.log(`  Node:   ${process.version}`);
   console.log(`  PID:    ${process.pid}`);
   console.log('');
 
   // Check for signal handlers
-  console.log(`  ${colorText('•', 'dim')} Graceful shutdown: ${process.listenerCount('SIGINT') > 0 ? colorText('✓', 'success') : colorText('✗', 'warning')}`);
-  console.log(`  ${colorText('•', 'dim')} Unhandled rejection handler: ${process.listenerCount('unhandledRejection') > 0 ? colorText('✓', 'success') : colorText('✗', 'warning')}`);
-  console.log(`  ${colorText('•', 'dim')} Uncaught exception handler: ${process.listenerCount('uncaughtException') > 0 ? colorText('✓', 'success') : colorText('✗', 'warning')}`);
+  console.log(
+    `  ${colorText('•', 'dim')} Graceful shutdown: ${process.listenerCount('SIGINT') > 0 ? colorText('✓', 'success') : colorText('✗', 'warning')}`,
+  );
+  console.log(
+    `  ${colorText('•', 'dim')} Unhandled rejection handler: ${process.listenerCount('unhandledRejection') > 0 ? colorText('✓', 'success') : colorText('✗', 'warning')}`,
+  );
+  console.log(
+    `  ${colorText('•', 'dim')} Uncaught exception handler: ${process.listenerCount('uncaughtException') > 0 ? colorText('✓', 'success') : colorText('✗', 'warning')}`,
+  );
   console.log('');
 }
 
@@ -121,7 +139,14 @@ async function showResources(): Promise<void> {
   // System info
   console.log(`  ${colorText('System', 'default')}`);
   console.log(`    Platform: ${process.platform}`);
-  console.log(`    Arch:     ${process.arch}`);    console.log(`    Cores:    ${cpus().length}`);    console.log(`    Memory:   ${(totalmem() / (1024 * 1024 * 1024)).toFixed(1)} GB total`);    console.log(`    Load:     ${loadavg().map((l: number) => l.toFixed(2)).join(', ')}`);
+  console.log(`    Arch:     ${process.arch}`);
+  console.log(`    Cores:    ${cpus().length}`);
+  console.log(`    Memory:   ${(totalmem() / (1024 * 1024 * 1024)).toFixed(1)} GB total`);
+  console.log(
+    `    Load:     ${loadavg()
+      .map((l: number) => l.toFixed(2))
+      .join(', ')}`,
+  );
   console.log('');
 }
 
@@ -135,7 +160,9 @@ async function showMetrics(): Promise<void> {
 
   // Check if telemetry file exists
   console.log(`  ${colorText('Note', 'warning')}: Detailed telemetry is collected during active`);
-  console.log(`  orchestration or workflow sessions. Run ${colorText('autic orchestrate', 'primary')}`);
+  console.log(
+    `  orchestration or workflow sessions. Run ${colorText('autic orchestrate', 'primary')}`,
+  );
   console.log(`  or ${colorText('autic workflow', 'primary')} to start an active session.`);
   console.log('');
 }
@@ -158,7 +185,9 @@ async function showProcesses(): Promise<void> {
   console.log(heading('Managed Processes'));
   console.log('');
   console.log(`  ${colorText('Process isolation is active during runtime sessions.', 'dim')}`);
-  console.log(`  Use ${colorText('autic orchestrate', 'primary')} or ${colorText('autic workflow', 'primary')} to monitor processes.`);
+  console.log(
+    `  Use ${colorText('autic orchestrate', 'primary')} or ${colorText('autic workflow', 'primary')} to monitor processes.`,
+  );
   console.log('');
 }
 

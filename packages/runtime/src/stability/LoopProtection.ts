@@ -153,9 +153,7 @@ export class LoopProtection extends EventEmitter {
       (f) => f.stepId === stepId && f.timestamp > cutoff,
     );
 
-    const similarFailures = relevantFailures.filter(
-      (f) => f.error.includes(error.slice(0, 50)),
-    );
+    const similarFailures = relevantFailures.filter((f) => f.error.includes(error.slice(0, 50)));
 
     return {
       detected: similarFailures.length >= this.options.maxRepeatedFailures,

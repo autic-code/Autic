@@ -37,20 +37,41 @@ export class ContextSelector {
 
   // High-priority config files to always include
   private readonly CONFIG_FILES = new Set([
-    'package.json', 'tsconfig.json', 'pnpm-workspace.yaml',
-    '.env', '.env.example', 'next.config.ts', 'vite.config.ts',
-    'docker-compose.yml', 'Dockerfile', 'Makefile',
-    'tailwind.config.ts', 'tailwind.config.js',
-    '.eslintrc.json', '.eslintrc.js', '.prettierrc',
-    'Cargo.toml', 'Gemfile', 'requirements.txt',
+    'package.json',
+    'tsconfig.json',
+    'pnpm-workspace.yaml',
+    '.env',
+    '.env.example',
+    'next.config.ts',
+    'vite.config.ts',
+    'docker-compose.yml',
+    'Dockerfile',
+    'Makefile',
+    'tailwind.config.ts',
+    'tailwind.config.js',
+    '.eslintrc.json',
+    '.eslintrc.js',
+    '.prettierrc',
+    'Cargo.toml',
+    'Gemfile',
+    'requirements.txt',
   ]);
 
   // File extensions by scanning priority
   private readonly EXT_SCORE: Record<string, number> = {
-    '.ts': 90, '.tsx': 90, '.js': 80, '.jsx': 80,
-    '.py': 80, '.go': 80, '.rs': 80,
-    '.json': 70, '.yaml': 60, '.yml': 60,
-    '.toml': 60, '.md': 50, '.css': 40,
+    '.ts': 90,
+    '.tsx': 90,
+    '.js': 80,
+    '.jsx': 80,
+    '.py': 80,
+    '.go': 80,
+    '.rs': 80,
+    '.json': 70,
+    '.yaml': 60,
+    '.yml': 60,
+    '.toml': 60,
+    '.md': 50,
+    '.css': 40,
   };
 
   constructor(rootDir?: string) {
@@ -95,9 +116,10 @@ export class ContextSelector {
       files: selected,
       totalCandidates: scored.length,
       totalTokens,
-      strategy: selected.length > 0
-        ? `Selected ${selected.length}/${scored.length} files (~${Math.round(totalTokens / 1000)}K tokens)`
-        : 'No relevant files found',
+      strategy:
+        selected.length > 0
+          ? `Selected ${selected.length}/${scored.length} files (~${Math.round(totalTokens / 1000)}K tokens)`
+          : 'No relevant files found',
     };
   }
 
@@ -105,10 +127,7 @@ export class ContextSelector {
    * Get a dependency-aware file list with import tracking.
    * Useful for understanding project structure before execution.
    */
-  async getDependencyFiles(
-    entryPoints: string[],
-    maxFiles = 10,
-  ): Promise<SelectedFile[]> {
+  async getDependencyFiles(entryPoints: string[], maxFiles = 10): Promise<SelectedFile[]> {
     const selected: SelectedFile[] = [];
     const visited = new Set<string>();
 
@@ -143,10 +162,7 @@ export class ContextSelector {
 
   // ---- Private: File gathering ----
 
-  private async gatherCandidates(
-    includeConfigs: boolean,
-    scanDepth: number,
-  ): Promise<string[]> {
+  private async gatherCandidates(includeConfigs: boolean, scanDepth: number): Promise<string[]> {
     const candidates: string[] = [];
 
     if (includeConfigs) {
@@ -267,7 +283,9 @@ export class ContextSelector {
         const contentLower = content.toLowerCase();
 
         for (const kw of keywords) {
-          const matches = (contentLower.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
+          const matches = (
+            contentLower.match(new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []
+          ).length;
           contentScore += Math.min(matches * 2, 10);
         }
 

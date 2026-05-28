@@ -163,7 +163,10 @@ export class Telemetry extends EventEmitter {
   }
 
   getTotalToolExecutions(): number {
-    return this.history.reduce((sum, m) => sum + m.toolExecutionCount, 0) + this.current.toolExecutionCount;
+    return (
+      this.history.reduce((sum, m) => sum + m.toolExecutionCount, 0) +
+      this.current.toolExecutionCount
+    );
   }
 
   getMemoryGrowthTrend(): { initial: number; current: number; growth: number } {
@@ -189,7 +192,7 @@ export class Telemetry extends EventEmitter {
 
     if (elapsedMin <= 0) return { likely: false, growthRateMBPerMin: 0 };
 
-    const growthPerMin = ((lastMem - firstMem) / (1024 * 1024)) / elapsedMin;
+    const growthPerMin = (lastMem - firstMem) / (1024 * 1024) / elapsedMin;
 
     return {
       likely: growthPerMin > 5, // >5MB/min growth is suspicious

@@ -13,13 +13,18 @@
  */
 
 import { timestamp } from '@autic/shared';
-import type { 
-  PlanningOutput, 
-  ResearchOutput, 
-  TaskContract, 
+import type {
+  PlanningOutput,
+  ResearchOutput,
+  TaskContract,
   OrchestrationStage,
 } from '@autic/shared';
-import { createContract, fulfillContract, rejectContract, getContractOutput } from '../contracts.js';
+import {
+  createContract,
+  fulfillContract,
+  rejectContract,
+  getContractOutput,
+} from '../contracts.js';
 
 export interface PlanningAgentOptions {
   maxTasks?: number;
@@ -42,58 +47,188 @@ const TASK_TEMPLATES: Array<{
   {
     pattern: /build|create|generate|scaffold|new/i,
     tasks: [
-      { description: 'Set up project structure', type: 'tool_call', dependencies: [], estimatedComplexity: 'medium' },
-      { description: 'Create core module files', type: 'tool_call', dependencies: ['task-0'], estimatedComplexity: 'high' },
-      { description: 'Configure build system', type: 'tool_call', dependencies: ['task-0'], estimatedComplexity: 'medium' },
-      { description: 'Implement primary functionality', type: 'tool_call', dependencies: ['task-1', 'task-2'], estimatedComplexity: 'high' },
-      { description: 'Add tests for core modules', type: 'tool_call', dependencies: ['task-3'], estimatedComplexity: 'medium' },
-      { description: 'Verify build passes', type: 'verify', dependencies: ['task-4'], estimatedComplexity: 'low' },
+      {
+        description: 'Set up project structure',
+        type: 'tool_call',
+        dependencies: [],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Create core module files',
+        type: 'tool_call',
+        dependencies: ['task-0'],
+        estimatedComplexity: 'high',
+      },
+      {
+        description: 'Configure build system',
+        type: 'tool_call',
+        dependencies: ['task-0'],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Implement primary functionality',
+        type: 'tool_call',
+        dependencies: ['task-1', 'task-2'],
+        estimatedComplexity: 'high',
+      },
+      {
+        description: 'Add tests for core modules',
+        type: 'tool_call',
+        dependencies: ['task-3'],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Verify build passes',
+        type: 'verify',
+        dependencies: ['task-4'],
+        estimatedComplexity: 'low',
+      },
     ],
   },
   {
     pattern: /fix|repair|resolve|patch|bug|error|issue/i,
     tasks: [
-      { description: 'Reproduce the issue', type: 'tool_call', dependencies: [], estimatedComplexity: 'medium' },
-      { description: 'Identify root cause', type: 'analyze', dependencies: ['task-0'], estimatedComplexity: 'medium' },
-      { description: 'Apply targeted fix', type: 'tool_call', dependencies: ['task-1'], estimatedComplexity: 'medium' },
-      { description: 'Verify fix resolves issue', type: 'verify', dependencies: ['task-2'], estimatedComplexity: 'low' },
+      {
+        description: 'Reproduce the issue',
+        type: 'tool_call',
+        dependencies: [],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Identify root cause',
+        type: 'analyze',
+        dependencies: ['task-0'],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Apply targeted fix',
+        type: 'tool_call',
+        dependencies: ['task-1'],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Verify fix resolves issue',
+        type: 'verify',
+        dependencies: ['task-2'],
+        estimatedComplexity: 'low',
+      },
     ],
   },
   {
     pattern: /refactor|restructure|reorganize|clean/i,
     tasks: [
-      { description: 'Map current code structure', type: 'analyze', dependencies: [], estimatedComplexity: 'medium' },
-      { description: 'Apply refactoring changes', type: 'tool_call', dependencies: ['task-0'], estimatedComplexity: 'high' },
-      { description: 'Run type checking', type: 'verify', dependencies: ['task-1'], estimatedComplexity: 'low' },
-      { description: 'Verify existing tests pass', type: 'verify', dependencies: ['task-1'], estimatedComplexity: 'low' },
+      {
+        description: 'Map current code structure',
+        type: 'analyze',
+        dependencies: [],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Apply refactoring changes',
+        type: 'tool_call',
+        dependencies: ['task-0'],
+        estimatedComplexity: 'high',
+      },
+      {
+        description: 'Run type checking',
+        type: 'verify',
+        dependencies: ['task-1'],
+        estimatedComplexity: 'low',
+      },
+      {
+        description: 'Verify existing tests pass',
+        type: 'verify',
+        dependencies: ['task-1'],
+        estimatedComplexity: 'low',
+      },
     ],
   },
   {
     pattern: /analyze|audit|inspect|review|profile/i,
     tasks: [
-      { description: 'Scan repository structure', type: 'analyze', dependencies: [], estimatedComplexity: 'low' },
-      { description: 'Run analysis commands', type: 'tool_call', dependencies: ['task-0'], estimatedComplexity: 'medium' },
-      { description: 'Compile findings report', type: 'complete', dependencies: ['task-1'], estimatedComplexity: 'medium' },
+      {
+        description: 'Scan repository structure',
+        type: 'analyze',
+        dependencies: [],
+        estimatedComplexity: 'low',
+      },
+      {
+        description: 'Run analysis commands',
+        type: 'tool_call',
+        dependencies: ['task-0'],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Compile findings report',
+        type: 'complete',
+        dependencies: ['task-1'],
+        estimatedComplexity: 'medium',
+      },
     ],
   },
   {
     pattern: /deploy|release|publish|ship/i,
     tasks: [
-      { description: 'Verify build is clean', type: 'verify', dependencies: [], estimatedComplexity: 'low' },
-      { description: 'Run full test suite', type: 'verify', dependencies: ['task-0'], estimatedComplexity: 'medium' },
-      { description: 'Execute deployment steps', type: 'tool_call', dependencies: ['task-1'], estimatedComplexity: 'high' },
-      { description: 'Verify deployment succeeded', type: 'verify', dependencies: ['task-2'], estimatedComplexity: 'low' },
+      {
+        description: 'Verify build is clean',
+        type: 'verify',
+        dependencies: [],
+        estimatedComplexity: 'low',
+      },
+      {
+        description: 'Run full test suite',
+        type: 'verify',
+        dependencies: ['task-0'],
+        estimatedComplexity: 'medium',
+      },
+      {
+        description: 'Execute deployment steps',
+        type: 'tool_call',
+        dependencies: ['task-1'],
+        estimatedComplexity: 'high',
+      },
+      {
+        description: 'Verify deployment succeeded',
+        type: 'verify',
+        dependencies: ['task-2'],
+        estimatedComplexity: 'low',
+      },
     ],
   },
 ];
 
 function generateDefaultTasks(goal: string): Omit<TaskDefinition, 'id'>[] {
   return [
-    { description: 'Analyze current state', type: 'analyze', dependencies: [], estimatedComplexity: 'low' },
-    { description: 'Develop solution approach', type: 'plan', dependencies: ['task-0'], estimatedComplexity: 'medium' },
-    { description: `Execute: ${goal.slice(0, 60)}`, type: 'tool_call', dependencies: ['task-1'], estimatedComplexity: 'high' },
-    { description: 'Verify results', type: 'verify', dependencies: ['task-2'], estimatedComplexity: 'low' },
-    { description: 'Complete and summarize', type: 'complete', dependencies: ['task-3'], estimatedComplexity: 'low' },
+    {
+      description: 'Analyze current state',
+      type: 'analyze',
+      dependencies: [],
+      estimatedComplexity: 'low',
+    },
+    {
+      description: 'Develop solution approach',
+      type: 'plan',
+      dependencies: ['task-0'],
+      estimatedComplexity: 'medium',
+    },
+    {
+      description: `Execute: ${goal.slice(0, 60)}`,
+      type: 'tool_call',
+      dependencies: ['task-1'],
+      estimatedComplexity: 'high',
+    },
+    {
+      description: 'Verify results',
+      type: 'verify',
+      dependencies: ['task-2'],
+      estimatedComplexity: 'low',
+    },
+    {
+      description: 'Complete and summarize',
+      type: 'complete',
+      dependencies: ['task-3'],
+      estimatedComplexity: 'low',
+    },
   ];
 }
 
@@ -113,7 +248,10 @@ export class PlanningAgent {
    */
   async execute(
     goal: string,
-    _runTool: (toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; data?: unknown; error?: string }>,
+    _runTool: (
+      toolName: string,
+      args: Record<string, unknown>,
+    ) => Promise<{ success: boolean; data?: unknown; error?: string }>,
     previousContract?: TaskContract,
   ): Promise<TaskContract> {
     const contract = createContract(
@@ -148,26 +286,18 @@ export class PlanningAgent {
 
       return fulfillContract(contract, output as unknown as Record<string, unknown>);
     } catch (error) {
-      return rejectContract(
-        contract,
-        error instanceof Error ? error.message : String(error),
-      );
+      return rejectContract(contract, error instanceof Error ? error.message : String(error));
     }
   }
 
   /**
    * Decompose a goal into ordered, dependency-aware tasks.
    */
-  private decomposeGoal(
-    goal: string,
-    _research?: ResearchOutput,
-  ): TaskDefinition[] {
+  private decomposeGoal(goal: string, _research?: ResearchOutput): TaskDefinition[] {
     const goalLower = goal.toLowerCase();
     const template = TASK_TEMPLATES.find((t) => t.pattern.test(goalLower));
 
-    const rawTasks = template
-      ? template.tasks
-      : generateDefaultTasks(goal);
+    const rawTasks = template ? template.tasks : generateDefaultTasks(goal);
 
     // Assign IDs based on index
     return rawTasks.slice(0, this.options.maxTasks).map((t, i) => ({

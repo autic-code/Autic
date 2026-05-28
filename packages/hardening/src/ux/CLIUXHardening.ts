@@ -28,7 +28,8 @@ export class CLIUXHardener {
       providerFeedback: true,
       executionTransparency: true,
       issues,
-      recommendations: recommendations.length > 0 ? recommendations : ['CLI UX hardening checks passed'],
+      recommendations:
+        recommendations.length > 0 ? recommendations : ['CLI UX hardening checks passed'],
     };
   }
 
@@ -68,7 +69,9 @@ export class CLIUXHardener {
     return sections.join('\n');
   }
 
-  formatProviderStatus(providers: Array<{ name: string; status: string; modelCount: number }>): string {
+  formatProviderStatus(
+    providers: Array<{ name: string; status: string; modelCount: number }>,
+  ): string {
     const lines: string[] = ['Providers:'];
     for (const p of providers) {
       const icon = p.status === 'healthy' ? '✓' : p.status === 'degraded' ? '⚠' : '✖';

@@ -27,7 +27,13 @@ export interface LongRunTestConfig {
 }
 
 export interface LongRunPhase extends StressTestPhase {
-  phaseType: 'steady_state' | 'repair_cycle' | 'queue_saturation' | 'orchestration_stress' | 'memory_pressure' | 'recovery';
+  phaseType:
+    | 'steady_state'
+    | 'repair_cycle'
+    | 'queue_saturation'
+    | 'orchestration_stress'
+    | 'memory_pressure'
+    | 'recovery';
 }
 
 export interface LongRunTestResult {
@@ -79,66 +85,86 @@ export class LongRunTester {
   /**
    * Simulate a multi-hour autonomous workflow
    */
-  async simulateLongWorkflow(): Promise<Array<{ name: string; passed: boolean; error?: string; duration: number }>> {
+  async simulateLongWorkflow(): Promise<
+    Array<{ name: string; passed: boolean; error?: string; duration: number }>
+  > {
     const phase = await this.runSteadyState();
-    return [{
-      name: 'Long-lived workflow execution',
-      passed: phase.errors.length === 0,
-      error: phase.errors[0],
-      duration: phase.durationMs,
-    }];
+    return [
+      {
+        name: 'Long-lived workflow execution',
+        passed: phase.errors.length === 0,
+        error: phase.errors[0],
+        duration: phase.durationMs,
+      },
+    ];
   }
 
   /**
    * Simulate repeated repair cycles
    */
-  async simulateRepeatedRepairCycles(): Promise<Array<{ name: string; passed: boolean; error?: string; duration: number }>> {
+  async simulateRepeatedRepairCycles(): Promise<
+    Array<{ name: string; passed: boolean; error?: string; duration: number }>
+  > {
     const phase = await this.runRepairCycles();
-    return [{
-      name: 'Repair cycle stress',
-      passed: phase.tasksFailed === 0,
-      error: phase.errors.length > 0 ? phase.errors.join('; ') : undefined,
-      duration: phase.durationMs,
-    }];
+    return [
+      {
+        name: 'Repair cycle stress',
+        passed: phase.tasksFailed === 0,
+        error: phase.errors.length > 0 ? phase.errors.join('; ') : undefined,
+        duration: phase.durationMs,
+      },
+    ];
   }
 
   /**
    * Simulate queue saturation
    */
-  async simulateQueueSaturation(): Promise<Array<{ name: string; passed: boolean; error?: string; duration: number }>> {
+  async simulateQueueSaturation(): Promise<
+    Array<{ name: string; passed: boolean; error?: string; duration: number }>
+  > {
     const phase = await this.runQueueSaturation();
-    return [{
-      name: 'Queue saturation test',
-      passed: phase.tasksFailed < phase.tasksCompleted * 0.3,
-      error: phase.errors.length > 0 ? phase.errors[0] : undefined,
-      duration: phase.durationMs,
-    }];
+    return [
+      {
+        name: 'Queue saturation test',
+        passed: phase.tasksFailed < phase.tasksCompleted * 0.3,
+        error: phase.errors.length > 0 ? phase.errors[0] : undefined,
+        duration: phase.durationMs,
+      },
+    ];
   }
 
   /**
    * Simulate orchestration stress
    */
-  async simulateOrchestrationStress(): Promise<Array<{ name: string; passed: boolean; error?: string; duration: number }>> {
+  async simulateOrchestrationStress(): Promise<
+    Array<{ name: string; passed: boolean; error?: string; duration: number }>
+  > {
     const phase = await this.runOrchestrationStress();
-    return [{
-      name: 'Orchestration stress test',
-      passed: phase.tasksFailed < phase.tasksCompleted * 0.2,
-      error: phase.errors.length > 0 ? phase.errors[0] : undefined,
-      duration: phase.durationMs,
-    }];
+    return [
+      {
+        name: 'Orchestration stress test',
+        passed: phase.tasksFailed < phase.tasksCompleted * 0.2,
+        error: phase.errors.length > 0 ? phase.errors[0] : undefined,
+        duration: phase.durationMs,
+      },
+    ];
   }
 
   /**
    * Simulate memory pressure
    */
-  async simulateMemoryPressure(): Promise<Array<{ name: string; passed: boolean; error?: string; duration: number }>> {
+  async simulateMemoryPressure(): Promise<
+    Array<{ name: string; passed: boolean; error?: string; duration: number }>
+  > {
     const phase = await this.runMemoryPressure();
-    return [{
-      name: 'Memory pressure test',
-      passed: phase.tasksFailed < phase.tasksCompleted * 0.15 && phase.errors.length === 0,
-      error: phase.errors.length > 0 ? phase.errors[0] : undefined,
-      duration: phase.durationMs,
-    }];
+    return [
+      {
+        name: 'Memory pressure test',
+        passed: phase.tasksFailed < phase.tasksCompleted * 0.15 && phase.errors.length === 0,
+        error: phase.errors.length > 0 ? phase.errors[0] : undefined,
+        duration: phase.durationMs,
+      },
+    ];
   }
 
   /**
@@ -183,19 +209,18 @@ export class LongRunTester {
     memorySamples.push(process.memoryUsage().heapUsed / (1024 * 1024));
 
     const totalDurationMs = Date.now() - startTime;
-    const memoryGrowthMB = memorySamples.length >= 2
-      ? memorySamples[memorySamples.length - 1] - memorySamples[0]
-      : 0;
+    const memoryGrowthMB =
+      memorySamples.length >= 2 ? memorySamples[memorySamples.length - 1] - memorySamples[0] : 0;
 
     // Aggregate results
     const totalWorkflows = phases.reduce((s, p) => s + p.tasksCompleted + p.tasksFailed, 0);
     const completedWorkflows = phases.reduce((s, p) => s + p.tasksCompleted, 0);
     const failedWorkflows = phases.reduce((s, p) => s + p.tasksFailed, 0);
     const peakMemoryMB = Math.max(...phases.map((p) => p.peakMemoryMB), 0);
-    const avgLatencyMs = phases.reduce((s, p) => s + p.avgLatencyMs, 0) / Math.max(phases.length, 1);
-    const latencyGrowth = phases.length >= 2
-      ? phases[phases.length - 1].avgLatencyMs - phases[0].avgLatencyMs
-      : 0;
+    const avgLatencyMs =
+      phases.reduce((s, p) => s + p.avgLatencyMs, 0) / Math.max(phases.length, 1);
+    const latencyGrowth =
+      phases.length >= 2 ? phases[phases.length - 1].avgLatencyMs - phases[0].avgLatencyMs : 0;
 
     // Collect issues from phases
     for (const phase of phases) {
@@ -203,7 +228,9 @@ export class LongRunTester {
         issues.push(`${phase.phaseType}: ${phase.errors.join(', ')}`);
       }
       if (phase.tasksFailed > phase.tasksCompleted * 0.3) {
-        issues.push(`${phase.phaseType}: high failure rate (${phase.tasksFailed}/${phase.tasksCompleted + phase.tasksFailed})`);
+        issues.push(
+          `${phase.phaseType}: high failure rate (${phase.tasksFailed}/${phase.tasksCompleted + phase.tasksFailed})`,
+        );
       }
     }
 
@@ -219,12 +246,14 @@ export class LongRunTester {
         completedWorkflows,
         failedWorkflows,
         totalRepairCycles: this.config.repairCycles,
-        successfulRepairs: phases.filter((p) => p.phaseType === 'repair_cycle')[0]?.tasksCompleted ?? 0,
+        successfulRepairs:
+          phases.filter((p) => p.phaseType === 'repair_cycle')[0]?.tasksCompleted ?? 0,
         peakMemoryMB,
         memoryGrowthMB: Math.round(memoryGrowthMB * 100) / 100,
         avgLatencyMs,
         latencyGrowth,
-        queueDrainRate: phases.filter((p) => p.phaseType === 'queue_saturation')[0]?.tasksCompleted ?? 0,
+        queueDrainRate:
+          phases.filter((p) => p.phaseType === 'queue_saturation')[0]?.tasksCompleted ?? 0,
       },
       issues,
       recommendations: this.generateRecommendations(issues, memoryGrowthMB),
@@ -292,7 +321,7 @@ export class LongRunTester {
       tasksCompleted: Math.floor(this.config.workflowCount * 0.9),
       tasksFailed: Math.floor(this.config.workflowCount * 0.1),
       avgLatencyMs: 420,
-      peakMemoryMB: process.memoryUsage().rss / (1024 * 1024) * 1.2,
+      peakMemoryMB: (process.memoryUsage().rss / (1024 * 1024)) * 1.2,
       errors: [],
     };
   }
@@ -306,10 +335,11 @@ export class LongRunTester {
       tasksCompleted: Math.floor(this.config.workflowCount * 0.95),
       tasksFailed: Math.floor(this.config.workflowCount * 0.05),
       avgLatencyMs: 680,
-      peakMemoryMB: process.memoryUsage().rss / (1024 * 1024) * 1.5,
-      errors: process.memoryUsage().heapUsed / process.memoryUsage().heapTotal > 0.85
-        ? ['High heap utilization during memory pressure phase']
-        : [],
+      peakMemoryMB: (process.memoryUsage().rss / (1024 * 1024)) * 1.5,
+      errors:
+        process.memoryUsage().heapUsed / process.memoryUsage().heapTotal > 0.85
+          ? ['High heap utilization during memory pressure phase']
+          : [],
     };
   }
 
@@ -334,7 +364,9 @@ export class LongRunTester {
       recs.push('Review phase failures and adjust timeout/retry configuration');
     }
     if (memoryGrowthMB > 100) {
-      recs.push(`Significant memory growth detected (${memoryGrowthMB.toFixed(0)}MB) — investigate potential leak`);
+      recs.push(
+        `Significant memory growth detected (${memoryGrowthMB.toFixed(0)}MB) — investigate potential leak`,
+      );
     }
     if (memoryGrowthMB > 200) {
       recs.push('CRITICAL: Memory growth exceeds 200MB threshold — run memory leak detection');

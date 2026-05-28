@@ -15,7 +15,9 @@ export async function longrunCommand(action?: string): Promise<void> {
 
   switch (action) {
     case 'workflow': {
-      console.log(`  ${colorText('⟳', 'primary')} Running multi-hour autonomous workflow simulation...\n`);
+      console.log(
+        `  ${colorText('⟳', 'primary')} Running multi-hour autonomous workflow simulation...\n`,
+      );
       const result = await tester.simulateLongWorkflow();
       printRunResult(result);
       break;
@@ -68,22 +70,28 @@ export async function longrunCommand(action?: string): Promise<void> {
 
         for (const r of result) {
           if (!r.passed) {
-            console.log(`    ${colorText('⚠', 'warning')} ${r.name}: ${r.error || 'Unknown error'}`);
+            console.log(
+              `    ${colorText('⚠', 'warning')} ${r.name}: ${r.error || 'Unknown error'}`,
+            );
           }
         }
         console.log('');
       }
 
       console.log(divider());
-      const verdict = allPassed ? colorText('ALL TESTS PASSED', 'success') : colorText('SOME TESTS FAILED', 'error');
+      const verdict = allPassed
+        ? colorText('ALL TESTS PASSED', 'success')
+        : colorText('SOME TESTS FAILED', 'error');
       console.log(`  ${colorText('Final Verdict:', 'bold')} ${verdict}`);
       break;
     }
   }
 }
 
-function printRunResult(result: Array<{ name: string; passed: boolean; error?: string; duration: number }>): void {
-  const allPassed = result.every(r => r.passed);
+function printRunResult(
+  result: Array<{ name: string; passed: boolean; error?: string; duration: number }>,
+): void {
+  const allPassed = result.every((r) => r.passed);
   const icon = allPassed ? colorText('✓', 'success') : colorText('✗', 'error');
   console.log(`  ${icon} ${allPassed ? 'PASSED' : 'FAILED'}`);
 

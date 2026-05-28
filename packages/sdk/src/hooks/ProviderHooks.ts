@@ -80,10 +80,7 @@ export class ProviderHooks {
   /**
    * Emit a provider event
    */
-  emit(
-    event: ProviderHookEvent,
-    context: Omit<ProviderHookContext, 'event' | 'timestamp'>,
-  ): void {
+  emit(event: ProviderHookEvent, context: Omit<ProviderHookContext, 'event' | 'timestamp'>): void {
     const fullContext: ProviderHookContext = {
       ...context,
       event,

@@ -35,9 +35,7 @@ export function CommandArea({ title, commands }: CommandAreaProps) {
             <Box>
               <Text color="#E2E8F0">$ </Text>
               <Text bold>{entry.command}</Text>
-              {entry.duration && (
-                <Text dimColor> ({entry.duration})</Text>
-              )}
+              {entry.duration && <Text dimColor> ({entry.duration})</Text>}
             </Box>
             {entry.output && (
               <Box marginLeft={2}>

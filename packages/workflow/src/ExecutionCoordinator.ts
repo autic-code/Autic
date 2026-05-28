@@ -91,12 +91,24 @@ export class ExecutionCoordinator extends EventEmitter {
     this.observability = new Observability();
   }
 
-  getPlanner(): WorkflowPlanner { return this.planner; }
-  getVerifier(): VerificationEngine { return this.verifier; }
-  getRepairLoop(): RepairLoop { return this.repairLoop; }
-  getSafety(): SafetyControls { return this.safety; }
-  getMemory(): ExecutionMemory { return this.memory; }
-  getObservability(): Observability { return this.observability; }
+  getPlanner(): WorkflowPlanner {
+    return this.planner;
+  }
+  getVerifier(): VerificationEngine {
+    return this.verifier;
+  }
+  getRepairLoop(): RepairLoop {
+    return this.repairLoop;
+  }
+  getSafety(): SafetyControls {
+    return this.safety;
+  }
+  getMemory(): ExecutionMemory {
+    return this.memory;
+  }
+  getObservability(): Observability {
+    return this.observability;
+  }
 
   /**
    * Set the tool executor — wired externally with real tool implementations.
@@ -156,11 +168,7 @@ export class ExecutionCoordinator extends EventEmitter {
     });
 
     // 3. Execute loop
-    for (
-      let i = 0;
-      i < this.workflowState.steps.length;
-      i = this.workflowState.currentStepIndex
-    ) {
+    for (let i = 0; i < this.workflowState.steps.length; i = this.workflowState.currentStepIndex) {
       const step = this.workflowState.steps[i];
       this.workflowState.currentStepIndex = i;
 
@@ -223,7 +231,7 @@ export class ExecutionCoordinator extends EventEmitter {
             },
             verify: async (_s: WorkflowStep) => {
               const vResult = await this.verifier.verifyCommandSuccess(
-                step.output as string || '',
+                (step.output as string) || '',
                 step.error ? 1 : 0,
                 step.durationMs || 0,
               );
@@ -344,7 +352,7 @@ export class ExecutionCoordinator extends EventEmitter {
         const prevStep = this.getPreviousStep(step);
         if (!prevStep) return { success: true };
         const vResult = await this.verifier.verifyCommandSuccess(
-          prevStep.output as string || '',
+          (prevStep.output as string) || '',
           prevStep.status === 'success' ? 0 : 1,
           prevStep.durationMs || 0,
         );
@@ -386,10 +394,13 @@ export class ExecutionCoordinator extends EventEmitter {
       }
 
       // Determine exit code from error message patterns
-      const exitCode = result.error?.includes('timeout') ? 124
-        : result.error?.includes('not found') ? 127
-        : result.error?.includes('permission') ? 126
-        : 1;
+      const exitCode = result.error?.includes('timeout')
+        ? 124
+        : result.error?.includes('not found')
+          ? 127
+          : result.error?.includes('permission')
+            ? 126
+            : 1;
 
       return { success: false, error: result.error, exitCode };
     } catch (error) {
@@ -447,9 +458,10 @@ export class ExecutionCoordinator extends EventEmitter {
 
     const state: CoordinationState = {
       workflow: this.workflowState,
-      currentStep: this.workflowState.currentStepIndex < this.workflowState.steps.length
-        ? this.workflowState.steps[this.workflowState.currentStepIndex]
-        : null,
+      currentStep:
+        this.workflowState.currentStepIndex < this.workflowState.steps.length
+          ? this.workflowState.steps[this.workflowState.currentStepIndex]
+          : null,
       pendingTools: this.workflowState.steps
         .filter((s) => s.status === 'pending' && s.type === 'tool_call')
         .map((s) => s.toolName || 'unknown'),

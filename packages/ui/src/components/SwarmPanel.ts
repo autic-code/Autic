@@ -59,33 +59,47 @@ function formatUptime(ms: number): string {
 /** Status indicator color */
 function statusColor(status: string): string {
   switch (status) {
-    case 'running': return theme.colors.primary;
-    case 'paused': return theme.colors.warning;
+    case 'running':
+      return theme.colors.primary;
+    case 'paused':
+      return theme.colors.warning;
     case 'stopped':
-    case 'error': return theme.colors.error;
-    default: return theme.colors.textMuted;
+    case 'error':
+      return theme.colors.error;
+    default:
+      return theme.colors.textMuted;
   }
 }
 
 /** Pressure level color */
 function pressureColor(level: string): string {
   switch (level) {
-    case 'critical': return theme.colors.error;
-    case 'high': return theme.colors.warning;
-    case 'medium': return theme.colors.info;
-    case 'low': return theme.colors.success;
-    default: return theme.colors.textDim;
+    case 'critical':
+      return theme.colors.error;
+    case 'high':
+      return theme.colors.warning;
+    case 'medium':
+      return theme.colors.info;
+    case 'low':
+      return theme.colors.success;
+    default:
+      return theme.colors.textDim;
   }
 }
 
 /** Pressure indicator icon */
 function pressureIcon(level: string): string {
   switch (level) {
-    case 'critical': return theme.icon.cross;
-    case 'high': return theme.icon.warning;
-    case 'medium': return theme.icon.dot;
-    case 'low': return theme.icon.check;
-    default: return theme.icon.ellipsis;
+    case 'critical':
+      return theme.icon.cross;
+    case 'high':
+      return theme.icon.warning;
+    case 'medium':
+      return theme.icon.dot;
+    case 'low':
+      return theme.icon.check;
+    default:
+      return theme.icon.ellipsis;
   }
 }
 
@@ -97,10 +111,14 @@ export function renderSwarmPanel(display: SwarmDisplay): string[] {
   const headerColor = statusColor(display.status);
 
   // Header
-  lines.push(`${theme.icon.arrow} ${headerColor}${display.swarmName}${theme.colors.text} ${theme.colors.textDim}— ${display.status}${theme.colors.text}`);
+  lines.push(
+    `${theme.icon.arrow} ${headerColor}${display.swarmName}${theme.colors.text} ${theme.colors.textDim}— ${display.status}${theme.colors.text}`,
+  );
 
   // Stats row
-  lines.push(`  ${theme.colors.textDim}Agents:${theme.colors.text} ${display.agents}  ${theme.colors.textDim}Active:${theme.colors.text} ${display.activeDelegations}  ${theme.colors.textDim}Completed:${theme.colors.text} ${display.completedDelegations}  ${theme.colors.textDim}Failed:${theme.colors.text} ${display.failedDelegations}  ${theme.colors.textDim}Partitions:${theme.colors.text} ${display.partitions}  ${theme.colors.textDim}Uptime:${theme.colors.text} ${formatUptime(display.uptimeMs)}`);
+  lines.push(
+    `  ${theme.colors.textDim}Agents:${theme.colors.text} ${display.agents}  ${theme.colors.textDim}Active:${theme.colors.text} ${display.activeDelegations}  ${theme.colors.textDim}Completed:${theme.colors.text} ${display.completedDelegations}  ${theme.colors.textDim}Failed:${theme.colors.text} ${display.failedDelegations}  ${theme.colors.textDim}Partitions:${theme.colors.text} ${display.partitions}  ${theme.colors.textDim}Uptime:${theme.colors.text} ${formatUptime(display.uptimeMs)}`,
+  );
 
   // Divider
   lines.push(`  ${theme.colors.textDim}${theme.icon.divider.repeat(40)}${theme.colors.text}`);
@@ -112,32 +130,49 @@ export function renderSwarmPanel(display: SwarmDisplay): string[] {
   const provColor = pressureColor(display.loadMetrics.providerPressure);
   const queueColor = pressureColor(display.loadMetrics.queuePressure);
 
-  lines.push(`    ${pressureIcon(display.loadMetrics.cpuPressure)} CPU: ${cpuColor}${display.loadMetrics.cpuPressure}${theme.colors.text}  ${pressureIcon(display.loadMetrics.memoryPressure)} Mem: ${memColor}${display.loadMetrics.memoryPressure}${theme.colors.text}  ${pressureIcon(display.loadMetrics.providerPressure)} Provider: ${provColor}${display.loadMetrics.providerPressure}${theme.colors.text}  ${pressureIcon(display.loadMetrics.queuePressure)} Queue: ${queueColor}${display.loadMetrics.queuePressure}${theme.colors.text}`);
-  lines.push(`    ${theme.colors.textDim}Workers:${theme.colors.text} ${display.loadMetrics.activeWorkers} active / ${display.loadMetrics.idleWorkers} idle  ${theme.colors.textDim}Recommendation:${theme.colors.text} ${display.loadMetrics.recommendation}`);
+  lines.push(
+    `    ${pressureIcon(display.loadMetrics.cpuPressure)} CPU: ${cpuColor}${display.loadMetrics.cpuPressure}${theme.colors.text}  ${pressureIcon(display.loadMetrics.memoryPressure)} Mem: ${memColor}${display.loadMetrics.memoryPressure}${theme.colors.text}  ${pressureIcon(display.loadMetrics.providerPressure)} Provider: ${provColor}${display.loadMetrics.providerPressure}${theme.colors.text}  ${pressureIcon(display.loadMetrics.queuePressure)} Queue: ${queueColor}${display.loadMetrics.queuePressure}${theme.colors.text}`,
+  );
+  lines.push(
+    `    ${theme.colors.textDim}Workers:${theme.colors.text} ${display.loadMetrics.activeWorkers} active / ${display.loadMetrics.idleWorkers} idle  ${theme.colors.textDim}Recommendation:${theme.colors.text} ${display.loadMetrics.recommendation}`,
+  );
 
   // Protection status
   if (display.protection.throttlingActive) {
-    lines.push(`    ${theme.icon.warning} ${theme.colors.warning}Throttling active${theme.colors.text} — CPU: ${display.protection.cpuPressure}, Memory: ${display.protection.memoryPressure}`);
+    lines.push(
+      `    ${theme.icon.warning} ${theme.colors.warning}Throttling active${theme.colors.text} — CPU: ${display.protection.cpuPressure}, Memory: ${display.protection.memoryPressure}`,
+    );
   }
 
   // Pipeline info
   if (display.pipelines && display.pipelines.length > 0) {
     lines.push(`  ${theme.colors.textDim}Pipelines:${theme.colors.text}`);
     for (const pipeline of display.pipelines) {
-      const pColor = pipeline.status === 'running' ? theme.colors.primary
-        : pipeline.status === 'completed' ? theme.colors.success
-        : pipeline.status === 'failed' ? theme.colors.error
-        : theme.colors.textMuted;
-      lines.push(`    ${theme.icon.arrow} ${pColor}${pipeline.name}${theme.colors.text} ${theme.colors.textDim}— ${pipeline.completedStages}/${pipeline.stageCount} stages (${pipeline.status})${theme.colors.text}`);
+      const pColor =
+        pipeline.status === 'running'
+          ? theme.colors.primary
+          : pipeline.status === 'completed'
+            ? theme.colors.success
+            : pipeline.status === 'failed'
+              ? theme.colors.error
+              : theme.colors.textMuted;
+      lines.push(
+        `    ${theme.icon.arrow} ${pColor}${pipeline.name}${theme.colors.text} ${theme.colors.textDim}— ${pipeline.completedStages}/${pipeline.stageCount} stages (${pipeline.status})${theme.colors.text}`,
+      );
     }
   }
 
   // Adaptation info
   if (display.adaptationLevel) {
-    const adaptColor = display.adaptationLevel === 'normal' ? theme.colors.success
-      : display.adaptationLevel === 'reduced' ? theme.colors.warning
-      : theme.colors.error;
-    lines.push(`  ${theme.colors.textDim}Adaptation:${theme.colors.text} ${adaptColor}${display.adaptationLevel}${display.cooldownActive ? ` ${theme.colors.warning}(cooldown)${theme.colors.text}` : theme.colors.text}`);
+    const adaptColor =
+      display.adaptationLevel === 'normal'
+        ? theme.colors.success
+        : display.adaptationLevel === 'reduced'
+          ? theme.colors.warning
+          : theme.colors.error;
+    lines.push(
+      `  ${theme.colors.textDim}Adaptation:${theme.colors.text} ${adaptColor}${display.adaptationLevel}${display.cooldownActive ? ` ${theme.colors.warning}(cooldown)${theme.colors.text}` : theme.colors.text}`,
+    );
   }
 
   return lines;
@@ -147,15 +182,17 @@ export function renderSwarmPanel(display: SwarmDisplay): string[] {
  * Render a compact one-line swarm status.
  */
 export function compactSwarmLine(display: SwarmDisplay): string {
-  const statusIcon = display.status === 'running' ? theme.icon.arrow
-    : display.status === 'paused' ? theme.icon.dot
-    : display.status === 'error' ? theme.icon.cross
-    : theme.icon.ellipsis;
+  const statusIcon =
+    display.status === 'running'
+      ? theme.icon.arrow
+      : display.status === 'paused'
+        ? theme.icon.dot
+        : display.status === 'error'
+          ? theme.icon.cross
+          : theme.icon.ellipsis;
   const statusCol = statusColor(display.status);
 
-  const throttleIndicator = display.protection.throttlingActive
-    ? ` ${theme.icon.warning}`
-    : '';
+  const throttleIndicator = display.protection.throttlingActive ? ` ${theme.icon.warning}` : '';
 
   return `${statusIcon} ${statusCol}${display.swarmName.padEnd(24)}${theme.colors.text} ${display.agents} agents, ${display.activeDelegations} active${throttleIndicator}${theme.colors.text}`;
 }
@@ -163,14 +200,21 @@ export function compactSwarmLine(display: SwarmDisplay): string {
 /**
  * Render agent delegation chain.
  */
-export function delegationChainLine(chain: Array<{ source: string; target: string; status: string }>): string {
-  if (chain.length === 0) return `  ${theme.colors.textDim}No active delegations${theme.colors.text}`;
+export function delegationChainLine(
+  chain: Array<{ source: string; target: string; status: string }>,
+): string {
+  if (chain.length === 0)
+    return `  ${theme.colors.textDim}No active delegations${theme.colors.text}`;
 
   const parts = chain.map((c) => {
-    const color = c.status === 'completed' ? theme.colors.success
-      : c.status === 'running' ? theme.colors.primary
-      : c.status === 'failed' ? theme.colors.error
-      : theme.colors.textDim;
+    const color =
+      c.status === 'completed'
+        ? theme.colors.success
+        : c.status === 'running'
+          ? theme.colors.primary
+          : c.status === 'failed'
+            ? theme.colors.error
+            : theme.colors.textDim;
     return `${color}${c.source}${theme.colors.text} ${theme.icon.arrow} ${color}${c.target}${theme.colors.text}`;
   });
 
@@ -184,7 +228,12 @@ export function workerUtilizationLine(active: number, idle: number, total: numbe
   const busyBar = theme.icon.bullet.repeat(active);
   const idleBar = theme.colors.textDim + theme.icon.bullet.repeat(idle) + theme.colors.text;
   const percent = total > 0 ? Math.round((active / total) * 100) : 0;
-  const color = percent > 80 ? theme.colors.warning : percent > 50 ? theme.colors.primary : theme.colors.success;
+  const color =
+    percent > 80
+      ? theme.colors.warning
+      : percent > 50
+        ? theme.colors.primary
+        : theme.colors.success;
 
   return `  ${color}${busyBar}${idleBar}${theme.colors.text} ${color}${active}/${total} (${percent}%)${theme.colors.text}`;
 }

@@ -46,7 +46,9 @@ export class OllamaProvider extends BaseProvider {
     try {
       const response = await fetch(`${this.baseUrl}/api/tags`);
       if (!response.ok) return [];
-      const json = (await response.json()) as { models?: Array<{ name: string; details?: { parameter_size?: string } }> };
+      const json = (await response.json()) as {
+        models?: Array<{ name: string; details?: { parameter_size?: string } }>;
+      };
       return (json.models || []).map((model) => ({
         id: model.name,
         name: model.name,

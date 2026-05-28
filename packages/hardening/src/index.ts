@@ -15,7 +15,10 @@ export type { StressTestRunnerOptions, StressTestEvents } from './stress/StressT
 
 // #3 — Provider Failure Hardening
 export { ProviderFailureHardener } from './provider/ProviderFailureHardening.js';
-export type { ProviderHardeningOptions, ProviderHardeningEvents } from './provider/ProviderFailureHardening.js';
+export type {
+  ProviderHardeningOptions,
+  ProviderHardeningEvents,
+} from './provider/ProviderFailureHardening.js';
 
 // #4 — Memory Leak Detection
 export { MemoryLeakDetector } from './memory/MemoryLeakDetector.js';
@@ -23,7 +26,10 @@ export type { MemoryLeakDetectorOptions, MemoryLeakEvents } from './memory/Memor
 
 // #5 — Deadlock + Stall Protection
 export { DeadlockStallProtector } from './deadlock/DeadlockStallProtection.js';
-export type { DeadlockStallOptions, DeadlockStallEvents } from './deadlock/DeadlockStallProtection.js';
+export type {
+  DeadlockStallOptions,
+  DeadlockStallEvents,
+} from './deadlock/DeadlockStallProtection.js';
 
 // #6 — Execution Safety Validation
 export { ExecutionSafetyValidator } from './safety/ExecutionSafetyValidator.js';

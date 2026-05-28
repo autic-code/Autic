@@ -9,7 +9,11 @@ export { WorkflowPlanner } from './WorkflowPlanner.js';
 export type { PlannerOptions, TaskTemplate } from './WorkflowPlanner.js';
 
 export { ExecutionCoordinator } from './ExecutionCoordinator.js';
-export type { CoordinatorOptions, CoordinatorSnapshot, ToolExecutor } from './ExecutionCoordinator.js';
+export type {
+  CoordinatorOptions,
+  CoordinatorSnapshot,
+  ToolExecutor,
+} from './ExecutionCoordinator.js';
 
 export { VerificationEngine } from './VerificationEngine.js';
 export type { VerificationEngineOptions } from './VerificationEngine.js';

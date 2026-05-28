@@ -11,10 +11,7 @@ import * as path from 'node:path';
 /**
  * Run template command
  */
-export async function templateCommand(
-  templateName?: string,
-  targetDir?: string,
-): Promise<void> {
+export async function templateCommand(templateName?: string, targetDir?: string): Promise<void> {
   const registry = new TemplateRegistry();
 
   // List templates

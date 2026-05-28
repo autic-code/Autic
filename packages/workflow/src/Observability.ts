@@ -83,11 +83,12 @@ export class Observability {
     durationMs?: number,
   ): ExecutionEvent {
     return this.record({
-      type: status === 'success'
-        ? 'workflow:step_completed'
-        : status === 'failed'
-          ? 'workflow:step_failed'
-          : 'workflow:step_started',
+      type:
+        status === 'success'
+          ? 'workflow:step_completed'
+          : status === 'failed'
+            ? 'workflow:step_failed'
+            : 'workflow:step_started',
       message: `${status === 'success' ? '✓' : status === 'failed' ? '✗' : '⟳'} ${description}`,
       planId,
       stepId,
@@ -175,9 +176,7 @@ export class Observability {
   searchEvents(query: string): ExecutionEvent[] {
     const lower = query.toLowerCase();
     return this.events.filter(
-      (e) =>
-        e.message.toLowerCase().includes(lower) ||
-        e.type.toLowerCase().includes(lower),
+      (e) => e.message.toLowerCase().includes(lower) || e.type.toLowerCase().includes(lower),
     );
   }
 

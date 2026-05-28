@@ -136,7 +136,9 @@ export function renderAgentPanel(display: AgentDisplay, options: AgentPanelOptio
 
   // Error if failed
   if (display.status === 'failed' && display.error) {
-    lines.push(`  ${theme.colors.error}${theme.icon.cross} ${display.error.slice(0, 120)}${theme.colors.text}`);
+    lines.push(
+      `  ${theme.colors.error}${theme.icon.cross} ${display.error.slice(0, 120)}${theme.colors.text}`,
+    );
   }
 
   // Step list (last N steps)
@@ -145,13 +147,23 @@ export function renderAgentPanel(display: AgentDisplay, options: AgentPanelOptio
     lines.push(`  ${theme.colors.textDim}Steps:${theme.colors.text}`);
     for (const step of stepsToShow) {
       const stepIcon = STEP_ICONS[step.status] || theme.icon.dot;
-      const stepColor = step.status === 'success' ? theme.colors.success
-        : step.status === 'failed' ? theme.colors.error
-        : step.status === 'running' ? theme.colors.primary
-        : theme.colors.textMuted;
-      const duration = step.durationMs ? ` ${theme.colors.textDim}${formatDuration(step.durationMs)}` : '';
-      const tool = step.toolName ? ` ${theme.colors.textDim}(${theme.colors.info}${step.toolName}${theme.colors.textDim})` : '';
-      lines.push(`    ${stepIcon} ${stepColor}${step.description}${tool}${duration}${theme.colors.text}`);
+      const stepColor =
+        step.status === 'success'
+          ? theme.colors.success
+          : step.status === 'failed'
+            ? theme.colors.error
+            : step.status === 'running'
+              ? theme.colors.primary
+              : theme.colors.textMuted;
+      const duration = step.durationMs
+        ? ` ${theme.colors.textDim}${formatDuration(step.durationMs)}`
+        : '';
+      const tool = step.toolName
+        ? ` ${theme.colors.textDim}(${theme.colors.info}${step.toolName}${theme.colors.textDim})`
+        : '';
+      lines.push(
+        `    ${stepIcon} ${stepColor}${step.description}${tool}${duration}${theme.colors.text}`,
+      );
     }
   }
 
@@ -189,13 +201,18 @@ export function agentSummary(display: AgentDisplay): string[] {
   const statusColor = display.status === 'completed' ? theme.colors.success : theme.colors.error;
   const duration = display.durationMs ? formatDuration(display.durationMs) : '';
 
-  lines.push(`${statusIcon} ${statusColor}${display.skillName}${theme.colors.textDim} — ${display.status}${theme.colors.text}`);
+  lines.push(
+    `${statusIcon} ${statusColor}${display.skillName}${theme.colors.textDim} — ${display.status}${theme.colors.text}`,
+  );
   if (duration) lines.push(`  ${theme.colors.textDim}Duration:${theme.colors.text} ${duration}`);
-  if (display.error) lines.push(`  ${theme.colors.error}Error:${theme.colors.text} ${display.error.slice(0, 120)}`);
+  if (display.error)
+    lines.push(`  ${theme.colors.error}Error:${theme.colors.text} ${display.error.slice(0, 120)}`);
 
   const successSteps = display.steps.filter((s) => s.status === 'success').length;
   const failedSteps = display.steps.filter((s) => s.status === 'failed').length;
-  lines.push(`  ${theme.colors.textDim}Steps:${theme.colors.text} ${successSteps} succeeded, ${failedSteps} failed${display.steps.length > 0 ? `, ${display.steps.length} total` : ''}`);
+  lines.push(
+    `  ${theme.colors.textDim}Steps:${theme.colors.text} ${successSteps} succeeded, ${failedSteps} failed${display.steps.length > 0 ? `, ${display.steps.length} total` : ''}`,
+  );
 
   return lines;
 }

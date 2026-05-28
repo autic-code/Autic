@@ -64,7 +64,13 @@ export async function searchFilesTool(args: SearchFilesArgs): Promise<ToolResult
 
     return {
       success: true,
-      data: { root: args.root, pattern: args.pattern, results, count: results.length, truncated: results.length >= maxResults },
+      data: {
+        root: args.root,
+        pattern: args.pattern,
+        results,
+        count: results.length,
+        truncated: results.length >= maxResults,
+      },
       durationMs: Date.now() - startTime,
     };
   } catch (error) {

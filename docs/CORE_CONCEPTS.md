@@ -21,6 +21,7 @@ Autic is built on five core principles:
 ### Providers
 
 Providers are LLM services that power Autic's AI capabilities. Autic supports:
+
 - **OpenRouter** — Access to 200+ models through a single API (recommended)
 - **Ollama** — Local models for offline/private use
 - **OpenAI** — Direct OpenAI API access
@@ -120,6 +121,7 @@ autic audit
 ### Release Channels
 
 Autic uses release channels to manage updates:
+
 - **stable** — Production-ready releases
 - **beta** — Pre-release testing
 - **dev** — Latest development builds
@@ -206,6 +208,7 @@ Your source code, secrets, and data stay on your machine. No data is sent to clo
 ### Why modular packages?
 
 Each subsystem is an independent package with a clean API. This enables:
+
 - Independent testing and validation
 - Clear ownership boundaries
 - Gradual learning curve

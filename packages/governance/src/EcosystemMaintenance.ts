@@ -73,7 +73,10 @@ export interface MaintenanceReport {
 // ─── EcosystemMaintenance ──────────────────────────────────────────
 
 export class EcosystemMaintenance {
-  private extensions: Map<string, { diagnostic: ExtensionDiagnostic; lifecycle: PluginLifecycleInfo }> = new Map();
+  private extensions: Map<
+    string,
+    { diagnostic: ExtensionDiagnostic; lifecycle: PluginLifecycleInfo }
+  > = new Map();
 
   /**
    * Register an extension for maintenance tracking
@@ -175,7 +178,9 @@ export class EcosystemMaintenance {
   /**
    * Run extension diagnostics — health checks for installed extensions
    */
-  async runExtensionDiagnostics(): Promise<Array<{ name: string; type: string; healthy: boolean; issues: string[] }>> {
+  async runExtensionDiagnostics(): Promise<
+    Array<{ name: string; type: string; healthy: boolean; issues: string[] }>
+  > {
     const report = await this.runMaintenanceCheck();
     return report.diagnostics.map((d) => ({
       name: d.name,
@@ -188,7 +193,14 @@ export class EcosystemMaintenance {
   /**
    * Inspect compatibility of extensions
    */
-  async inspectCompatibility(): Promise<Array<{ name: string; compatible: boolean; runtimeApiVersion: string; requiredApiVersion: string }>> {
+  async inspectCompatibility(): Promise<
+    Array<{
+      name: string;
+      compatible: boolean;
+      runtimeApiVersion: string;
+      requiredApiVersion: string;
+    }>
+  > {
     const report = await this.runMaintenanceCheck();
     return report.compatibilityReports.map((c) => ({
       name: c.extensionId,
@@ -201,7 +213,9 @@ export class EcosystemMaintenance {
   /**
    * Audit runtime subsystems
    */
-  async auditRuntime(): Promise<Array<{ category: string; passed: boolean; detail: string; recommendations: string[] }>> {
+  async auditRuntime(): Promise<
+    Array<{ category: string; passed: boolean; detail: string; recommendations: string[] }>
+  > {
     const report = await this.runMaintenanceCheck();
     return [
       {
@@ -214,13 +228,19 @@ export class EcosystemMaintenance {
         category: 'Update Status',
         passed: report.summary.updatesAvailable === 0,
         detail: `${report.summary.updatesAvailable} updates available`,
-        recommendations: report.summary.updatesAvailable > 0 ? ['Run update to get latest features and fixes'] : [],
+        recommendations:
+          report.summary.updatesAvailable > 0
+            ? ['Run update to get latest features and fixes']
+            : [],
       },
       {
         category: 'Orphan Management',
         passed: report.summary.orphans === 0,
         detail: `${report.summary.orphans} orphaned extensions`,
-        recommendations: report.summary.orphans > 0 ? ['Remove orphaned extensions to reduce maintenance burden'] : [],
+        recommendations:
+          report.summary.orphans > 0
+            ? ['Remove orphaned extensions to reduce maintenance burden']
+            : [],
       },
     ];
   }
@@ -228,7 +248,9 @@ export class EcosystemMaintenance {
   /**
    * Manage plugin lifecycle — get current state of all plugins
    */
-  async managePluginLifecycle(): Promise<Array<{ name: string; state: string; healthy: boolean; version: string; uptime: number }>> {
+  async managePluginLifecycle(): Promise<
+    Array<{ name: string; state: string; healthy: boolean; version: string; uptime: number }>
+  > {
     const report = await this.runMaintenanceCheck();
     return report.lifecycleInfo.map((l) => ({
       name: l.name,

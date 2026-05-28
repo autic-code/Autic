@@ -51,7 +51,11 @@ export class ResourceProtection {
   start(intervalMs: number = 10_000): void {
     if (this.checkInterval) return;
     this.checkInterval = setInterval(() => this.check(), intervalMs);
-    if (this.checkInterval && typeof this.checkInterval === 'object' && 'unref' in this.checkInterval) {
+    if (
+      this.checkInterval &&
+      typeof this.checkInterval === 'object' &&
+      'unref' in this.checkInterval
+    ) {
       this.checkInterval.unref();
     }
   }
@@ -79,22 +83,34 @@ export class ResourceProtection {
 
     // Memory pressure
     if (params.memoryPercent !== undefined) {
-      this.state.memoryPressure = this.classifyPressure(params.memoryPercent, this.state.memoryThreshold);
+      this.state.memoryPressure = this.classifyPressure(
+        params.memoryPercent,
+        this.state.memoryThreshold,
+      );
     }
 
     // Provider pressure
     if (params.providerUtilization !== undefined) {
-      this.state.providerPressure = this.classifyPressure(params.providerUtilization, this.state.providerThreshold);
+      this.state.providerPressure = this.classifyPressure(
+        params.providerUtilization,
+        this.state.providerThreshold,
+      );
     }
 
     // Worker pressure
     if (params.workerUtilization !== undefined) {
-      this.state.workerPressure = this.classifyPressure(params.workerUtilization, this.state.workerThreshold);
+      this.state.workerPressure = this.classifyPressure(
+        params.workerUtilization,
+        this.state.workerThreshold,
+      );
     }
 
     // Queue pressure
     if (params.queueBackpressure !== undefined) {
-      this.state.queuePressure = this.classifyPressure(params.queueBackpressure, this.state.queueBackpressureThreshold);
+      this.state.queuePressure = this.classifyPressure(
+        params.queueBackpressure,
+        this.state.queueBackpressureThreshold,
+      );
     }
 
     // Assess if throttling is needed
@@ -103,7 +119,10 @@ export class ResourceProtection {
   }
 
   /** Classify pressure level based on percent and threshold */
-  private classifyPressure(percent: number, threshold: number): 'none' | 'low' | 'medium' | 'high' | 'critical' {
+  private classifyPressure(
+    percent: number,
+    threshold: number,
+  ): 'none' | 'low' | 'medium' | 'high' | 'critical' {
     const ratio = percent / threshold;
     if (ratio >= 1.5) return 'critical';
     if (ratio >= 1.2) return 'high';
@@ -127,7 +146,8 @@ export class ResourceProtection {
 
   /** Get the recommended concurrency reduction factor (0-1) */
   getThrottleFactor(): number {
-    if (this.state.cpuPressure === 'critical' || this.state.memoryPressure === 'critical') return 0.1;
+    if (this.state.cpuPressure === 'critical' || this.state.memoryPressure === 'critical')
+      return 0.1;
     if (this.state.cpuPressure === 'high' || this.state.memoryPressure === 'high') return 0.25;
     if (this.state.cpuPressure === 'medium' || this.state.memoryPressure === 'medium') return 0.5;
     if (this.state.cpuPressure === 'low' || this.state.memoryPressure === 'low') return 0.75;
@@ -141,7 +161,11 @@ export class ResourceProtection {
 
   /** Should we pause non-critical operations? */
   shouldPauseNonCritical(): boolean {
-    return this.state.cpuPressure === 'high' || this.state.memoryPressure === 'high' || this.state.providerPressure === 'critical';
+    return (
+      this.state.cpuPressure === 'high' ||
+      this.state.memoryPressure === 'high' ||
+      this.state.providerPressure === 'critical'
+    );
   }
 
   /** Run a protection check — emit events if throttling */
