@@ -6,6 +6,7 @@
 import { SessionManager, SessionHistory } from '@autic/sessions';
 import { WorkspaceMemory, EngineeringMemory } from '@autic/memory';
 import { RepoIntelligence, ContextOptimizer } from '@autic/context';
+import { colorText, heading, divider } from '@autic/ui';
 
 let sessionManager: SessionManager | null = null;
 let sessionHistory: SessionHistory | null = null;
@@ -46,14 +47,28 @@ export async function sessionsCommand(action?: string, name?: string): Promise<v
       await showContextOptimization(manager, name);
       break;
     default:
-      console.log('❯ Autic Sessions\n');
-      console.log('  Commands:\n');
-      console.log('    autic sessions                    List all sessions');
-      console.log('    autic sessions create [name]      Create new session');
-      console.log('    autic sessions restore <id>       Restore a session');
-      console.log('    autic sessions status [id]        Show session details + memory');
-      console.log('    autic sessions memory [id]        Show memory statistics');
-      console.log('    autic sessions context [id]       Show context optimization info\n');
+      console.log(`\n  ${heading('Session Management')}`);
+      console.log(`  ${divider(48)}\n`);
+      console.log(`  ${colorText('Commands:', 'bold')}\n`);
+      console.log(
+        `    ${colorText('autic sessions', 'primary').padEnd(32)} ${colorText('List all sessions', 'dim')}`,
+      );
+      console.log(
+        `    ${colorText('autic sessions create [name]', 'primary').padEnd(32)} ${colorText('Create new session', 'dim')}`,
+      );
+      console.log(
+        `    ${colorText('autic sessions restore <id>', 'primary').padEnd(32)} ${colorText('Restore a session', 'dim')}`,
+      );
+      console.log(
+        `    ${colorText('autic sessions status [id]', 'primary').padEnd(32)} ${colorText('Show session details + memory', 'dim')}`,
+      );
+      console.log(
+        `    ${colorText('autic sessions memory [id]', 'primary').padEnd(32)} ${colorText('Show memory statistics', 'dim')}`,
+      );
+      console.log(
+        `    ${colorText('autic sessions context [id]', 'primary').padEnd(32)} ${colorText('Show context optimization info', 'dim')}`,
+      );
+      console.log(`  ${divider(48)}\n`);
       await listAllSessions(manager);
   }
 }

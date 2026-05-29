@@ -10,6 +10,7 @@ import { Command } from 'commander';
 import { CLI_NAME, CLI_VERSION, CLI_DESCRIPTION } from './constants.js';
 import { renderError, colorText } from '@autic/ui';
 import {
+  dashboardCommand,
   initCommand,
   buildCommand,
   chatCommand,
@@ -648,5 +649,11 @@ process.on('uncaughtException', (error: Error) => {
   process.exit(1);
 });
 
-// Parse and execute
-program.parse(process.argv);
+// Launchpad dashboard — show when no command is provided
+const args = process.argv.slice(2);
+if (args.length === 0) {
+  await dashboardCommand();
+} else {
+  // Parse and execute
+  program.parse(process.argv);
+}

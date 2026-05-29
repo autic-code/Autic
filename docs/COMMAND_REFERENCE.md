@@ -484,18 +484,6 @@ autic docs troubleshooting       # Troubleshooting guide
 
 ---
 
-## Platform Certification
-
-### `autic platform-certify`
-
-Run all platform certification checks.
-
-```bash
-autic platform-certify [all|local-first|byok|offline|orchestration|security|ecosystem]
-```
-
----
-
 ## Exit Codes
 
 | Code  | Meaning          |

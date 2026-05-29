@@ -15,6 +15,7 @@ import {
   createProviderError,
 } from '@autic/providers';
 import type { ProviderConfig } from '@autic/shared';
+import { colorText, heading, divider } from '@autic/ui';
 
 const DEFAULT_CONFIGS: ProviderConfig[] = [
   {
@@ -101,47 +102,67 @@ export async function providersCommand(
   }
 
   // Help
+  console.log(`\n  ${heading('Provider Management')}`);
+  console.log(`  ${divider(48)}\n`);
+  console.log(
+    `  ${colorText('Usage:', 'primary')} ${colorText('autic providers <action> [name] [options]', 'dim')}\n`,
+  );
+  console.log(`  ${colorText('Actions:', 'bold')}`);
+  console.log(
+    `    ${colorText('list', 'primary').padEnd(22)} ${colorText('List registered providers (default)', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('check', 'primary').padEnd(22)} ${colorText('Check provider connectivity', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('add <name>', 'primary').padEnd(22)} ${colorText('Add a provider (--key, --url)', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('remove <name>', 'primary').padEnd(22)} ${colorText('Remove a provider', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('setup [name]', 'primary').padEnd(22)} ${colorText('Guided provider onboarding wizard', 'dim')}`,
+  );
   console.log('');
-  console.log('  Usage: autic providers <action> [name] [options]');
+  console.log(`  ${colorText('Supported providers:', 'bold')}`);
+  console.log(
+    `    ${colorText('openrouter', 'primary').padEnd(22)} ${colorText('Cloud API via OpenRouter', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('ollama', 'primary').padEnd(22)} ${colorText('Local LLM server', 'dim')}`,
+  );
   console.log('');
-  console.log('  Actions:');
-  console.log('    list           List registered providers (default)');
-  console.log('    check          Check provider connectivity');
-  console.log('    add <name>     Add a provider (--key, --url)');
-  console.log('    remove <name>  Remove a provider');
-  console.log('    setup [name]   Guided provider onboarding wizard');
-  console.log('');
-  console.log('  Supported providers:');
-  console.log('    openrouter     Cloud API via OpenRouter');
-  console.log('    ollama         Local LLM server');
-  console.log('');
-  console.log('  Examples:');
-  console.log('    autic providers');
-  console.log('    autic providers check');
-  console.log('    autic providers add openrouter --key sk-or-v1-...');
-  console.log('    autic providers add ollama --url http://localhost:11434');
-  console.log('    autic providers setup openrouter');
-  console.log('    autic providers setup ollama');
-  console.log('');
+  console.log(`  ${colorText('Examples:', 'bold')}`);
+  console.log(`    ${colorText('autic providers', 'primary')}`);
+  console.log(`    ${colorText('autic providers check', 'primary')}`);
+  console.log(`    ${colorText('autic providers add openrouter --key sk-or-v1-...', 'primary')}`);
+  console.log(
+    `    ${colorText('autic providers add ollama --url http://localhost:11434', 'primary')}`,
+  );
+  console.log(`    ${colorText('autic providers setup openrouter', 'primary')}`);
+  console.log(`    ${colorText('autic providers setup ollama', 'primary')}`);
+  console.log(`  ${divider(48)}\n`);
 }
 
 // ─── Guided Provider Setup (Subsystem #9) ──────────────────────────
 
 async function guidedProviderSetup(name?: string): Promise<void> {
-  console.log('');
-  console.log(
-    '  \u2554\u2550\u2550\u2550\u2550 Provider Setup Wizard \u2550\u2550\u2550\u2550\u2557',
-  );
-  console.log('');
+  console.log(`\n  ${heading('Provider Setup Wizard')}`);
+  console.log(`  ${divider(48)}\n`);
 
   if (!name) {
-    console.log('  Choose a provider to set up:');
+    console.log(`  ${colorText('Choose a provider to set up:', 'bold')}\n`);
+    console.log(
+      `    ${colorText('1.', 'primary')} ${colorText('OpenRouter', 'bold')}  ${colorText('- Cloud API (requires API key)', 'dim')}`,
+    );
+    console.log(
+      `    ${colorText('2.', 'primary')} ${colorText('Ollama', 'bold')}      ${colorText('- Local server (free, runs on your machine)', 'dim')}`,
+    );
     console.log('');
-    console.log('    1. OpenRouter  - Cloud API (requires API key)');
-    console.log('    2. Ollama      - Local server (free, runs on your machine)');
-    console.log('');
-    console.log('  Usage: autic providers setup <name>');
-    console.log('');
+    console.log(
+      `  ${colorText('Usage:', 'dim')} ${colorText('autic providers setup <name>', 'primary')}`,
+    );
+    console.log(`  ${divider(48)}\n`);
     return;
   }
 
@@ -160,60 +181,60 @@ async function guidedProviderSetup(name?: string): Promise<void> {
 }
 
 async function setupOpenRouter(): Promise<void> {
-  console.log('  \u25A0 Provider: OpenRouter');
-  console.log('  \u25A0 Type: Cloud API');
-  console.log('  \u25A0 Website: https://openrouter.ai');
+  console.log(`  ${colorText('Provider:', 'dim')}  ${colorText('OpenRouter', 'bold')}`);
+  console.log(`  ${colorText('Type:', 'dim')}      ${colorText('Cloud API', 'bold')}`);
+  console.log(
+    `  ${colorText('Website:', 'dim')}   ${colorText('https://openrouter.ai', 'primary')}`,
+  );
   console.log('');
 
   // Step 1: API Key verification
-  console.log('  Step 1: API Key Verification');
-  console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
-  );
+  console.log(`  ${colorText('Step 1: API Key Verification', 'bold')}`);
+  console.log(`  ${divider(36)}`);
 
   const envKey = process.env.OPENROUTER_API_KEY || process.env.AUTIC_OPENROUTER_KEY;
   if (envKey) {
-    console.log('  \u2713 API key found in environment');
-    console.log('     (OPENROUTER_API_KEY or AUTIC_OPENROUTER_KEY)');
+    console.log(`  ${colorText('✓ API key found in environment', 'success')}`);
+    console.log(`     ${colorText('(OPENROUTER_API_KEY or AUTIC_OPENROUTER_KEY)', 'dim')}`);
     console.log('');
   } else {
-    console.log('  \u2717 No API key found in environment');
-    console.log('     Get a key at: https://openrouter.ai/keys');
-    console.log('     Then set it: export OPENROUTER_API_KEY=<your-key>');
-    console.log('     Or run: autic providers add openrouter --key <your-key>');
+    console.log(`  ${colorText('✗ No API key found in environment', 'error')}`);
+    console.log(`     ${colorText('Get a key at: https://openrouter.ai/keys', 'dim')}`);
+    console.log(`     ${colorText('Then set: export OPENROUTER_API_KEY=<your-key>', 'dim')}`);
+    console.log(
+      `     ${colorText('Or run: autic providers add openrouter --key <your-key>', 'dim')}`,
+    );
     console.log('');
     return;
   }
 
   // Step 2: Connection verification
-  console.log('  Step 2: Connection Verification');
-  console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
-  );
+  console.log(`  ${colorText('Step 2: Connection Verification', 'bold')}`);
+  console.log(`  ${divider(36)}`);
 
   const provider = new OpenRouterProvider({ apiKey: envKey });
   try {
     const connected = await provider.connect();
     if (connected) {
-      console.log('  \u2713 Connection successful');
+      console.log(`  ${colorText('✓ Connection successful', 'success')}`);
     } else {
-      console.log('  \u2717 Connection failed — check your API key');
-      console.log('     Verify at: https://openrouter.ai/keys');
+      console.log(`  ${colorText('✗ Connection failed — check your API key', 'error')}`);
+      console.log(`     ${colorText('Verify at: https://openrouter.ai/keys', 'dim')}`);
       console.log('');
       return;
     }
   } catch (error) {
-    console.log('  \u2717 Connection error:', error instanceof Error ? error.message : 'Unknown');
+    console.log(
+      `  ${colorText(`✗ Connection error: ${error instanceof Error ? error.message : 'Unknown'}`, 'error')}`,
+    );
     console.log('');
     return;
   }
   console.log('');
 
   // Step 3: Model discovery
-  console.log('  Step 3: Model Discovery');
-  console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
-  );
+  console.log(`  ${colorText('Step 3: Model Discovery', 'bold')}`);
+  console.log(`  ${divider(36)}`);
 
   try {
     const models = await provider.listModels();
@@ -229,96 +250,92 @@ async function setupOpenRouter(): Promise<void> {
       small: models.filter((m) => (m.contextLength || 0) < 32000),
     };
 
-    console.log(`  Found ${totalModels} model(s):`);
-    console.log(`    Large context (128K+):  ${byContext.large.length}`);
-    console.log(`    Medium context (32K+):  ${byContext.medium.length}`);
-    console.log(`    Small context (<32K):   ${byContext.small.length}`);
+    console.log(`  ${colorText(`Found ${totalModels} model(s):`, 'bold')}`);
+    console.log(`    ${colorText(`Large context (128K+):  ${byContext.large.length}`, 'dim')}`);
+    console.log(`    ${colorText(`Medium context (32K+):  ${byContext.medium.length}`, 'dim')}`);
+    console.log(`    ${colorText(`Small context (<32K):   ${byContext.small.length}`, 'dim')}`);
     console.log('');
 
     // Key model recommendations
-    console.log('  Recommended models:');
+    console.log(`  ${colorText('Recommended models:', 'bold')}`);
     const topModels = models.slice(0, 5);
     for (const m of topModels) {
-      console.log(`    \u25CB ${m.id} (${m.contextLength || '?'} ctx)`);
+      console.log(`    ${colorText(`○ ${m.id} (${m.contextLength || '?'} ctx)`, 'dim')}`);
     }
     console.log('');
   } catch {
-    console.log('  \u25CB Could not fetch models (API limitation)');
+    console.log(`  ${colorText('○ Could not fetch models (API limitation)', 'warning')}`);
     console.log('');
   }
 
   // Step 4: Runtime recommendations
-  console.log('  Step 4: Runtime Recommendations');
+  console.log(`  ${colorText('Step 4: Runtime Recommendations', 'bold')}`);
+  console.log(`  ${divider(36)}`);
+  console.log(`  ${colorText('✓ OpenRouter is configured and ready.', 'success')}`);
+  console.log(`  ${colorText('○ For large repos, consider models with 128K+ context', 'dim')}`);
+  console.log(`  ${colorText('○ For quick fixes, smaller models are faster and cheaper', 'dim')}`);
   console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+    `  ${colorText('○ Set AUTIC_DEFAULT_MODEL in config for automatic selection', 'dim')}`,
   );
-  console.log('  \u2713 OpenRouter is configured and ready.');
-  console.log('  \u25CB For large repos, consider models with 128K+ context');
-  console.log('  \u25CB For quick fixes, smaller models are faster and cheaper');
-  console.log('  \u25CB Set AUTIC_DEFAULT_MODEL in config for automatic selection');
   console.log('');
 
   // Summary
-  console.log('  \u2554\u2550\u2550\u2550 Setup Complete \u2550\u2550\u2550\u2557');
-  console.log('  \u2502 OpenRouter: Ready');
-  console.log('  \u2502 API Key:    Verified');
-  console.log('  \u2502 Models:     Discovered');
-  console.log(
-    '  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D',
-  );
+  console.log(`  ${divider(36)}`);
+  console.log(`  ${colorText('Setup Complete', 'bold')}`);
+  console.log(`    ${colorText('OpenRouter:', 'dim')} ${colorText('Ready', 'success')}`);
+  console.log(`    ${colorText('API Key:', 'dim')}    ${colorText('Verified', 'success')}`);
+  console.log(`    ${colorText('Models:', 'dim')}     ${colorText('Discovered', 'success')}`);
+  console.log(`  ${divider(36)}`);
   console.log('');
-  console.log('  Next: autic doctor quick');
-  console.log('        autic chat');
+  console.log(`  ${colorText('Next:', 'bold')}`);
+  console.log(`    ${colorText('autic doctor quick', 'primary')}`);
+  console.log(`    ${colorText('autic chat', 'primary')}`);
   console.log('');
 }
 
 async function setupOllama(): Promise<void> {
-  console.log('  \u25A0 Provider: Ollama');
-  console.log('  \u25A0 Type: Local LLM Server');
-  console.log('  \u25A0 Website: https://ollama.ai');
+  console.log(`  ${colorText('Provider:', 'dim')}  ${colorText('Ollama', 'bold')}`);
+  console.log(`  ${colorText('Type:', 'dim')}      ${colorText('Local LLM Server', 'bold')}`);
+  console.log(`  ${colorText('Website:', 'dim')}   ${colorText('https://ollama.ai', 'primary')}`);
   console.log('');
 
   // Step 1: Check if Ollama is installed
-  console.log('  Step 1: Installation Check');
-  console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
-  );
+  console.log(`  ${colorText('Step 1: Installation Check', 'bold')}`);
+  console.log(`  ${divider(36)}`);
 
   let ollamaInstalled = false;
   try {
     const { execSync } = await import('node:child_process');
     execSync('ollama --version', { encoding: 'utf-8' });
     ollamaInstalled = true;
-    console.log('  \u2713 Ollama is installed');
+    console.log(`  ${colorText('✓ Ollama is installed', 'success')}`);
   } catch {
-    console.log('  \u2717 Ollama is not installed');
-    console.log('     Install from: https://ollama.ai');
-    console.log('     Or: curl -fsSL https://ollama.ai/install.sh | sh');
+    console.log(`  ${colorText('✗ Ollama is not installed', 'error')}`);
+    console.log(`     ${colorText('Install from: https://ollama.ai', 'dim')}`);
+    console.log(`     ${colorText('Or: curl -fsSL https://ollama.ai/install.sh | sh', 'dim')}`);
     console.log('');
   }
   console.log('');
 
   // Step 2: Connection check
-  console.log('  Step 2: Connection Check');
-  console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
-  );
+  console.log(`  ${colorText('Step 2: Connection Check', 'bold')}`);
+  console.log(`  ${divider(36)}`);
 
   const provider = new OllamaProvider();
   let connected = false;
   try {
     connected = await provider.connect();
     console.log(
-      `  ${connected ? '\u2713' : '\u2717'} Ollama server: ${connected ? 'running' : 'not running'}`,
+      `  ${connected ? colorText('✓ Ollama server: running', 'success') : colorText('✗ Ollama server: not running', 'error')}`,
     );
     if (!connected) {
-      console.log('     Start with: ollama serve');
+      console.log(`     ${colorText('Start with: ollama serve', 'dim')}`);
       console.log('');
       if (!ollamaInstalled) return;
     }
   } catch {
-    console.log('  \u2717 Could not connect to Ollama');
-    console.log('     Ensure Ollama is running: ollama serve');
+    console.log(`  ${colorText('✗ Could not connect to Ollama', 'error')}`);
+    console.log(`     ${colorText('Ensure Ollama is running: ollama serve', 'dim')}`);
     console.log('');
     if (!ollamaInstalled) return;
   }
@@ -327,53 +344,51 @@ async function setupOllama(): Promise<void> {
   if (!connected) return;
 
   // Step 3: Model discovery
-  console.log('  Step 3: Local Model Discovery');
-  console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
-  );
+  console.log(`  ${colorText('Step 3: Local Model Discovery', 'bold')}`);
+  console.log(`  ${divider(36)}`);
 
   try {
     const models = await provider.listModels();
     if (models.length > 0) {
-      console.log(`  Found ${models.length} local model(s):`);
+      console.log(`  ${colorText(`Found ${models.length} local model(s):`, 'bold')}`);
       for (const m of models) {
-        console.log(`    \u25CB ${m.id} (${m.contextLength || '?'} ctx)`);
+        console.log(`    ${colorText(`○ ${m.id} (${m.contextLength || '?'} ctx)`, 'dim')}`);
       }
     } else {
-      console.log('  No models found. Pull a model:');
-      console.log('    ollama pull llama3.2');
-      console.log('    ollama pull deepseek-coder');
-      console.log('    ollama pull mistral');
+      console.log(`  ${colorText('No models found. Pull a model:', 'warning')}`);
+      console.log(`    ${colorText('ollama pull llama3.2', 'primary')}`);
+      console.log(`    ${colorText('ollama pull deepseek-coder', 'primary')}`);
+      console.log(`    ${colorText('ollama pull mistral', 'primary')}`);
     }
     console.log('');
   } catch {
-    console.log('  \u25CB Could not list models');
+    console.log(`  ${colorText('○ Could not list models', 'warning')}`);
     console.log('');
   }
 
   // Step 4: Runtime recommendations
-  console.log('  Step 4: Runtime Recommendations');
+  console.log(`  ${colorText('Step 4: Runtime Recommendations', 'bold')}`);
+  console.log(`  ${divider(36)}`);
+  console.log(`  ${colorText('✓ Ollama is configured and ready.', 'success')}`);
+  console.log(`  ${colorText('○ Local models work offline — no API costs', 'dim')}`);
   console.log(
-    '  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+    `  ${colorText('○ For coding, pull models like deepseek-coder or codellama', 'dim')}`,
   );
-  console.log('  \u2713 Ollama is configured and ready.');
-  console.log('  \u25CB Local models work offline — no API costs');
-  console.log('  \u25CB For coding, pull models like deepseek-coder or codellama');
-  console.log('  \u25CB For chat, pull models like llama3.2 or mistral');
-  console.log('  \u25CB Set AUTIC_DEFAULT_MODEL or use --model in chat');
+  console.log(`  ${colorText('○ For chat, pull models like llama3.2 or mistral', 'dim')}`);
+  console.log(`  ${colorText('○ Set AUTIC_DEFAULT_MODEL or use --model in chat', 'dim')}`);
   console.log('');
 
   // Summary
-  console.log('  \u2554\u2550\u2550\u2550 Setup Complete \u2550\u2550\u2550\u2557');
-  console.log('  \u2502 Ollama:     Running');
-  console.log('  \u2502 Models:     Scanned');
-  console.log('  \u2502 Offline:    Supported');
-  console.log(
-    '  \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D',
-  );
+  console.log(`  ${divider(36)}`);
+  console.log(`  ${colorText('Setup Complete', 'bold')}`);
+  console.log(`    ${colorText('Ollama:', 'dim')}     ${colorText('Running', 'success')}`);
+  console.log(`    ${colorText('Models:', 'dim')}     ${colorText('Scanned', 'success')}`);
+  console.log(`    ${colorText('Offline:', 'dim')}    ${colorText('Supported', 'success')}`);
+  console.log(`  ${divider(36)}`);
   console.log('');
-  console.log('  Next: autic doctor quick');
-  console.log('        autic chat');
+  console.log(`  ${colorText('Next:', 'bold')}`);
+  console.log(`    ${colorText('autic doctor quick', 'primary')}`);
+  console.log(`    ${colorText('autic chat', 'primary')}`);
   console.log('');
 }
 

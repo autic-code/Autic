@@ -8,6 +8,7 @@ import { createSession } from './sessions.js';
 import { TaskOrchestrator } from '@autic/runtime';
 import { ToolRegistry, registerBuiltinTools } from '@autic/tools';
 import { readFile } from 'node:fs/promises';
+import { colorText, heading, divider } from '@autic/ui';
 
 export async function chatCommand(
   options: {
@@ -17,7 +18,8 @@ export async function chatCommand(
     file?: string;
   } = {},
 ): Promise<void> {
-  console.log('❯ Starting Autic interactive session...\n');
+  console.log(`\n  ${heading('Interactive Session')}`);
+  console.log(`  ${divider(48)}\n`);
 
   // Create or restore session
   const sessionName = options.session || `chat-${Date.now()}`;

@@ -10,8 +10,11 @@ import { spawn } from 'node:child_process';
 
 const modelRegistry = new ModelRegistry();
 
+import { colorText, heading, divider } from '@autic/ui';
+
 export async function modelsCommand(action?: string, name?: string): Promise<void> {
-  console.log('❯ Autic Models\n');
+  console.log(`\n  ${heading('Model Management')}`);
+  console.log(`  ${divider(48)}\n`);
 
   switch (action) {
     case 'list':
@@ -28,7 +31,9 @@ export async function modelsCommand(action?: string, name?: string): Promise<voi
       await showCapabilities(name);
       break;
     default:
-      console.log('  Usage: autic models [list|search|install|capabilities] [name]\n');
+      console.log(
+        `  ${colorText('Usage:', 'primary')} ${colorText('autic models [list|search|install|capabilities] [name]', 'dim')}\n`,
+      );
       await listModels();
   }
 }

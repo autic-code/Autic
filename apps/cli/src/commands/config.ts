@@ -7,6 +7,7 @@
 
 import { ConfigManager } from '@autic/config';
 import type { RuntimePreferences, ProviderConfig } from '@autic/shared';
+import { colorText, heading, divider } from '@autic/ui';
 
 let configManager: ConfigManager | null = null;
 
@@ -46,18 +47,32 @@ async function handleConfig(action?: string, key?: string, value?: string): Prom
   }
 
   // Help
-  console.log('\n  Usage: autic config <action> [key] [value]\n');
-  console.log('  Actions:');
-  console.log('    status     Show current configuration status');
-  console.log('    get <key>  Get a configuration value');
-  console.log('    set <kv>   Set a configuration key=value');
-  console.log('    list       List all configuration values\n');
-  console.log('  Examples:');
-  console.log('    autic config');
-  console.log('    autic config status');
-  console.log('    autic config get defaultModel');
-  console.log('    autic config set defaultModel=gpt-4o');
-  console.log('    autic config list\n');
+  console.log(`\n  ${heading('Configuration Management')}`);
+  console.log(`  ${divider(48)}\n`);
+  console.log(
+    `  ${colorText('Usage:', 'primary')} ${colorText('autic config <action> [key] [value]', 'dim')}\n`,
+  );
+  console.log(`  ${colorText('Actions:', 'bold')}`);
+  console.log(
+    `    ${colorText('status', 'primary').padEnd(14)} ${colorText('Show current configuration status', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('get <key>', 'primary').padEnd(14)} ${colorText('Get a configuration value', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('set <kv>', 'primary').padEnd(14)} ${colorText('Set a configuration key=value', 'dim')}`,
+  );
+  console.log(
+    `    ${colorText('list', 'primary').padEnd(14)} ${colorText('List all configuration values', 'dim')}`,
+  );
+  console.log('');
+  console.log(`  ${colorText('Examples:', 'dim')}\n`);
+  console.log(`    ${colorText('autic config', 'primary')}`);
+  console.log(`    ${colorText('autic config status', 'primary')}`);
+  console.log(`    ${colorText('autic config get defaultModel', 'primary')}`);
+  console.log(`    ${colorText('autic config set defaultModel=gpt-4o', 'primary')}`);
+  console.log(`    ${colorText('autic config list', 'primary')}`);
+  console.log(`  ${divider(48)}\n`);
 }
 
 async function showConfigStatus(cm: ConfigManager): Promise<void> {
