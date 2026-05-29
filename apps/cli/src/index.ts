@@ -12,6 +12,7 @@ import { renderError, colorText } from '@autic/ui';
 import {
   dashboardCommand,
   launchCommand,
+  uiCommand,
   initCommand,
   buildCommand,
   chatCommand,
@@ -70,10 +71,12 @@ const program = new Command();
 program.name(CLI_NAME).version(CLI_VERSION).description(CLI_DESCRIPTION);
 
 // Custom help text — show categorized commands at top
-program.addHelpText(
-  'beforeAll',
-  `\n  ${colorText('Launch:', 'bold')}\n    ${colorText('autic', 'primary')}              ${colorText('Open Launchpad Dashboard', 'dim')}\n    ${colorText('autic launch', 'primary')}       ${colorText('Alias for launchpad (identical to autic)', 'dim')}\n\n  ${colorText('Setup:', 'bold')}\n    ${colorText('autic init', 'primary')}            ${colorText('Initialize Autic in current directory', 'dim')}\n    ${colorText('autic doctor', 'primary')}          ${colorText('Full environment diagnostics', 'dim')}\n\n  ${colorText('Development:', 'bold')}\n    ${colorText('autic build', 'primary')}            ${colorText('Build the workspace', 'dim')}\n    ${colorText('autic fix --target .', 'primary')}   ${colorText('Run autonomous fix workflow', 'dim')}\n    ${colorText('autic run', 'primary')}              ${colorText('Execute a task or script', 'dim')}\n\n  ${colorText('Models:', 'bold')}\n    ${colorText('autic providers', 'primary')}        ${colorText('List and manage LLM providers', 'dim')}\n    ${colorText('autic models', 'primary')}           ${colorText('Search, list, and install models', 'dim')}\n\n  ${colorText('Sessions:', 'bold')}\n    ${colorText('autic sessions', 'primary')}         ${colorText('Create, list, and restore sessions', 'dim')}\n    ${colorText('autic chat', 'primary')}             ${colorText('Start an interactive chat session', 'dim')}\n`,
-);
+// Only use colors in interactive terminals to avoid raw ANSI codes when piped
+const helpPrefix = process.stdout.isTTY
+  ? `\n  ${colorText('Launch:', 'bold')}\n    ${colorText('autic', 'primary')}              ${colorText('Launch the full-screen terminal UI', 'dim')}\n    ${colorText('autic launch', 'primary')}       ${colorText('Alias for launch (UI)', 'dim')}\n    ${colorText('autic ui', 'primary')}            ${colorText('Alias for launch (UI)', 'dim')}\n    ${colorText('autic help', 'primary')}           ${colorText('Show command reference', 'dim')}\n\n  ${colorText('Setup:', 'bold')}\n    ${colorText('autic init', 'primary')}            ${colorText('Initialize Autic in current directory', 'dim')}\n    ${colorText('autic doctor', 'primary')}          ${colorText('Full environment diagnostics', 'dim')}\n\n  ${colorText('Development:', 'bold')}\n    ${colorText('autic build', 'primary')}            ${colorText('Build the workspace', 'dim')}\n    ${colorText('autic fix --target .', 'primary')}   ${colorText('Run autonomous fix workflow', 'dim')}\n    ${colorText('autic run', 'primary')}              ${colorText('Execute a task or script', 'dim')}\n\n  ${colorText('Models:', 'bold')}\n    ${colorText('autic providers', 'primary')}        ${colorText('List and manage LLM providers', 'dim')}\n    ${colorText('autic models', 'primary')}           ${colorText('Search, list, install models', 'dim')}\n\n  ${colorText('Sessions:', 'bold')}\n    ${colorText('autic sessions', 'primary')}         ${colorText('Create, list, restore sessions', 'dim')}\n    ${colorText('autic chat', 'primary')}             ${colorText('Start a chat session', 'dim')}\n`
+  : `\n  Launch:\n    autic              Launch the full-screen terminal UI\n    autic launch       Alias for launch (UI)\n    autic ui            Alias for launch (UI)\n    autic help           Show command reference\n\n  Setup:\n    autic init            Initialize Autic in current directory\n    autic doctor          Full environment diagnostics\n\n  Development:\n    autic build            Build the workspace\n    autic fix --target .   Run autonomous fix workflow\n    autic run              Execute a task or script\n\n  Models:\n    autic providers        List and manage LLM providers\n    autic models           Search, list, install models\n\n  Sessions:\n    autic sessions         Create, list, restore sessions\n    autic chat             Start a chat session\n`;
+
+program.addHelpText('beforeAll', helpPrefix);
 
 // autic launch — Explicit launch command
 program
@@ -81,6 +84,14 @@ program
   .description('Open the Launchpad Dashboard (same as running autic with no arguments)')
   .action(async () => {
     await launchCommand();
+  });
+
+// autic ui — Explicit UI command (identical to no-args)
+program
+  .command('ui')
+  .description('Launch the full-screen terminal UI (same as running autic with no arguments)')
+  .action(async () => {
+    await uiCommand();
   });
 
 // autic init
