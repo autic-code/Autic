@@ -24,8 +24,6 @@ Providers are LLM services that power Autic's AI capabilities. Autic supports:
 
 - **OpenRouter** — Access to 200+ models through a single API (recommended)
 - **Ollama** — Local models for offline/private use
-- **OpenAI** — Direct OpenAI API access
-- **Anthropic** — Direct Claude API access
 
 ```bash
 # Add a provider

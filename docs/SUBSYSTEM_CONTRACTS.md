@@ -10,7 +10,7 @@ The shared types package defines cross-cutting interfaces used by all subsystems
 // Provider contract
 interface ProviderConfig {
   name: string;
-  provider: 'openrouter' | 'ollama' | 'openai' | 'anthropic';
+  provider: 'openrouter' | 'ollama';
   apiKey?: string;
   baseUrl?: string;
   models: string[];

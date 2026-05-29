@@ -6,7 +6,7 @@ Autic is a developer tool that uses AI models to help you build, fix, and manage
 
 ## Features
 
-- **Multi-Provider AI** — OpenRouter (200+ models), OpenAI, Anthropic, or local Ollama models with automatic fallback
+- **Multi-Provider AI** — OpenRouter (200+ models) or local Ollama models with automatic fallback
 - **Autonomous Workflows** — Fix code, refactor, build features, and more with multi-step AI workflows
 - **Local-First Security** — Encrypted vault for API keys, secret sanitization, permission profiles
 - **48 CLI Commands** — Providers, models, sessions, workflows, orchestration, security, diagnostics, validation, and more

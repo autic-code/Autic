@@ -57,7 +57,7 @@ All notable changes to Autic will be documented in this file.
 
 - Initial development release — CLI-native autonomous AI engineering runtime
 - 27 internal packages + CLI application
-- Provider orchestration: OpenRouter, OpenAI, Anthropic, Ollama
+- Provider orchestration: OpenRouter, Ollama
 - Context engineering: token budgeting, compression, retrieval, ranking
 - Swarm coordination: role-based pipelines, delegation, parallel execution
 - Security: encrypted vault, sanitizer, permission management, provider security

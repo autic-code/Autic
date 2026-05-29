@@ -397,33 +397,41 @@ async function setupOllama(): Promise<void> {
 async function listProviders(): Promise<void> {
   const reg = getRegistry();
   console.log('');
-  console.log('  Registered providers:');
+  console.log(`  ${heading('Registered Providers')}`);
   console.log('');
 
   const statuses = await reg.healthCheckAll();
 
   for (const status of statuses) {
     const icon =
-      status.status === 'healthy' ? '\u2713' : status.status === 'unknown' ? '\u25CB' : '\u2717';
+      status.status === 'healthy'
+        ? colorText('✓', 'success')
+        : status.status === 'unknown'
+          ? colorText('○', 'warning')
+          : colorText('✗', 'error');
     const latencyInfo = status.latencyMs ? ` (${status.latencyMs}ms)` : '';
 
-    console.log(`  ${icon} ${status.providerName}${latencyInfo}`);
-    console.log(`     ID: ${status.providerId}`);
-    console.log(`     Status: ${status.status}`);
-    console.log(`     Models: ${status.modelCount}`);
+    console.log(
+      `  ${icon} ${colorText(status.providerName, 'bold')}${colorText(latencyInfo, 'dim')}`,
+    );
+    console.log(`     ${colorText('ID:', 'dim')}      ${status.providerId}`);
+    console.log(`     ${colorText('Status:', 'dim')}   ${status.status}`);
+    console.log(`     ${colorText('Models:', 'dim')}   ${status.modelCount}`);
 
     if (status.lastError) {
-      console.log(`     Last error: ${status.lastError}`);
+      console.log(
+        `     ${colorText('Last error:', 'dim')} ${colorText(status.lastError, 'error')}`,
+      );
     }
 
     if (keyManager) {
       const keyStats = keyManager.getProviderKeyStats(status.providerId);
       if (keyStats.total > 0) {
         console.log(
-          `     Keys: ${keyStats.active} active, ${keyStats.inCooldown} cooldown, ${keyStats.verified} verified`,
+          `     ${colorText('Keys:', 'dim')} ${keyStats.active} active, ${keyStats.inCooldown} cooldown, ${keyStats.verified} verified`,
         );
       } else {
-        console.log(`     Keys: none configured`);
+        console.log(`     ${colorText('Keys:', 'dim')} none configured`);
       }
     }
 
@@ -431,7 +439,7 @@ async function listProviders(): Promise<void> {
       const util = rateLimiter.getUtilization(status.providerId);
       if (util.rpmUtilization > 0 || util.tpmUtilization > 0) {
         console.log(
-          `     Rate: ${util.rpmUtilization.toFixed(1)}% RPM, ${util.tpmUtilization.toFixed(1)}% TPM`,
+          `     ${colorText('Rate:', 'dim')} ${util.rpmUtilization.toFixed(1)}% RPM, ${util.tpmUtilization.toFixed(1)}% TPM`,
         );
       }
     }
@@ -439,7 +447,7 @@ async function listProviders(): Promise<void> {
     console.log('');
   }
 
-  console.log(`  Total: ${reg.count} provider(s)`);
+  console.log(`  ${colorText(`Total: ${reg.count} provider(s)`, 'bold')}`);
   console.log('');
 }
 
@@ -447,7 +455,8 @@ async function listProviders(): Promise<void> {
 
 async function checkProviders(): Promise<void> {
   const reg = getRegistry();
-  process.stdout.write('  Checking provider connectivity...\n\n');
+  console.log(`  ${heading('Provider Connectivity Check')}`);
+  console.log('');
 
   const statuses = await reg.healthCheckAll();
 
@@ -455,33 +464,44 @@ async function checkProviders(): Promise<void> {
   let unhealthy = 0;
 
   for (const status of statuses) {
-    const icon = status.status === 'healthy' ? '\u2713' : '\u2717';
-    process.stdout.write(`  ${icon} ${status.providerName}... `);
+    const icon = status.status === 'healthy' ? colorText('✓', 'success') : colorText('✗', 'error');
+    const name = colorText(status.providerName, 'bold');
 
     if (status.status === 'healthy') {
-      process.stdout.write(`connected (${status.latencyMs}ms, ${status.modelCount} models)\n`);
+      console.log(
+        `  ${icon} ${name}  ${colorText(`connected (${status.latencyMs}ms, ${status.modelCount} models)`, 'dim')}`,
+      );
       healthy++;
     } else {
-      process.stdout.write(`${status.lastError || 'not available'}\n`);
+      console.log(`  ${icon} ${name}  ${colorText(status.lastError || 'not available', 'error')}`);
       unhealthy++;
     }
   }
 
-  process.stdout.write(`\n  Summary: ${healthy} healthy, ${unhealthy} unhealthy\n\n`);
+  console.log('');
+  console.log(
+    `  ${colorText('Summary:', 'bold')} ${colorText(`${healthy} healthy`, 'success')}, ${colorText(`${unhealthy} unhealthy`, unhealthy > 0 ? 'error' : 'dim')}`,
+  );
+  console.log('');
 
   if (modelRegistry) {
     const modelStats = modelRegistry.getStats();
-    process.stdout.write(`  Model registry: ${modelStats.totalModels} total models\n`);
-    process.stdout.write(
-      `    ${modelStats.localModels} local, ${modelStats.cloudModels} cloud\n\n`,
+    console.log(
+      `  ${colorText('Model Registry:', 'bold')} ${colorText(`${modelStats.totalModels} total models`, 'dim')}`,
     );
+    console.log(
+      `    ${colorText(`${modelStats.localModels} local, ${modelStats.cloudModels} cloud`, 'dim')}`,
+    );
+    console.log('');
 
     if (modelStats.totalModels > 0) {
-      process.stdout.write('  Capability coverage:\n');
+      console.log(`  ${colorText('Capability Coverage:', 'bold')}`);
       for (const [cap, count] of Object.entries(modelStats.capabilities)) {
-        process.stdout.write(`    ${cap}: ${count} models\n`);
+        console.log(
+          `    ${colorText(`${cap}:`, 'dim')} ${colorText(`${count} models`, 'primary')}`,
+        );
       }
-      process.stdout.write('\n');
+      console.log('');
     }
   }
 }
@@ -490,11 +510,17 @@ async function checkProviders(): Promise<void> {
 
 async function addProvider(name?: string, options: Record<string, unknown> = {}): Promise<void> {
   if (!name) {
-    console.log('  Usage: autic providers add <name> [--key <api-key>] [--url <base-url>]');
+    console.log(
+      `  ${colorText('Usage:', 'primary')} ${colorText('autic providers add <name> [--key <api-key>] [--url <base-url>]', 'dim')}`,
+    );
     console.log('');
-    console.log('  Supported providers:');
-    console.log('    openrouter  - OpenRouter cloud API (requires --key)');
-    console.log('    ollama      - Local Ollama server (optional --url)');
+    console.log(`  ${colorText('Supported providers:', 'bold')}`);
+    console.log(
+      `    ${colorText('openrouter', 'primary')}  ${colorText('- OpenRouter cloud API (requires --key)', 'dim')}`,
+    );
+    console.log(
+      `    ${colorText('ollama', 'primary')}      ${colorText('- Local Ollama server (optional --url)', 'dim')}`,
+    );
     console.log('');
     return;
   }
@@ -505,7 +531,9 @@ async function addProvider(name?: string, options: Record<string, unknown> = {})
   const reg = getRegistry();
 
   if (reg.hasProvider(name)) {
-    console.log(`  \u2717 Provider "${name}" is already registered.`);
+    console.log(
+      `  ${colorText('✗', 'error')} ${colorText(`Provider "${name}" is already registered.`, 'error')}`,
+    );
     console.log('');
     return;
   }
@@ -516,8 +544,10 @@ async function addProvider(name?: string, options: Record<string, unknown> = {})
   switch (name) {
     case 'openrouter': {
       if (!apiKey) {
-        console.log('  \u2717 OpenRouter requires an API key. Use --key <your-key>');
-        console.log('  Get a key at: https://openrouter.ai/keys');
+        console.log(
+          `  ${colorText('✗', 'error')} ${colorText('OpenRouter requires an API key. Use --key <your-key>', 'error')}`,
+        );
+        console.log(`  ${colorText('Get a key at: https://openrouter.ai/keys', 'dim')}`);
         console.log('');
         return;
       }
@@ -539,7 +569,9 @@ async function addProvider(name?: string, options: Record<string, unknown> = {})
       break;
     }
     default: {
-      console.log(`  \u2717 Unknown provider: "${name}". Supported: openrouter, ollama`);
+      console.log(
+        `  ${colorText('✗', 'error')} ${colorText(`Unknown provider: "${name}". Supported: openrouter, ollama`, 'error')}`,
+      );
       console.log('');
       return;
     }
@@ -549,50 +581,57 @@ async function addProvider(name?: string, options: Record<string, unknown> = {})
 
   if (apiKey && keyManager) {
     const keyId = await keyManager.addKey(name, 'default', apiKey, false);
-    process.stdout.write(`  Verifying ${name}...\n`);
+    console.log(`  ${colorText(`Verifying ${name}...`, 'bold')}`);
     try {
       const verified = await provider.verifyKey();
       if (verified) {
         keyManager.markKeyVerified(keyId);
-        process.stdout.write(`  \u2713 API key verified\n\n`);
+        console.log(`  ${colorText('✓ API key verified', 'success')}`);
+        console.log('');
       } else {
-        process.stdout.write(`  \u25CB Key verification failed \u2014 check your API key\n\n`);
+        console.log(`  ${colorText('○ Key verification failed — check your API key', 'warning')}`);
+        console.log('');
       }
     } catch (error) {
       const providerError = createProviderError(name, error);
-      process.stdout.write(`  \u25CB Key verification: ${providerError.suggestion}\n\n`);
+      console.log(`  ${colorText(`○ Key verification: ${providerError.suggestion}`, 'warning')}`);
+      console.log('');
     }
   }
 
-  process.stdout.write(`  Fetching models from ${name}...\n`);
+  console.log(`  ${colorText(`Fetching models from ${name}...`, 'bold')}`);
   try {
     const models = await provider.listModels();
     if (modelRegistry) {
       modelRegistry.registerModels(models, name, name === 'ollama');
     }
-    process.stdout.write(`  \u2713 ${models.length} model(s) found\n\n`);
+    console.log(`  ${colorText(`✓ ${models.length} model(s) found`, 'success')}`);
+    console.log('');
 
     if (models.length > 0) {
-      process.stdout.write('  Available models:\n');
+      console.log(`  ${colorText('Available models:', 'bold')}`);
       for (const model of models.slice(0, 10)) {
-        process.stdout.write(`    \u25CB ${model.id} (${model.contextLength} ctx)\n`);
+        console.log(`    ${colorText(`○ ${model.id} (${model.contextLength} ctx)`, 'dim')}`);
       }
       if (models.length > 10) {
-        process.stdout.write(`    ... and ${models.length - 10} more\n`);
+        console.log(`    ${colorText(`... and ${models.length - 10} more`, 'dim')}`);
       }
-      process.stdout.write('\n');
+      console.log('');
     }
   } catch (error) {
     const providerError = createProviderError(name, error);
-    process.stdout.write(`  \u25CB Could not fetch models: ${providerError.message}\n\n`);
+    console.log(`  ${colorText(`○ Could not fetch models: ${providerError.message}`, 'warning')}`);
+    console.log('');
   }
 
-  process.stdout.write(`  Connecting to ${name}...\n`);
+  console.log(`  ${colorText(`Connecting to ${name}...`, 'bold')}`);
   const connected = await reg.connect(name);
   if (connected) {
-    process.stdout.write(`  \u2713 ${name} is connected and ready\n\n`);
+    console.log(`  ${colorText(`✓ ${name} is connected and ready`, 'success')}`);
+    console.log('');
   } else {
-    process.stdout.write(`  \u25CB ${name} is not available right now\n\n`);
+    console.log(`  ${colorText(`○ ${name} is not available right now`, 'warning')}`);
+    console.log('');
   }
 }
 
@@ -600,14 +639,18 @@ async function addProvider(name?: string, options: Record<string, unknown> = {})
 
 async function removeProvider(name?: string): Promise<void> {
   if (!name) {
-    console.log('  Usage: autic providers remove <name>');
+    console.log(
+      `  ${colorText('Usage:', 'primary')} ${colorText('autic providers remove <name>', 'dim')}`,
+    );
     console.log('');
     return;
   }
 
   const reg = getRegistry();
   if (!reg.hasProvider(name)) {
-    console.log(`  \u2717 Provider "${name}" is not registered.`);
+    console.log(
+      `  ${colorText('✗', 'error')} ${colorText(`Provider "${name}" is not registered.`, 'error')}`,
+    );
     console.log('');
     return;
   }
@@ -622,6 +665,8 @@ async function removeProvider(name?: string): Promise<void> {
     }
   }
 
-  console.log(`  \u2713 Provider "${name}" removed.`);
+  console.log(
+    `  ${colorText('✓', 'success')} ${colorText(`Provider "${name}" removed.`, 'success')}`,
+  );
   console.log('');
 }

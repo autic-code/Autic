@@ -72,7 +72,7 @@ autic providers add <name>   # Add provider (--key, --url)
 autic providers remove <name>
 ```
 
-**Supported providers:** `openrouter`, `openai`, `anthropic`, `ollama`
+**Supported providers:** `openrouter`, `ollama`
 
 ### `autic models`
 

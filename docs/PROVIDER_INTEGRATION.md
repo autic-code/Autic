@@ -73,37 +73,18 @@ autic config set ollama.timeout 120000
 autic config set ollama.keep_alive 5m
 ```
 
-### 3. OpenAI (Direct)
+### 3. Additional Providers (Future)
 
-**Best for:** Direct OpenAI API access without routing through OpenRouter.
+Direct OpenAI and Anthropic provider integrations are planned for future releases. For now, use OpenRouter to access models from:
 
-```bash
-autic providers add openai --key YOUR_API_KEY
-```
+- **OpenAI** — GPT-4o, GPT-4o-mini, o1-preview
+- **Anthropic** — Claude 3.5 Sonnet, Claude 3 Opus
+- **Google** — Gemini Pro, Gemini Ultra
+- **Meta** — Llama 3, Llama 3.1
+- **Mistral** — Mistral Large, Mixtral
+- **DeepSeek** — DeepSeek V2, DeepSeek Coder
 
-**Environment variables:**
-
-- `AUTIC_OPENAI_KEY` or `OPENAI_API_KEY`
-
-**Available models:** GPT-4o, GPT-4o-mini, GPT-4 Turbo, GPT-3.5 Turbo, o1-preview, o1-mini.
-
-**Rate limits:** Based on your OpenAI plan (Tier 1-5).
-
-### 4. Anthropic (Direct)
-
-**Best for:** Direct Claude API access.
-
-```bash
-autic providers add anthropic --key YOUR_API_KEY
-```
-
-**Environment variables:**
-
-- `AUTIC_ANTHROPIC_KEY` or `ANTHROPIC_API_KEY`
-
-**Available models:** Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku.
-
-**Rate limits:** Based on your Anthropic API tier.
+All of these are accessible via OpenRouter with a single API key.
 
 ## Provider Configuration
 
@@ -115,7 +96,6 @@ Configure multiple providers for resilience and intelligent routing:
 # Add multiple providers
 autic providers add openrouter --key sk-or-...
 autic providers add ollama --url http://localhost:11434
-autic providers add openai --key sk-...
 
 # View all providers
 autic providers
@@ -140,7 +120,7 @@ When a provider fails, Autic automatically falls back to the next available prov
 ```bash
 # Configure fallback behavior
 autic config set provider.fallback_enabled true
-autic config set provider.fallback_order openrouter,ollama,openai
+autic config set provider.fallback_order openrouter,ollama
 ```
 
 ## Provider Health Monitoring
@@ -219,7 +199,7 @@ autic config
 autic config set provider.rate_limit.requests_per_minute 10
 
 # Use multiple providers for load balancing
-autic providers add openai --key sk-...
+autic providers add openrouter --key sk-or-...
 ```
 
 ### Slow Responses

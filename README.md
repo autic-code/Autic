@@ -60,7 +60,7 @@ Autic treats AI as a composable resource — not a single chat window. You bring
 
 | Capability                       | Description                                                                                              |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| **Multi-provider orchestration** | OpenAI, Anthropic, Google Gemini, Ollama — or all at once with automatic fallback and routing            |
+| **Multi-provider orchestration** | OpenRouter (200+ models), Ollama — with automatic fallback and routing                                   |
 | **Autonomous workflows**         | Multi-step pipelines: fix, refactor, build features, add tests, verify — run without hand-holding        |
 | **Role-based agents**            | Specialist agents (architect, engineer, reviewer) with controlled swarm coordination                     |
 | **Local-first architecture**     | Encrypted vault for API keys, secret sanitization, permission controls — your data stays on your machine |
@@ -134,9 +134,8 @@ Autic creates a `.autic` directory and detects your project's framework and pack
 # OpenRouter (fastest way to get started — 200+ models, single API key)
 autic providers add openrouter --key sk-or-v1-xxxxxxxx
 
-# Or bring your own:
-autic providers add openai --key sk-...
-autic providers add anthropic --key sk-ant-...
+# Or set up a local provider:
+autic providers setup ollama
 ```
 
 ### 3. Verify setup
@@ -166,12 +165,13 @@ autic workflow "Add error handling to API routes"
 
 ### Getting started
 
-| Command        | Description                               |
-| -------------- | ----------------------------------------- |
-| `autic init`   | Initialize Autic in the current directory |
-| `autic doctor` | Full environment diagnostics              |
-| `autic chat`   | Start an interactive AI chat session      |
-| `autic --help` | Show all commands and options             |
+| Command        | Description                                                             |
+| -------------- | ----------------------------------------------------------------------- |
+| `autic`        | Launchpad dashboard — workspace status, provider health, quick commands |
+| `autic init`   | Initialize Autic in the current directory                               |
+| `autic doctor` | Full environment diagnostics                                            |
+| `autic chat`   | Start an interactive AI chat session                                    |
+| `autic --help` | Show all commands and options                                           |
 
 ### Building & fixing
 
@@ -189,6 +189,7 @@ autic workflow "Add error handling to API routes"
 | ----------------------- | ---------------------------------------------- |
 | `autic providers`       | List, add, remove, and check LLM providers     |
 | `autic providers check` | Test connectivity for all configured providers |
+| `autic providers setup` | Guided provider onboarding wizard              |
 | `autic models`          | Search, list, and inspect available models     |
 
 ### Sessions & memory
@@ -243,9 +244,9 @@ autic workflow "Add error handling to API routes"
 | Provider       | Command                                      | Best For                                      |
 | -------------- | -------------------------------------------- | --------------------------------------------- |
 | **OpenRouter** | `autic providers add openrouter --key <key>` | 200+ models, single API key, fallback routing |
-| **OpenAI**     | `autic providers add openai --key <key>`     | Direct GPT-4o / GPT-4 access                  |
-| **Anthropic**  | `autic providers add anthropic --key <key>`  | Direct Claude 3.5 Sonnet / Opus access        |
-| **Ollama**     | `autic providers add ollama --url <url>`     | Local, offline-capable models                 |
+| **Ollama**     | `autic providers setup ollama`               | Local, offline-capable models                 |
+
+> Direct OpenAI and Anthropic provider integrations are planned for future releases. Use OpenRouter to access GPT-4o, Claude 3.5, Gemini, and 200+ other models with a single API key.
 
 ### Ollama Integration
 
@@ -378,21 +379,23 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 
 ## Roadmap
 
-| Area                                                                 | Status         |
-| -------------------------------------------------------------------- | -------------- |
-| Multi-provider orchestration (OpenAI, Anthropic, OpenRouter, Ollama) | ✅ Shipped     |
-| Autonomous workflows (fix, refactor, orchestrate)                    | ✅ Shipped     |
-| Role-based agents and swarm coordination                             | ✅ Shipped     |
-| Security & privacy (vault, sanitization, permissions, profiles)      | ✅ Shipped     |
-| Session persistence (disk-backed, crash recovery)                    | ✅ Shipped     |
-| Diagnostics & observability (doctor, audit, profiling)               | ✅ Shipped     |
-| Production validation (chaos, regression, certification)             | ✅ Shipped     |
-| Context optimization and workspace memory                            | ✅ Shipped     |
-| Extension SDK and plugin ecosystem                                   | 🚧 In progress |
-| Interactive terminal UI                                              | 🚧 In progress |
-| Windows platform certification                                       | 🔜 Planned     |
-| CI/CD integration (GitHub Actions, GitLab CI)                        | 🔜 Planned     |
-| Template marketplace                                                 | 🔜 Planned     |
+| Area                                                            | Status         |
+| --------------------------------------------------------------- | -------------- |
+| Multi-provider orchestration (OpenRouter, Ollama)               | ✅ Shipped     |
+| Direct OpenAI & Anthropic provider support                      | 🔜 Planned     |
+| Launchpad dashboard (autic with no args)                        | ✅ Shipped     |
+| Autonomous workflows (fix, refactor, orchestrate)               | ✅ Shipped     |
+| Role-based agents and swarm coordination                        | ✅ Shipped     |
+| Security & privacy (vault, sanitization, permissions, profiles) | ✅ Shipped     |
+| Session persistence (disk-backed, crash recovery)               | ✅ Shipped     |
+| Diagnostics & observability (doctor, audit, profiling)          | ✅ Shipped     |
+| Production validation (chaos, regression, certification)        | ✅ Shipped     |
+| Context optimization and workspace memory                       | ✅ Shipped     |
+| Extension SDK and plugin ecosystem                              | 🚧 In progress |
+| Interactive terminal UI                                         | 🚧 In progress |
+| Windows platform certification                                  | 🔜 Planned     |
+| CI/CD integration (GitHub Actions, GitLab CI)                   | 🔜 Planned     |
+| Template marketplace                                            | 🔜 Planned     |
 
 Autic follows semantic versioning. The current `0.1.0-alpha` release is the first public alpha — core functionality is stable, but APIs may evolve based on feedback.
 
