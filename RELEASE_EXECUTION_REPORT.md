@@ -2,7 +2,7 @@
 
 **Version:** `0.1.0-alpha.1`  
 **Git Tag:** `v0.1.0-alpha.1`  
-**Commit:** `e7f6c4a`  
+**Latest Commit:** `c624bae`  
 **Date:** May 29, 2026  
 **Status:** ✅ **APPROVED FOR PUBLIC ALPHA RELEASE**
 
@@ -21,7 +21,7 @@
 | License | ✅ | MIT |
 | Repository metadata | ✅ | GitHub URL, bugs URL, homepage set |
 | Keywords | ✅ | 10 relevant keywords for npm discovery |
-| Bundle integrity | ✅ | 1.0 MB bundled single-file distribution |
+| Bundle integrity | ✅ | 1.0 MB bundled single-file distribution, version from package.json |
 
 **Publish command:** `cd apps/cli && npm publish`
 
@@ -32,7 +32,7 @@
 | Check | Status | Details |
 |-------|--------|---------|
 | npm pack | ✅ | 607.9 KB compressed, 3.0 MB unpacked |
-| Package contents | ✅ | `dist/index.js`, `package.json`, `README.md`, `LICENSE` |
+| Package contents | ✅ | `dist/index.js`, `package.json`, `README.md`, `LICENSE` verified via `npm publish --dry-run --tag alpha` |
 | Binary entrypoint | ✅ | `autic` → `dist/index.js` with `#!/usr/bin/env node` |
 | npm install from tarball | ✅ | 43 packages installed successfully |
 | `autic --version` | ✅ | Returns `0.1.0` |
