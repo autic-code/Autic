@@ -3,24 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "CLI-native autonomous AI engineering runtime — local-first, BYOK, multi-provider",
   "bin": {
     "autic": "./dist/index.js"
   },
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
   "scripts": {
     "build": "tsc",
+    "bundle": "node scripts/bundle.mjs",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "prepack": "node scripts/bundle.mjs"
   },
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "dependencies": {
+    "commander": "^12.0.0",
+    "ink": "^5.0.0",
+    "react": "^18.3.0"
+  },
+  "devDependencies": {
     "@autic/shared": "workspace:*",
     "@autic/providers": "workspace:*",
     "@autic/runtime": "workspace:*",
@@ -47,12 +57,32 @@
     "@autic/governance": "workspace:*",
     "@autic/telemetry": "workspace:*",
     "@autic/profiling": "workspace:*",
-    "commander": "^12.0.0",
-    "ink": "^5.0.0",
-    "react": "^18.3.0"
-  },
-  "devDependencies": {
     "@types/react": "^18.3.0",
+    "esbuild": "^0.28.0",
     "typescript": "^5.6.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autic/autic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/autic/autic/issues"
+  },
+  "homepage": "https://github.com/autic/autic#readme",
+  "keywords": [
+    "cli",
+    "ai",
+    "autonomous",
+    "engineering",
+    "local-first",
+    "byok",
+    "llm",
+    "developer-tools",
+    "orchestration",
+    "typescript"
+  ]
 }
