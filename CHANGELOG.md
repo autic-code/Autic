@@ -2,7 +2,7 @@
 
 All notable changes to Autic will be documented in this file.
 
-## [0.1.0] — 2026-05-29
+## [0.1.0-alpha.3] — 2026-05-29
 
 ### Added
 

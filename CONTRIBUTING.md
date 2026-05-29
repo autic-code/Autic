@@ -41,7 +41,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ```bash
 # Clone the repository
-git clone https://github.com/autic/autic.git
+git clone https://github.com/autic-code/Autic.git
 cd autic
 
 # Install dependencies
@@ -179,6 +179,6 @@ Before submitting, ensure:
 
 ## Questions?
 
-- Open a [GitHub Discussion](https://github.com/autic/autic/discussions)
+- Open a [GitHub Discussion](https://github.com/autic-code/Autic/discussions)
 - Read the [Architecture](docs/ARCHITECTURE.md) and [Core Concepts](docs/CORE_CONCEPTS.md) docs
 - Run `autic help` for CLI guidance

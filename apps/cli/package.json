@@ -67,12 +67,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/autic/autic.git"
+    "url": "git+https://github.com/autic-code/Autic.git"
   },
   "bugs": {
-    "url": "https://github.com/autic/autic/issues"
+    "url": "https://github.com/autic-code/Autic/issues"
   },
-  "homepage": "https://github.com/autic/autic#readme",
+  "homepage": "https://github.com/autic-code/Autic#readme",
   "keywords": [
     "cli",
     "ai",
