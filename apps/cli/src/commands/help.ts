@@ -11,6 +11,7 @@
  */
 
 import { CLI_NAME, CLI_VERSION, CLI_DESCRIPTION } from '../constants.js';
+import { colorText, divider } from '@autic/ui';
 
 export interface HelpSection {
   title: string;
@@ -99,45 +100,48 @@ export async function helpCommand(topic?: string): Promise<void> {
 
 function printGeneralHelp(): void {
   console.log('');
-  console.log(`  ${CLI_NAME} v${CLI_VERSION}`);
-  console.log(`  ${CLI_DESCRIPTION}`);
+  console.log(`  ${colorText(CLI_NAME, 'primary')} ${colorText(`v${CLI_VERSION}`, 'dim')}`);
+  console.log(`  ${colorText(CLI_DESCRIPTION, 'dim')}`);
   console.log('');
 
   // Usage
-  console.log('  USAGE');
-  console.log('    autic <command> [action] [options]');
+  console.log(`  ${colorText('USAGE', 'bold')}`);
+  console.log(`  ${divider(36)}`);
+  console.log(
+    `    ${colorText('autic', 'primary')} ${colorText('<command> [action] [options]', 'dim')}`,
+  );
   console.log('');
 
   // Command groups
   for (const group of COMMAND_GROUPS) {
-    console.log(`  ${group.title}`);
-    console.log(`  ${'─'.repeat(36)}`);
+    console.log(`  ${colorText(group.title, 'bold')}`);
+    console.log(`  ${divider(36)}`);
     for (const item of group.items) {
-      const cmd = item.cmd.padEnd(22);
+      const cmd = colorText(item.cmd.padEnd(22), 'primary');
       console.log(`    ${cmd} ${item.desc}`);
     }
     console.log('');
   }
 
   // Quick examples
-  console.log('  QUICK START');
-  console.log(`  ${'─'.repeat(36)}`);
-  console.log('    # Initialize Autic in your project');
-  console.log('    autic init');
+  console.log(`  ${colorText('QUICK START', 'bold')}`);
+  console.log(`  ${divider(36)}`);
+  console.log(`    ${colorText('#', 'dim')} Initialize Autic in your project`);
+  console.log(`    ${colorText('autic init', 'primary')}`);
   console.log('');
-  console.log('    # Run diagnostics to check environment');
-  console.log('    autic doctor');
+  console.log(`    ${colorText('#', 'dim')} Run diagnostics to check environment`);
+  console.log(`    ${colorText('autic doctor', 'primary')}`);
   console.log('');
-  console.log('    # Set up a provider');
-  console.log('    autic providers setup openrouter');
+  console.log(`    ${colorText('#', 'dim')} Set up a provider`);
+  console.log(`    ${colorText('autic providers setup openrouter', 'primary')}`);
   console.log('');
-  console.log('    # Start a chat session');
-  console.log('    autic chat');
+  console.log(`    ${colorText('#', 'dim')} Start a chat session`);
+  console.log(`    ${colorText('autic chat', 'primary')}`);
   console.log('');
 
-  console.log('  For detailed help on a specific command:');
-  console.log('    autic help <command>');
-  console.log('    autic <command> --help');
+  console.log(`  ${colorText('For detailed help on a specific command:', 'dim')}`);
+  console.log(`    ${colorText('autic help <command>', 'primary')}`);
+  console.log(`    ${colorText('autic <command> --help', 'primary')}`);
   console.log('');
 }
 

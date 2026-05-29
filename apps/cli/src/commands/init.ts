@@ -2,12 +2,15 @@
  * autic init — Enhanced workspace initialization.
  * Creates .autic directory structure, detects project frameworks,
  * scaffolds configuration, and initializes session storage.
+ *
+ * Premium blue-themed terminal output.
  */
 
 import { mkdir, access, writeFile, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ConfigManager } from '@autic/config';
 import type { WorkspaceConfig } from '@autic/shared';
+import { colorText, startupHeader } from '@autic/ui';
 
 export async function initCommand(
   options: { force?: boolean; profile?: string } = {},
@@ -15,16 +18,25 @@ export async function initCommand(
   const cwd = process.cwd();
   const auticDir = join(cwd, '.autic');
 
-  console.log('❯ Initializing Autic...\n');
+  // Startup header
+  const headerLines = startupHeader('Autic', '0.1.0', 'loading');
+  console.log('');
+  for (const line of headerLines) {
+    console.log(line);
+  }
+  console.log(`  ${colorText('Initializing workspace...', 'dim')}`);
+  console.log('');
 
   try {
     await access(auticDir);
     if (!options.force) {
-      console.log('  Autic is already initialized in this directory.');
-      console.log('  Use --force to reinitialize.\n');
+      console.log(`  ${colorText('✓', 'success')} Autic is already initialized in this directory.`);
+      console.log(
+        `  ${colorText('→', 'dim')} Use ${colorText('--force', 'primary')} to reinitialize.\n`,
+      );
       return;
     }
-    console.log('  Reinitializing (--force)...\n');
+    console.log(`  ${colorText('⟳', 'warning')} Reinitializing (--force)...\n`);
   } catch {
     // Directory doesn't exist, proceed
   }
@@ -33,19 +45,27 @@ export async function initCommand(
   const projectInfo = await detectProjectInfo(cwd);
 
   if (projectInfo.name) {
-    console.log(`  Detected project: ${projectInfo.name}`);
+    console.log(
+      `  ${colorText('●', 'primary')} ${colorText('Project:', 'dim')} ${projectInfo.name}`,
+    );
   }
   if (projectInfo.framework) {
-    console.log(`  Detected framework: ${projectInfo.framework}`);
+    console.log(
+      `  ${colorText('●', 'primary')} ${colorText('Framework:', 'dim')} ${projectInfo.framework}`,
+    );
   }
   if (projectInfo.packageManager) {
-    console.log(`  Detected package manager: ${projectInfo.packageManager}`);
+    console.log(
+      `  ${colorText('●', 'primary')} ${colorText('Package Manager:', 'dim')} ${projectInfo.packageManager}`,
+    );
   }
   if (projectInfo.name || projectInfo.framework || projectInfo.packageManager) {
     console.log('');
   }
 
   // Create directory structure
+  console.log(`  ${colorText('Creating directory structure...', 'dim')}`);
+
   const dirs = [
     auticDir,
     join(auticDir, 'sessions'),
@@ -57,7 +77,8 @@ export async function initCommand(
 
   for (const dir of dirs) {
     await mkdir(dir, { recursive: true });
-    console.log(`  ✓ Created ${dir}`);
+    const relPath = dir.replace(cwd, '.').replace(/^\//, '');
+    console.log(`    ${colorText('✓', 'success')} ${colorText(relPath, 'dim')}`);
   }
 
   // Create workspace config
@@ -73,24 +94,45 @@ export async function initCommand(
   };
 
   await writeFile(join(auticDir, 'config.json'), JSON.stringify(workspaceConfig, null, 2));
-  console.log('  ✓ Created .autic/config.json (workspace config)\n');
+  console.log(
+    `    ${colorText('✓', 'success')} ${colorText('.autic/config.json', 'dim')} ${colorText('(workspace config)', 'muted')}`,
+  );
+  console.log('');
 
   // Initialize global config if not exists
   const configManager = new ConfigManager();
   await configManager.init();
   if (!configManager.isLoaded()) {
     await configManager.saveGlobalConfig();
-    console.log('  ✓ Created global config (~/.autic/config.json)\n');
+    console.log(
+      `  ${colorText('✓', 'success')} ${colorText('Created global config', 'dim')} ${colorText('(~/.autic/config.json)', 'muted')}`,
+    );
+    console.log('');
   }
 
-  console.log('  Autic initialized successfully.\n');
+  // Success banner
+  console.log(`  ${colorText('═', 'primary').repeat(48)}`);
+  console.log(
+    `  ${colorText('✓', 'success')} ${colorText('Autic initialized successfully.', 'bold')}`,
+  );
+  console.log(`  ${colorText('═', 'primary').repeat(48)}`);
+  console.log('');
 
-  // Print next steps
-  console.log('  Next steps:');
-  console.log('    • Configure providers:    autic providers add <name>');
-  console.log('    • Set developer profile:  autic profile set <profile>');
-  console.log('    • Run diagnostics:        autic doctor');
-  console.log('    • Start a session:        autic chat\n');
+  // Next steps
+  console.log(`  ${colorText('Next steps:', 'primary')}`);
+  console.log(
+    `    ${colorText('→', 'dim')} ${colorText('autic providers add openrouter', 'primary')}  ${colorText('Set up an LLM provider', 'muted')}`,
+  );
+  console.log(
+    `    ${colorText('→', 'dim')} ${colorText('autic profile set balanced', 'primary')}      ${colorText('Set developer profile', 'muted')}`,
+  );
+  console.log(
+    `    ${colorText('→', 'dim')} ${colorText('autic doctor', 'primary')}                   ${colorText('Verify everything works', 'muted')}`,
+  );
+  console.log(
+    `    ${colorText('→', 'dim')} ${colorText('autic chat', 'primary')}                     ${colorText('Start a coding session', 'muted')}`,
+  );
+  console.log('');
 }
 
 async function detectProjectInfo(cwd: string): Promise<{

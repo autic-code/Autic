@@ -8,6 +8,7 @@
 
 import { Command } from 'commander';
 import { CLI_NAME, CLI_VERSION, CLI_DESCRIPTION } from './constants.js';
+import { renderError, colorText } from '@autic/ui';
 import {
   initCommand,
   buildCommand,
@@ -609,17 +610,41 @@ program
     await platformCertifyCommand(action);
   });
 
-// Global error handling
+// Global error handling — structured error experience
 process.on('unhandledRejection', (reason: unknown) => {
-  console.error(
-    '\n  ✗ Unhandled error:',
-    reason instanceof Error ? reason.message : String(reason),
-  );
+  const message = reason instanceof Error ? reason.message : String(reason);
+  const errorLines = renderError({
+    title: 'Unhandled Error',
+    message,
+    level: 'error',
+    causes: ['An unexpected error occurred during execution', 'A promise rejection was not caught'],
+    actions: ['Run autic doctor to verify environment', 'Try the command again with --verbose'],
+    docs: 'https://autic.dev/docs/troubleshooting',
+    recoverable: false,
+  });
+  for (const line of errorLines) {
+    console.error(line);
+  }
   process.exit(1);
 });
 
 process.on('uncaughtException', (error: Error) => {
-  console.error('\n  ✗ Fatal error:', error.message);
+  const errorLines = renderError({
+    title: 'Fatal Error',
+    message: error.message,
+    level: 'error',
+    causes: ['A critical runtime error occurred', 'The application state may be corrupted'],
+    actions: [
+      'Run autic doctor to verify environment',
+      'Restart the session',
+      'Check for updates: autic update',
+    ],
+    docs: 'https://autic.dev/docs/troubleshooting',
+    recoverable: false,
+  });
+  for (const line of errorLines) {
+    console.error(line);
+  }
   process.exit(1);
 });
 

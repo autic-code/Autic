@@ -96,3 +96,38 @@ export {
   memoryIndicator,
 } from './components/LoadingSpinner.js';
 export type { SpinnerStyle, SpinnerStatus } from './components/LoadingSpinner.js';
+
+export { renderRuntimePanel, compactRuntimeLine } from './components/RuntimePanel.js';
+export type {
+  RuntimeDisplay,
+  RuntimeProvider,
+  RuntimeSession,
+  RuntimeWorkspace,
+  RuntimeMemory,
+  RuntimeQueue,
+  ProviderStatus,
+} from './components/RuntimePanel.js';
+
+export { eventLine, renderExecutionFeed, compactEventSummary } from './components/ExecutionFeed.js';
+export type {
+  ExecutionEvent,
+  EventLevel,
+  ExecutionFeedOptions,
+} from './components/ExecutionFeed.js';
+
+export {
+  renderSessionPanel,
+  compactSessionLine,
+  sessionSummary,
+} from './components/SessionPanel.js';
+export type { SessionDisplay } from './components/SessionPanel.js';
+
+export {
+  renderError,
+  compactError,
+  providerError,
+  configError,
+  workflowError,
+  toast,
+} from './components/ErrorDisplay.js';
+export type { ErrorDisplayConfig } from './components/ErrorDisplay.js';
