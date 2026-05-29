@@ -10,3 +10,4 @@ coverage/
 .tmp/
 /sessions/
 autic-data/
+*.tgz
