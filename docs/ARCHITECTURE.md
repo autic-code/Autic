@@ -1,10 +1,10 @@
-# Autic Architecture
+# Architecture
 
 > **Version:** 0.1.0 | **Last Updated:** May 2026
 
 ## Overview
 
-Autic is a production-grade CLI-native autonomous AI engineering runtime. It provides a deterministic, local-first platform for AI-assisted software engineering with a modular layered architecture.
+Autic is a CLI-native autonomous AI engineering runtime. It provides a deterministic, local-first platform for AI-assisted software engineering with a modular layered architecture.
 
 ```
 ┌──────────────────────────────────────────────────────────┐

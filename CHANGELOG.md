@@ -10,6 +10,10 @@ All notable changes to Autic will be documented in this file.
 - CONTRIBUTING.md with coding guidelines, development setup, and pull request checklist
 - MIT LICENSE file
 - `.prettierignore` to prevent formatting of generated files (dist, node_modules, coverage, etc.)
+- Release notes (RELEASE_NOTES.md) for alpha launch
+- Release quality report (RELEASE_QUALITY_REPORT.md) with scorecard
+- GitHub issue templates (bug report, feature request, documentation)
+- GitHub pull request template
 
 ### Fixed
 
@@ -23,6 +27,9 @@ All notable changes to Autic will be documented in this file.
 
 - **Workspace concurrency** — Root scripts (`build`, `typecheck`, `lint`) now use `--workspace-concurrency=4` to prevent CI OOM from launching all 27 TypeScript compiler processes simultaneously.
 - **All documentation reviewed and validated** — SECURITY.md, ARCHITECTURE.md, COMMAND_REFERENCE.md, TROUBLESHOOTING.md, CORE_CONCEPTS.md, PROVIDER_INTEGRATION.md, SUBSYSTEM_CONTRACTS.md, EXTENSION_SDK.md — all production quality.
+- **README.md rebuilt** — Professional, scannable, developer-focused with architecture overview, roadmap, and guided quick start
+- **COMMAND_REFERENCE.md streamlined** — More concise descriptions, consistent formatting, reduced redundancy
+- **README header titles normalized** — All doc headers use short, consistent titles ("Architecture" not "Autic Architecture")
 
 ### Security
 
@@ -40,6 +47,7 @@ All notable changes to Autic will be documented in this file.
 
 - GitHub Actions CI configured: Node.js 20/22, pnpm 9, `--frozen-lockfile`, build, typecheck, lint, format:check
 - `npm pack` validated — `autic-cli-0.1.0.tgz` generates correctly with `bin: autic -> ./dist/index.js`
+- Temp artifacts cleaned (old RC reports, build tarballs)
 
 ---
 

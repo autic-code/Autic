@@ -1,13 +1,14 @@
 # Command Reference
 
-> Version: 0.1.0 | Complete reference for all Autic CLI commands.
+> **Version:** 0.1.0 | Complete reference for all Autic CLI commands.
 
 ## Getting Help
 
 ```bash
-autic help                    # General help overview
-autic <command> --help        # Command-specific help
-autic docs                    # Generate full documentation
+autic --help                # List all commands
+autic <command> --help      # Command-specific help
+autic help <command>        # Detailed help for a command
+autic docs                  # Generate full documentation set
 ```
 
 ---
@@ -16,84 +17,36 @@ autic docs                    # Generate full documentation
 
 ### `autic init`
 
-Initialize Autic in the current directory.
+Initialize Autic in the current directory. Creates `.autic/` structure, detects project framework.
 
 ```bash
 autic init [--force]
 ```
 
-**Options:**
-
-- `--force` — Force reinitialization
-
-**Example:**
-
-```bash
-autic init
-autic init --force
-```
-
 ### `autic chat`
 
-Start an interactive chat session with an AI model.
+Start an interactive AI chat session.
 
 ```bash
 autic chat [options]
 ```
 
-**Options:**
-
-- `-m, --model <model>` — Model to use
-- `-p, --provider <provider>` — Provider to use
-- `-s, --session <session>` — Session ID to restore
-- `-f, --file <file>` — Context file to load
-
-**Example:**
-
-```bash
-autic chat
-autic chat --model gpt-4o --provider openrouter
-autic chat --session my-session
-```
+**Options:** `-m, --model <model>` · `-p, --provider <provider>` · `-s, --session <id>` · `-f, --file <path>`
 
 ### `autic fix`
 
 Run autonomous fix workflow on a target.
 
 ```bash
-autic fix [options]
-```
-
-**Options:**
-
-- `-t, --target <path>` — Target directory or file
-- `-m, --model <model>` — Model to use
-- `--dry-run` — Preview changes without applying
-
-**Example:**
-
-```bash
-autic fix --target src/
-autic fix --target src/index.ts --dry-run
+autic fix --target <path> [--dry-run] [-m, --model <model>]
 ```
 
 ### `autic run`
 
-Execute a task or script.
+Execute a task or script with optional AI assistance.
 
 ```bash
-autic run [script] [options]
-```
-
-**Options:**
-
-- `-m, --model <model>` — Model to use
-
-**Example:**
-
-```bash
-autic run test
-autic run build --model gpt-4o
+autic run <script> [-m, --model <model>]
 ```
 
 ### `autic build`
@@ -101,20 +54,7 @@ autic run build --model gpt-4o
 Build the current Autic workspace.
 
 ```bash
-autic build [options]
-```
-
-**Options:**
-
-- `--watch` — Watch for changes
-- `--clean` — Clean previous build first
-
-**Example:**
-
-```bash
-autic build
-autic build --watch
-autic build --clean
+autic build [--watch] [--clean]
 ```
 
 ---
@@ -123,42 +63,25 @@ autic build --clean
 
 ### `autic providers`
 
-List and manage LLM providers.
+List, add, remove, and check LLM providers.
 
 ```bash
-autic providers [action] [name] [options]
+autic providers              # List configured providers
+autic providers check        # Test provider connectivity
+autic providers add <name>   # Add provider (--key, --url)
+autic providers remove <name>
 ```
 
-**Actions:** `list` (default), `check`, `add`, `remove`
-
-**Options:**
-
-- `-k, --key <key>` — API key (for add)
-- `-u, --url <url>` — Base URL (for add)
-
-**Example:**
-
-```bash
-autic providers
-autic providers add openrouter --key sk-or-...
-autic providers check
-```
+**Supported providers:** `openrouter`, `openai`, `anthropic`, `ollama`
 
 ### `autic models`
 
-Search, install, list models, and show capabilities.
+Search, list, and inspect available models.
 
 ```bash
-autic models [action] [name]
-```
-
-**Actions:** `list` (default), `search`, `install`, `capabilities`
-
-**Example:**
-
-```bash
-autic models
-autic models search gpt-4
+autic models                 # List available models
+autic models search <query>  # Search for models
+autic models install <name>  # Install a model (Ollama)
 ```
 
 ---
@@ -170,37 +93,19 @@ autic models search gpt-4
 Create, list, and restore sessions.
 
 ```bash
-autic sessions [action] [name]
-```
-
-**Actions:** `list` (default), `create`, `restore`
-
-**Example:**
-
-```bash
-autic sessions
-autic sessions restore <session-id>
+autic sessions               # List active sessions
+autic sessions create <name> # Create a new session
+autic sessions restore <id>  # Restore an existing session
 ```
 
 ### `autic context`
 
-Advanced context engineering and token optimization system.
+Context engineering and token optimization.
 
 ```bash
-autic context [action] [options]
-```
-
-**Actions:** `status` (default), `inspect`, `optimize`, `safety`, `cache`, `reset`
-
-**Options:**
-
-- `-t, --target <path>` — Target for optimize action
-
-**Example:**
-
-```bash
-autic context status
-autic context reset
+autic context status         # View context state
+autic context reset          # Clear context cache
+autic context optimize       # Optimize token usage
 ```
 
 ---
@@ -212,61 +117,23 @@ autic context reset
 Run an autonomous engineering workflow.
 
 ```bash
-autic workflow [goal] [options]
-```
-
-**Options:**
-
-- `--steps <n>` — Max execution steps (default: 20)
-- `--timeout <ms>` — Workflow timeout in ms (default: 300000)
-- `--allow-dangerous` — Allow potentially dangerous operations
-- `--verbose` — Show detailed execution events
-
-**Example:**
-
-```bash
-autic workflow "Add error handling to API routes"
-autic workflow "Refactor database layer" --steps 15
+autic workflow <goal> [--steps <n>] [--timeout <ms>]
 ```
 
 ### `autic orchestrate`
 
-Run the full R&D pipeline system.
+Run the full R&D pipeline: Research → Plan → Architect → Engineer → Verify → Repair → Review.
 
 ```bash
-autic orchestrate [goal] [options]
-```
-
-**Pipeline:** Research → Plan → Architect → Engineer → Verify → Repair → Final Review
-
-**Options:**
-
-- `--pipeline <id>` — Pipeline to use (full-development, analysis-only, engineering-only)
-- `--stage <name>` — Execute a single pipeline stage
-- `--verbose` — Show detailed execution events
-
-**Example:**
-
-```bash
-autic orchestrate "Build a REST API"
-autic orchestrate "Review architecture" --pipeline analysis-only
+autic orchestrate <goal> [--pipeline <id>] [--stage <name>]
 ```
 
 ### `autic swarm`
 
-Controlled multi-agent swarm orchestration and coordination.
+Controlled multi-agent swarm coordination.
 
 ```bash
-autic swarm [action]
-```
-
-**Actions:** `status` (default), `inspect`, `pipelines`, `safety`, `start`, `stop`, `pause`, `resume`
-
-**Example:**
-
-```bash
-autic swarm status
-autic swarm start --goal "Refactor codebase"
+autic swarm [status|start|stop|pause|resume|inspect|pipelines|safety]
 ```
 
 ---
@@ -275,47 +142,32 @@ autic swarm start --goal "Refactor codebase"
 
 ### `autic security`
 
-View and manage security settings, trust profiles, and permissions.
+Manage security settings, trust profiles, and permissions.
 
 ```bash
-autic security [action] [sub] [options]
+autic security                      # View security status
+autic security profile <profile>    # Set trust profile
+autic security permissions          # View permissions
+autic security vault                # Encrypted vault status
+autic security events [--limit <n>] # View security events
 ```
 
-**Actions:** `status` (default), `profile`, `permissions`, `events`, `vault`
-
-**Options:**
-
-- `--limit <n>` — Event limit (for events action)
-
-**Example:**
-
-```bash
-autic security
-autic security profile set safe
-autic security events --limit 50
-```
+**Trust profiles:** `safe` (read-only) · `balanced` (workspace access, default) · `full_auto` (full system) · `local_only` (offline)
 
 ### `autic privacy`
 
 Configure privacy mode.
 
 ```bash
-autic privacy [action] [mode]
+autic privacy                    # View current mode
+autic privacy set <mode>         # Set mode
 ```
 
-**Actions:** `status` (default), `set`, `help`
-**Modes:** `normal`, `local_only`, `offline`
-
-**Example:**
-
-```bash
-autic privacy
-autic privacy set local_only
-```
+**Modes:** `normal` · `local_only` · `offline`
 
 ### `autic validate-security`
 
-Run security validation checks.
+Run all 21 security validation checks (vault, sanitization, permissions, extensions, providers).
 
 ```bash
 autic validate-security
@@ -323,19 +175,10 @@ autic validate-security
 
 ### `autic security-audit`
 
-Run comprehensive security audit.
+Comprehensive security audit across all layers.
 
 ```bash
-autic security-audit [action]
-```
-
-**Actions:** `all` (default), `permissions`, `vault`, `sanitization`, `commands`, `boundaries`
-
-**Example:**
-
-```bash
-autic security-audit
-autic security-audit --action vault
+autic security-audit [all|permissions|vault|sanitization|commands|boundaries]
 ```
 
 ---
@@ -344,98 +187,55 @@ autic security-audit --action vault
 
 ### `autic doctor`
 
-Run comprehensive environment diagnostics.
+Full environment diagnostics — system, providers, security, and network.
 
 ```bash
-autic doctor
+autic doctor                 # Full diagnostics
+autic doctor quick           # Quick system + provider check
+autic doctor validate        # Installation validation
 ```
 
-### `autic stability`
+### `autic audit`
 
-Monitor runtime health, performance, and stability.
-
-```bash
-autic stability [action]
-```
-
-**Actions:** `status` (default), `health`, `resources`, `metrics`, `loops`, `processes`, `cleanup`
-
-**Example:**
+Comprehensive runtime audit — health, orchestration, queue, provider, memory, safety.
 
 ```bash
-autic stability health
-autic stability resources
+autic audit                  # Full audit
 ```
 
 ### `autic observability`
 
-View system observability snapshots.
+Runtime system snapshots.
 
 ```bash
-autic observability [action]
+autic observability                  # Runtime health
+autic observability <subsystem>      # Subsystem snapshot
 ```
 
-**Actions:** `health` (default), `orchestration`, `queue`, `provider`, `context`, `learning`, `events`
+**Subsystems:** `health` · `orchestration` · `queue` · `provider` · `context` · `learning` · `events`
 
-**Example:**
+### `autic stability`
 
-```bash
-autic observability
-autic observability provider
-```
-
-### `autic memory`
-
-Detect memory leaks in workers and runtime.
+Runtime health, performance, and stability monitoring.
 
 ```bash
-autic memory [action]
-```
-
-**Actions:** `check` (default), `start` (continuous monitoring)
-
-**Example:**
-
-```bash
-autic memory check
-```
-
----
-
-## Profiling & Performance
-
-### `autic profiling`
-
-Run runtime profiling and performance baselines.
-
-```bash
-autic profiling [action]
-```
-
-**Actions:** `all` (default), `cpu`, `memory`, `queue`, `provider`, `orchestration`, `baseline`, `compare`
-
-**Example:**
-
-```bash
-autic profiling
-autic profiling baseline
-autic profiling compare
+autic stability [status|health|resources|metrics|loops|processes|cleanup]
 ```
 
 ### `autic diagnose`
 
-View error diagnostics reports and CLI UX hardening status.
+Error diagnostics and CLI UX hardening.
 
 ```bash
-autic diagnose [action]
+autic diagnose [errors|ux]
 ```
 
-**Actions:** `errors` (default), `ux`
+### `autic profiling`
 
-**Example:**
+Performance profiling — CPU, memory, queue latency, provider latency, baselines.
 
 ```bash
-autic diagnose
+autic profiling [all|cpu|memory|queue|provider|orchestration|baseline|compare]
 ```
 
 ---
@@ -444,61 +244,30 @@ autic diagnose
 
 ### `autic validate`
 
-Run production validation suite or release readiness checks.
+Production validation suite.
 
 ```bash
-autic validate [action]
+autic validate all           # Full validation suite
+autic validate release       # Release readiness check
 ```
 
-**Actions:** `all` (default), `suite`, `release`
+### `autic chaos`
 
-**Example:**
+Provider resilience testing — simulate outages, auth failures, rate limits, partial failures.
 
 ```bash
-autic validate all
+autic chaos                          # All scenarios
+autic chaos <scenario>               # Single scenario
 ```
 
-### `autic audit`
-
-Run comprehensive runtime audit.
-
-```bash
-autic audit [action]
-```
-
-**Actions:** `run` (default), `health`
-
-**Example:**
-
-```bash
-autic audit
-```
-
-### `autic stress`
-
-Run long-workflow stress tests.
-
-```bash
-autic stress [action]
-```
-
-**Actions:** `run` (default)
+**Scenarios:** `outage` · `auth` · `slow` · `rate-limit` · `partial` · `degraded`
 
 ### `autic regression`
 
-Run regression prevention checks.
+Regression prevention across architecture, orchestration, provider, memory, security.
 
 ```bash
-autic regression [action]
-```
-
-**Actions:** `all` (default), `architecture`, `orchestration`, `provider`, `memory`, `security`
-
-**Example:**
-
-```bash
-autic regression
-autic regression --action security
+autic regression [all|architecture|orchestration|provider|memory|security]
 ```
 
 ### `autic workflow-validate`
@@ -506,48 +275,7 @@ autic regression --action security
 Validate workflows against real project types.
 
 ```bash
-autic workflow-validate [action]
-```
-
-**Actions:** `all` (default), `typescript`, `nextjs`, `python`, `saas`, `monorepo`, `cli`
-
-**Example:**
-
-```bash
-autic workflow-validate typescript
-```
-
-### `autic chaos`
-
-Run provider chaos testing.
-
-```bash
-autic chaos [action]
-```
-
-**Actions:** `all` (default), `outage`, `auth`, `slow`, `rate-limit`, `partial`, `degraded`
-
-**Example:**
-
-```bash
-autic chaos
-autic chaos outage
-```
-
-### `autic longrun`
-
-Run long-running autonomous tests.
-
-```bash
-autic longrun [action]
-```
-
-**Actions:** `all` (default), `workflow`, `repair`, `queue`, `orchestration`, `memory`
-
-**Example:**
-
-```bash
-autic longrun
+autic workflow-validate [all|typescript|nextjs|python|saas|monorepo|cli]
 ```
 
 ### `autic recovery`
@@ -555,15 +283,15 @@ autic longrun
 Validate crash recovery capabilities.
 
 ```bash
-autic recovery [action]
+autic recovery
 ```
 
-**Actions:** `check` (default)
+### `autic longrun`
 
-**Example:**
+Long-running autonomous workflow tests.
 
 ```bash
-autic recovery
+autic longrun [all|workflow|repair|queue|orchestration|memory]
 ```
 
 ---
@@ -572,36 +300,28 @@ autic recovery
 
 ### `autic ecosystem`
 
-Ecosystem maintenance tooling.
+Extension diagnostics, compatibility, audit, and plugin lifecycle management.
 
 ```bash
-autic ecosystem [action]
-```
-
-**Actions:** `all` (default), `diagnostics`, `compat`, `audit`, `plugins`
-
-**Example:**
-
-```bash
-autic ecosystem diagnostics
-autic ecosystem compat
+autic ecosystem [all|diagnostics|compat|audit|plugins]
 ```
 
 ### `autic governance`
 
-Manage extension governance.
+Extension governance — trust metadata, permission auditing, compatibility, unsafe detection.
 
 ```bash
-autic governance [action]
+autic governance [all|trust|permissions|compat|unsafe|isolation]
 ```
 
-**Actions:** `all` (default), `trust`, `permissions`, `compat`, `unsafe`, `isolation`
+### `autic skills`
 
-**Example:**
+List, install, remove, and run skills.
 
 ```bash
-autic governance
-autic governance permissions
+autic skills list            # List installed skills
+autic skills install <name>  # Install a skill
+autic skills run <name>      # Run a skill (--goal)
 ```
 
 ### `autic template`
@@ -610,36 +330,23 @@ Scaffold a new project from a built-in template.
 
 ```bash
 autic template <template> [target]
+autic template list          # List available templates
 ```
 
-**Templates:** `saas-starter`, `cli-starter`, `api-starter`, `ai-tool-starter`, `list`
-
-**Example:**
-
-```bash
-autic template cli-starter my-cli
-autic template list
-```
+**Templates:** `saas-starter` · `cli-starter` · `api-starter` · `ai-tool-starter`
 
 ---
 
-## System & Maintenance
+## Configuration & Profiles
 
 ### `autic config`
 
-Manage Autic configuration.
+Manage Autic configuration — global, workspace, and profile overrides.
 
 ```bash
-autic config [action] [key] [value]
-```
-
-**Actions:** `status` (default), `get`, `set`, `list`
-
-**Example:**
-
-```bash
-autic config
-autic config set openrouter.timeout 120000
+autic config                     # View configuration
+autic config get <key>           # Get a config value
+autic config set <key> <value>   # Set a config value
 ```
 
 ### `autic profile`
@@ -647,139 +354,64 @@ autic config set openrouter.timeout 120000
 Manage developer profiles.
 
 ```bash
-autic profile [action] [profile]
+autic profile              # View current profile
+autic profile list         # List available profiles
+autic profile set <name>   # Set profile
+autic profile describe     # Describe current profile
 ```
 
-**Actions:** `status` (default), `list`, `set`, `describe`
-**Profiles:** `safe`, `balanced`, `full_auto`, `local_only`
+**Profiles:** `safe` · `balanced` (default) · `full_auto` · `local_only`
 
-**Example:**
+---
 
-```bash
-autic profile
-autic profile set balanced
-```
+## System & Maintenance
 
 ### `autic protect`
 
-Manage provider hardening, execution safety, security posture.
+Provider hardening, execution safety, and security posture.
 
 ```bash
-autic protect [action]
+autic protect [providers|safety|security|stall]
 ```
 
-**Actions:** `providers` (default), `safety`, `security`, `stall`
+### `autic memory`
 
-**Example:**
+Memory leak detection — worker leaks, orphan tracking, growth analysis.
 
 ```bash
-autic protect
+autic memory [check|start]
 ```
 
 ### `autic system`
 
-View performance metrics, CLI resilience status, and context hardening.
+Performance metrics, resilience status, and context hardening.
 
 ```bash
-autic system [action]
-```
-
-**Actions:** `perf` (default), `resilience`, `context`
-
-**Example:**
-
-```bash
-autic system
+autic system [perf|resilience|context]
 ```
 
 ### `autic fs`
 
-Validate filesystem safety.
+Filesystem safety validation.
 
 ```bash
-autic fs [action] [path]
-```
-
-**Actions:** `check` (default), `path`
-
-**Example:**
-
-```bash
-autic fs check
+autic fs [check|path <target>]
 ```
 
 ### `autic swarm-hardening`
 
-Validate swarm stability.
+Swarm stability validation.
 
 ```bash
-autic swarm-hardening [action]
+autic swarm-hardening
 ```
 
-**Actions:** `check` (default)
+### `autic debug`
 
----
-
-## Learning & Skills
-
-### `autic learning`
-
-Engineering learning and operational intelligence system.
+Debugging, tracing, and platform utilities.
 
 ```bash
-autic learning [action]
-```
-
-**Actions:** `status` (default), `inspect`, `clear`, `disable`, `enable`
-
-**Example:**
-
-```bash
-autic learning status
-```
-
-### `autic skills`
-
-List, install, remove, and run skills.
-
-```bash
-autic skills [action] [name] [options]
-```
-
-**Actions:** `list` (default), `install`, `remove`, `run`
-
-**Options:**
-
-- `-g, --goal <goal>` — Goal for run action
-
-**Example:**
-
-```bash
-autic skills list
-autic skills run my-skill --goal "Do something"
-```
-
----
-
-## Documentation
-
-### `autic docs`
-
-Generate command documentation and guides.
-
-```bash
-autic docs [action]
-```
-
-**Actions:** `all` (default), `commands`, `providers`, `troubleshooting`, `examples`, `single`, `architecture`, `contracts`, `sdk`, `security`, `concepts`
-
-**Example:**
-
-```bash
-autic docs
-autic docs architecture
-autic docs sdk
-autic docs security
+autic debug [mode|platform|trace]
 ```
 
 ---
@@ -791,103 +423,84 @@ autic docs security
 Manage release channels and check for updates.
 
 ```bash
-autic release [action] [value]
+autic release                 # View current channel
+autic release check           # Check for updates
+autic release channel <name>  # Switch channel
 ```
 
-**Actions:** `status` (default), `check`, `channel`, `versions`
-
-**Channels:** `stable`, `beta`, `dev`
-
-**Example:**
-
-```bash
-autic release
-autic release check
-autic release channel beta
-```
+**Channels:** `stable` · `beta` · `dev`
 
 ### `autic update`
 
-Check for Autic updates and manage versions.
+Check for updates and manage versions.
 
 ```bash
-autic update [action]
-```
-
-**Actions:** `check` (default), `info`, `version`
-
-**Example:**
-
-```bash
-autic update
+autic update [check|info|version]
 ```
 
 ### `autic platform-certify`
 
-Run platform certification checks.
+Platform certification checks — local-first, BYOK, offline, orchestration, security, ecosystem.
 
 ```bash
-autic platform-certify [action]
-```
-
-**Actions:** `all` (default), `local-first`, `byok`, `offline`, `orchestration`, `security`, `ecosystem`
-
-**Example:**
-
-```bash
-autic platform-certify
+autic platform-certify [all|local-first|byok|offline|orchestration|security|ecosystem]
 ```
 
 ---
 
-## Debugging & Telemetry
-
-### `autic debug`
-
-Debugging, tracing, and platform information utilities.
-
-```bash
-autic debug [action] [value]
-```
-
-**Actions:** `mode` (default), `platform`, `trace`
-
-**Example:**
-
-```bash
-autic debug platform
-```
+## Telemetry
 
 ### `autic telemetry`
 
-Manage safe optional telemetry.
+Manage opt-in anonymized telemetry.
 
 ```bash
-autic telemetry [action]
+autic telemetry             # View current status
+autic telemetry enable      # Enable (opt-in)
+autic telemetry disable     # Disable
+autic telemetry report      # View collection report
+autic telemetry clear       # Clear collected data
 ```
 
-**Actions:** `status` (default), `enable`, `disable`, `report`, `clear`
+Telemetry is **disabled by default**. Only anonymized runtime metrics are collected — never secrets, source code, prompts, or credentials.
 
-**Example:**
+---
+
+## Documentation
+
+### `autic docs`
+
+Generate command reference, provider guides, and troubleshooting docs.
 
 ```bash
-autic telemetry status
-autic telemetry enable
+autic docs                       # All documentation
+autic docs commands              # Command reference
+autic docs providers             # Provider setup guides
+autic docs architecture          # Architecture docs
+autic docs sdk                   # SDK docs
+autic docs security              # Security docs
+autic docs troubleshooting       # Troubleshooting guide
 ```
 
-### `autic help`
+---
 
-Show detailed help for Autic commands.
+## Platform Certification
+
+### `autic platform-certify`
+
+Run all platform certification checks.
 
 ```bash
-autic help [topic]
+autic platform-certify [all|local-first|byok|offline|orchestration|security|ecosystem]
 ```
 
-**Topics:** Any command name
+---
 
-**Example:**
+## Exit Codes
 
-```bash
-autic help
-autic help providers
-```
+| Code  | Meaning          |
+| ----- | ---------------- |
+| `0`   | Success          |
+| `1`   | General error    |
+| `2`   | Usage error      |
+| `130` | Aborted (SIGINT) |
