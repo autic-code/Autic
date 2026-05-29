@@ -128,7 +128,15 @@ autic init
 
 Autic creates a `.autic` directory and detects your project's framework and package manager automatically.
 
-### 2. Add a provider
+### 2. Launch the Dashboard
+
+```bash
+autic
+```
+
+Opens the Launchpad Dashboard — your starting point for all Autic commands. Shows workspace status, provider health, and quick actions. You can also use `autic launch`.
+
+### 3. Add a provider
 
 ```bash
 # OpenRouter (fastest way to get started — 200+ models, single API key)
@@ -138,7 +146,7 @@ autic providers add openrouter --key sk-or-v1-xxxxxxxx
 autic providers setup ollama
 ```
 
-### 3. Verify setup
+### 4. Verify setup
 
 ```bash
 autic doctor
@@ -146,7 +154,7 @@ autic doctor
 
 All checks should pass. If Ollama is running locally, it will be detected automatically.
 
-### 4. Start working
+### 5. Start working
 
 ```bash
 # Interactive chat session
@@ -165,13 +173,14 @@ autic workflow "Add error handling to API routes"
 
 ### Getting started
 
-| Command        | Description                                                             |
-| -------------- | ----------------------------------------------------------------------- |
-| `autic`        | Launchpad dashboard — workspace status, provider health, quick commands |
-| `autic init`   | Initialize Autic in the current directory                               |
-| `autic doctor` | Full environment diagnostics                                            |
-| `autic chat`   | Start an interactive AI chat session                                    |
-| `autic --help` | Show all commands and options                                           |
+| Command        | Description                                                            |
+| -------------- | ---------------------------------------------------------------------- |
+| `autic`        | Open Launchpad Dashboard — workspace status, providers, quick commands |
+| `autic launch` | Explicit alias for the Launchpad Dashboard                             |
+| `autic init`   | Initialize Autic in the current directory                              |
+| `autic doctor` | Full environment diagnostics                                           |
+| `autic chat`   | Start an interactive AI chat session                                   |
+| `autic --help` | Show all commands and options                                          |
 
 ### Building & fixing
 

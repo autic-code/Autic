@@ -3,6 +3,7 @@
  */
 
 export { dashboardCommand } from './dashboard.js';
+export { launchCommand } from './launch.js';
 export { initCommand } from './init.js';
 export { buildCommand } from './build.js';
 export { chatCommand } from './chat.js';

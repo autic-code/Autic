@@ -11,6 +11,7 @@ import { CLI_NAME, CLI_VERSION, CLI_DESCRIPTION } from './constants.js';
 import { renderError, colorText } from '@autic/ui';
 import {
   dashboardCommand,
+  launchCommand,
   initCommand,
   buildCommand,
   chatCommand,
@@ -67,6 +68,20 @@ import {
 const program = new Command();
 
 program.name(CLI_NAME).version(CLI_VERSION).description(CLI_DESCRIPTION);
+
+// Custom help text — show categorized commands at top
+program.addHelpText(
+  'beforeAll',
+  `\n  ${colorText('Launch:', 'bold')}\n    ${colorText('autic', 'primary')}              ${colorText('Open Launchpad Dashboard', 'dim')}\n    ${colorText('autic launch', 'primary')}       ${colorText('Alias for launchpad (identical to autic)', 'dim')}\n\n  ${colorText('Setup:', 'bold')}\n    ${colorText('autic init', 'primary')}            ${colorText('Initialize Autic in current directory', 'dim')}\n    ${colorText('autic doctor', 'primary')}          ${colorText('Full environment diagnostics', 'dim')}\n\n  ${colorText('Development:', 'bold')}\n    ${colorText('autic build', 'primary')}            ${colorText('Build the workspace', 'dim')}\n    ${colorText('autic fix --target .', 'primary')}   ${colorText('Run autonomous fix workflow', 'dim')}\n    ${colorText('autic run', 'primary')}              ${colorText('Execute a task or script', 'dim')}\n\n  ${colorText('Models:', 'bold')}\n    ${colorText('autic providers', 'primary')}        ${colorText('List and manage LLM providers', 'dim')}\n    ${colorText('autic models', 'primary')}           ${colorText('Search, list, and install models', 'dim')}\n\n  ${colorText('Sessions:', 'bold')}\n    ${colorText('autic sessions', 'primary')}         ${colorText('Create, list, and restore sessions', 'dim')}\n    ${colorText('autic chat', 'primary')}             ${colorText('Start an interactive chat session', 'dim')}\n`,
+);
+
+// autic launch — Explicit launch command
+program
+  .command('launch')
+  .description('Open the Launchpad Dashboard (same as running autic with no arguments)')
+  .action(async () => {
+    await launchCommand();
+  });
 
 // autic init
 program

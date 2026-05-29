@@ -13,6 +13,26 @@ autic docs                  # Generate full documentation set
 
 ---
 
+## Launch
+
+### `autic`
+
+Open the Launchpad Dashboard — shows workspace status, provider health, quick commands, and command categories.
+
+```bash
+autic
+```
+
+### `autic launch`
+
+Explicit alias for the Launchpad Dashboard. Provides the identical experience to running `autic` with no arguments.
+
+```bash
+autic launch
+```
+
+---
+
 ## Core Commands
 
 ### `autic init`
