@@ -1,7 +1,6 @@
 {
   "name": "@autic/cli",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.0-alpha.1",
   "type": "module",
   "description": "CLI-native autonomous AI engineering runtime — local-first, BYOK, multi-provider",
   "bin": {
@@ -23,7 +22,8 @@
   },
   "files": [
     "dist/",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "dependencies": {
     "commander": "^12.0.0",
