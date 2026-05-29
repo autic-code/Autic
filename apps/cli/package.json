@@ -4,7 +4,7 @@
   "type": "module",
   "description": "CLI-native autonomous AI engineering runtime — local-first, BYOK, multi-provider",
   "bin": {
-    "autic": "./dist/index.js"
+    "autic": "dist/index.js"
   },
   "main": "./dist/index.js",
   "exports": {

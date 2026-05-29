@@ -28,6 +28,10 @@ async function main() {
   // Ensure dist directory exists
   fs.mkdirSync(distDir, { recursive: true });
 
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(rootDir, 'package.json'), 'utf-8'),
+  );
+
   // External dependencies that remain as npm deps
   const external = [
     'commander',
@@ -52,7 +56,7 @@ async function main() {
     minify: false,
     banner: {
       js: `/**
- * Autic v0.1.0 — CLI-native autonomous AI engineering runtime.
+ * Autic v${pkg.version} — CLI-native autonomous AI engineering runtime.
  * Bundled distribution. Source: https://github.com/autic/autic
  */`,
     },
