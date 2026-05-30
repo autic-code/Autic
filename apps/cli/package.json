@@ -1,6 +1,6 @@
 {
   "name": "@autic/cli",
-  "version": "0.1.0-alpha.6",
+  "version": "0.1.0-alpha.7",
   "type": "module",
   "description": "CLI-native autonomous AI engineering runtime — local-first, BYOK, multi-provider",
   "bin": {

@@ -1,10 +1,11 @@
 /**
  * autic chat — Start an interactive chat session with Autic.
- * Launches the full-screen Ink terminal UI for interactive conversation.
- * The TUI provides the input box, execution feed, todo panel, and agent view.
+ * Launches the full-screen Ink terminal UI wrapped with RuntimeProvider.
  */
 
+import React from 'react';
 import { render } from 'ink';
+import { RuntimeProvider } from '../runtime/RuntimeContext.js';
 import { AuticApp } from '../ui/app.js';
 
 export async function chatCommand(
@@ -15,7 +16,10 @@ export async function chatCommand(
     file?: string;
   } = {},
 ): Promise<void> {
-  // Launch the full Ink-based terminal UI
-  const { waitUntilExit } = render(<AuticApp />);
+  const { waitUntilExit } = render(
+    <RuntimeProvider>
+      <AuticApp />
+    </RuntimeProvider>,
+  );
   await waitUntilExit();
 }
